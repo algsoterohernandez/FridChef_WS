@@ -1,1 +1,16 @@
-C:\Users\alba.lima.garcia\Desktop\Accenture\FridChefWebService\src\main\java\com\fpdual\MyResource.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\manager\UserManager.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\dao\IngredientDao.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\MyResource.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\controller\NotificationController.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\exceptions\UserAlreadyExistsException.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\dao\RoleDao.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\manager\RoleManager.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\manager\IngredientManager.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\connector\MySQLConnector.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\service\WebService.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\dao\UserDao.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\dao\AllergenDao.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\connector\MySQLConstants.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\api\dto\Notification.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\dao\RecipeDao.java
+C:\Users\marta.romero.perez\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\service\UserService.java
