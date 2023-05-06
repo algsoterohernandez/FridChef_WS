@@ -24,14 +24,9 @@ public class UserService {
     public UserService(MySQLConnector connector, UserManager userManager) {
         this.connector = connector;
         this.userManager = userManager;
-        try {
-            md5 = MessageDigest.getInstance("MD5");
-        } catch (Exception e) {
-            System.out.println(e);
-        }
     }
 
-    public UserDto registerUser(UserDto userDto) {
+    public UserDto createUser(UserDto userDto) {
 
         try (Connection con = connector.getMySQLConnection()) {
 
@@ -50,7 +45,7 @@ public class UserService {
 
     }
 
-    public boolean unregisterUser(String email) {
+    public boolean deleteUser(String email) {
         boolean deleted = false;
 
         try (Connection con = connector.getMySQLConnection()) {
@@ -108,16 +103,6 @@ public class UserService {
         userDto.setPassword(userDao.getPassword());
 
         return userDto;
-    }
-
-    public String encryptPassword(String password) {
-        md5.update(password.getBytes());
-        byte[] digest = md5.digest();
-        StringBuffer sb = new StringBuffer();
-        for (byte b : digest) {
-            sb.append(String.format("%02x", b & 0xff));
-        }
-        return sb.toString();
     }
 
 }
