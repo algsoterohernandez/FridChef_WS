@@ -77,8 +77,7 @@ public class UserService {
 
     }
 
-
-    public UserDao mapToDao(UserDto userDto) {
+    private UserDao mapToDao(UserDto userDto) {
         UserDao userDao = new UserDao();
 
         userDao.setId(userDto.getId());
@@ -92,7 +91,7 @@ public class UserService {
         return userDao;
     }
 
-    public UserDto mapToDto(UserDao userDao) {
+    private UserDto mapToDto(UserDao userDao) {
         UserDto userDto = new UserDto();
 
         userDto.setId(userDao.getId());
