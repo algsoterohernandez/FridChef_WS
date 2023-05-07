@@ -10,7 +10,7 @@ import com.fpdual.api.dto.UserDto;
 
 @Path("/user")
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     public UserController() {
         userService = new UserService(new MySQLConnector(), new UserManager());
@@ -27,16 +27,22 @@ public class UserController {
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createUser(UserDto userDto) {
-        Response rs;
+        Response rs = null;
 
         try {
-            UserDto userRs = userService.createUser(userDto);
-
-            if (userRs == null) {
-                rs = Response.notModified().build();
+            if (userDto == null) {
+                rs = Response.status(400).build(); //status Bad request
             } else {
-                rs = Response.ok().entity(userRs).build();
+                UserDto userRs = userService.createUser(userDto);
+
+                if (userRs != null && userRs.isAlreadyExists()) {
+                    rs = Response.status(304).build();//status Not modified
+
+                } else if (userRs != null && !userRs.isAlreadyExists()) {
+                    rs = Response.ok().entity(userRs).build();
+                }
             }
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             rs = Response.serverError().build();
@@ -49,16 +55,17 @@ public class UserController {
     @Path("/delete/{email}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteUser(@PathParam("email") String email) {
-
+        Response rs;
         try {
             boolean deleted = userService.deleteUser(email);
 
-            return Response.ok().entity(deleted).build();
+            rs = Response.ok().entity(deleted).build();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return Response.serverError().build();
+            rs = Response.serverError().build();
         }
+        return rs;
     }
 
     @POST
@@ -67,13 +74,16 @@ public class UserController {
     public Response findUser(@QueryParam("email") String email, @QueryParam("password") String password) {
         Response rs;
         try {
-            UserDto userRs = userService.findUser(email, password);
-
-            if (userRs == null) {
-                rs = Response.noContent().build();
+            if (email == null || password == null) {
+                rs = Response.status(400).build();
             } else {
+                UserDto userRs = userService.findUser(email, password);
 
-                rs = Response.ok().entity(userRs).build();
+                if (userRs == null) {
+                    rs = Response.status(204).build();//status No content
+                } else {
+                    rs = Response.ok().entity(userRs).build();
+                }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
