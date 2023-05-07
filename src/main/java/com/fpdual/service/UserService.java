@@ -35,8 +35,9 @@ public class UserService {
 
 
         } catch (UserAlreadyExistsException e) {
-            userDto.setAlreadyExists(true);
-
+            if (userDto != null) {
+                userDto.setAlreadyExists(true);
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -66,8 +67,10 @@ public class UserService {
         try (Connection con = connector.getMySQLConnection()) {
 
             UserDao userDao = this.userManager.findByEmailPassword(con, email, password);
-            userDto = mapToDto(userDao);
 
+            if (userDao != null) {
+                userDto = mapToDto(userDao);
+            }
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
