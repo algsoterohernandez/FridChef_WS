@@ -1,7 +1,8 @@
 package com.fpdual.controller;
 
 import com.fpdual.api.dto.IngredientDto;
-import com.fpdual.service.IngredientService;
+import com.fpdual.api.dto.RecipeDto;
+import com.fpdual.service.RecipeService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -10,13 +11,12 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
-@Path("/ingredients")
-public class IngredientController {
+@Path("/recipes")
+public class RecipeController {
 
-    private final IngredientService ingredientService;
+    private final RecipeService recipesService;
 
-    public IngredientController() {
-        ingredientService = new IngredientService();
+    public RecipeController() { recipesService = new RecipeService();
     }
 
     @GET
@@ -31,7 +31,7 @@ public class IngredientController {
     public Response findAll() {
         Response rs;
 
-        List<IngredientDto> ingredientsList = ingredientService.findAll();
+        List<RecipeDto> ingredientsList = recipesService.findAll();
 
         if (ingredientsList != null) {
             rs = Response.ok().entity(ingredientsList).build();

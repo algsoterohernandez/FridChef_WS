@@ -1,9 +1,12 @@
 package com.fpdual.persistence.aplication.dao;
 
+import lombok.Data;
+
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+@Data
 
 public class RecipeDao {
 
