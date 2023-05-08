@@ -71,13 +71,13 @@ public class UserController {
     @POST
     @Path("/find")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findUser(@QueryParam("email") String email, @QueryParam("password") String password) {
+    public Response findUser(UserDto userDto) {
         Response rs;
         try {
-            if (email == null || password == null) {
+            if (userDto.getEmail() == null || userDto.getPassword() == null) {
                 rs = Response.status(400).build();
             } else {
-                UserDto userRs = userService.findUser(email, password);
+                UserDto userRs = userService.findUser(userDto.getEmail(), userDto.getPassword());
 
                 if (userRs == null) {
                     rs = Response.status(204).build();//status No content

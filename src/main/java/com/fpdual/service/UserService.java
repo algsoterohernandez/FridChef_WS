@@ -34,7 +34,7 @@ public class UserService {
             userDto = mapToDto(userDao);
 
 
-        } catch (UserAlreadyExistsException e) {
+        } catch (UserAlreadyExistsException uaee) {
             if (userDto != null) {
                 userDto.setAlreadyExists(true);
             }
