@@ -7,24 +7,22 @@ import lombok.Setter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 @Data
 @Getter
 @Setter
 @NoArgsConstructor
 
-public class IngredientDao {
-    private int id;
-    private String name;
+public class CategoryRecipeDao {
+    private int idCategory;
+    private int idRecipe;
 
-    public IngredientDao(ResultSet result) {
+    public CategoryRecipeDao(ResultSet result) {
         try {
-            this.id = result.getInt("id");
-            this.name = result.getString("name");
+            this.idCategory = result.getInt("id_category");
+            this.idRecipe = result.getInt("id_recipe");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 }
