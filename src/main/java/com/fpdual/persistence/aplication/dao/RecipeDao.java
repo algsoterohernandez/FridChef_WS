@@ -17,7 +17,7 @@ public class RecipeDao {
     private int time;
     private String unit_time;
     private int id_category;
-    private Date crete_time;
+    private Date create_time;
     private Blob image;
 
     public RecipeDao(ResultSet result) {
@@ -29,7 +29,7 @@ public class RecipeDao {
             this.time = result.getInt("time");
             this.unit_time = result.getString("unit_time");
             this.id_category = result.getInt("id_category");
-            this.crete_time = result.getDate("crete_time");
+            this.create_time = result.getDate("crete_time");
             this.image = result.getBlob("image");
         } catch (SQLException e) {
             e.printStackTrace();

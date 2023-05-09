@@ -17,7 +17,7 @@ public class RecipeManager {
 
     public List<RecipeDao> findAll() {
         try (Connection con = new MySQLConnector().getMySQLConnection(); Statement stm = con.createStatement()) {
-            ResultSet result = stm.executeQuery("select * from recipe order by name ASC");
+            ResultSet result = stm.executeQuery("select * from recipe");
 
             result.beforeFirst();
 

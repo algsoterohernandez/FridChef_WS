@@ -21,7 +21,7 @@ public class RecipeDto {
     private int time;
     private String unit_time;
     private int id_category;
-    private Date crete_time;
+    private Date create_time;
     private Blob image;
 
     public RecipeDto(int id, String name, String description, int difficulty, int time, String unit_time, int id_category, Date crete_time) {
@@ -32,6 +32,6 @@ public class RecipeDto {
         this.time = time;
         this.unit_time = unit_time;
         this.id_category = id_category;
-        this.crete_time = crete_time;
+        this.create_time = crete_time;
     }
 }
