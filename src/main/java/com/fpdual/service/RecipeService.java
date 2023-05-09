@@ -33,6 +33,12 @@ public class RecipeService {
 
         recipeDto.setId(recipeDao.getId());
         recipeDto.setName(recipeDao.getName());
+        recipeDto.setDescription(recipeDao.getDescription());
+        recipeDto.setDifficulty(recipeDao.getDifficulty());
+        recipeDto.setTime(recipeDao.getTime());
+        recipeDto.setUnit_time(recipeDao.getUnit_time());
+        recipeDto.setId_category(recipeDao.getId_category());
+        recipeDto.setCreate_time(recipeDao.getCreate_time());
 
 
         return recipeDto;
