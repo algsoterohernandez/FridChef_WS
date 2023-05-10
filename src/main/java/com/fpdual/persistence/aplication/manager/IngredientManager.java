@@ -58,5 +58,19 @@ public class IngredientManager {
         }
     }
 
+    public Integer getIngredientIdByName(String ingredientName) {
+        try (Connection con = new MySQLConnector().getMySQLConnection(); Statement stm = con.createStatement()) {
+
+            ResultSet result = stm.executeQuery("select id from ingredient where name = '" + ingredientName  + "'");
+
+            if (result.next()) {
+                return result.getInt("id");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
 

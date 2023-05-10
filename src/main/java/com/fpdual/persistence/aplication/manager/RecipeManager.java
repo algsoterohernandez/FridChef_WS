@@ -1,5 +1,6 @@
 package com.fpdual.persistence.aplication.manager;
 
+import com.fpdual.api.dto.RecipeFilterDto;
 import com.fpdual.exceptions.RecipeAlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.IngredientDao;
@@ -119,6 +120,41 @@ public class RecipeManager {
     public List<RecipeDao> findAll() {
         try (Connection con = new MySQLConnector().getMySQLConnection(); Statement stm = con.createStatement()) {
             ResultSet result = stm.executeQuery("select * from recipe");
+
+            result.beforeFirst();
+
+            List<RecipeDao> recipes = new ArrayList<>();
+
+            while (result.next()) {
+                recipes.add(new RecipeDao(result));
+            }
+
+            return recipes;
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<RecipeDao> findRecipesByIngredients(List<Integer> ingredientIds) {
+        try (Connection con = new MySQLConnector().getMySQLConnection(); Statement stm = con.createStatement()) {
+
+            String query =
+
+
+
+
+            String query = "SELECT * FROM recipe r, ingredient_recipe ir, ingredient i WHERE r.id = ir.id_recipe AND ir.id_ingredient IN (SELECT i.id FROM ingredient WHERE NAME IN (";
+            List<String> ingredients = recipeFilterDto.getIngredients();
+            for (int i = 0; i < ingredients.size(); i++) {
+                query += "'" + ingredients.get(i) + "'";
+                if (i < ingredients.size() - 1) {
+                    query += ", ";
+                }
+            }
+            query +=")) GROUP BY r.name";
+            ResultSet result = stm.executeQuery(query);
 
             result.beforeFirst();
 
