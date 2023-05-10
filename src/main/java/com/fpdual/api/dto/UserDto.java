@@ -1,9 +1,11 @@
 package com.fpdual.api.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
+@NoArgsConstructor
 
 public class UserDto {
     private int id;
@@ -11,8 +13,5 @@ public class UserDto {
 
     private boolean alreadyExists;
 
-    public UserDto() {
-
-    }
 
 }

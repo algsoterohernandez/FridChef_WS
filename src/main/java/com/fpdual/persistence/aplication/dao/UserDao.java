@@ -1,6 +1,7 @@
 package com.fpdual.persistence.aplication.dao;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -8,15 +9,12 @@ import java.sql.SQLException;
 
 
 @Data
-
+@NoArgsConstructor
 public class UserDao {
     private int id;
     private String name, surname1, surname2, email, password;
     private Date createTime;
 
-    public UserDao() {
-
-    }
 
     public UserDao(ResultSet result) {
 
