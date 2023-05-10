@@ -15,16 +15,19 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 
-public class AllergenDao {
-    private int id;
-    private String name;
-    private List<IngredientDao> ingredients;
+public class RoleUserDao {
+    private int idRole;
+    private int idUser;
+    private List<RoleDao> roles;
+    private List<UserDao> users;
 
-    public AllergenDao(ResultSet result) {
+    public RoleUserDao(ResultSet result) {
+
         try {
-            this.id = result.getInt("id");
-            this.name = result.getString("name");
-            this.ingredients = new ArrayList<>();
+            this.idRole = result.getInt("id_role");
+            this.idUser = result.getInt("id_user");
+            this.roles  = new ArrayList<>();
+            this.users = new ArrayList<>();
         } catch (SQLException e) {
             e.printStackTrace();
         }

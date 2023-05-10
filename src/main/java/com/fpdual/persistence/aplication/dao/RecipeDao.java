@@ -1,24 +1,33 @@
 package com.fpdual.persistence.aplication.dao;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 @Data
+@Getter
+@Setter
+@NoArgsConstructor
 
 public class RecipeDao {
-
     private int id;
     private String name;
     private String description;
     private int difficulty;
     private int time;
-    private String unit_time;
-    private int id_category;
-    private Date create_time;
+    private String unitTime;
+    private int idCategory;
+    private Date createTime;
     private Blob image;
+
 
     public RecipeDao(ResultSet result) {
         try {
@@ -27,14 +36,16 @@ public class RecipeDao {
             this.description = result.getString("description");
             this.difficulty = result.getInt("difficulty");
             this.time = result.getInt("time");
-            this.unit_time = result.getString("unit_time");
-            this.id_category = result.getInt("id_category");
-            this.create_time = result.getDate("crete_time");
+            this.unitTime = result.getString("unit_time");
+            this.idCategory = result.getInt("id_category");
+            this.createTime = result.getDate("create_time");
             this.image = result.getBlob("image");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
-
+    public Date getCreateTime() {
+        return createTime;
     }
 }

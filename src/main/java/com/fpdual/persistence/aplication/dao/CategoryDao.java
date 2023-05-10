@@ -5,24 +5,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Getter
 @Setter
 @NoArgsConstructor
 
-public class RoleDao {
+public class CategoryDao {
     private int id;
-    private String description;
+    private String name;
+    private List<RecipeDao> recipes;
 
-    public RoleDao(ResultSet result) {
-
+    public CategoryDao(ResultSet result) {
         try {
             this.id = result.getInt("id");
-            this.description = result.getString("description");
+            this.name = result.getString("name");
+            this.recipes = new ArrayList<>();
         } catch (SQLException e) {
             e.printStackTrace();
         }

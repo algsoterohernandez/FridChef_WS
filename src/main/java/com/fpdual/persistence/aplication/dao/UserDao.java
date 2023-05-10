@@ -15,7 +15,6 @@ public class UserDao {
     private String name, surname1, surname2, email, password;
     private Date createTime;
 
-
     public UserDao(ResultSet result) {
 
         try {

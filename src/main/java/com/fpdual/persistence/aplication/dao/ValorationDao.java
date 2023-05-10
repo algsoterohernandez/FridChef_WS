@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -14,15 +13,22 @@ import java.sql.SQLException;
 @Setter
 @NoArgsConstructor
 
-public class RoleDao {
+public class ValorationDao {
     private int id;
+    private int idRecipe;
+    private int idUser;
+    private String title;
     private String description;
+    private double valoration;
 
-    public RoleDao(ResultSet result) {
-
+    public ValorationDao(ResultSet result) {
         try {
             this.id = result.getInt("id");
+            this.idRecipe = result.getInt("id_recipe");
+            this.idUser = result.getInt("id_User");
+            this.title = result.getString("title");
             this.description = result.getString("description");
+            this.valoration = result.getDouble("valoration");
         } catch (SQLException e) {
             e.printStackTrace();
         }
