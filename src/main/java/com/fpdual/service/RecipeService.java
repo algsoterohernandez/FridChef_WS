@@ -54,6 +54,31 @@ public class RecipeService {
         return recipeDtos;
     }
 
+    public List<RecipeDto> findRecipeSuggestions(List<String> recipeIngredients) {
+        List<Integer> ingredientIds = new ArrayList<>();
+
+        for (String ingredientName: recipeIngredients) {
+            Integer ingredientId = ingredientManager.getIngredientIdByName(ingredientName);
+
+            if (ingredientId == null) {
+                return null;
+            }
+
+            ingredientIds.add(ingredientId);
+        }
+
+        List<RecipeDto> recipeDtos = null;
+
+        List<RecipeDao> recipeDaos = recipeManager.findRecipeSuggestions(ingredientIds);
+
+        if (recipeDaos != null) {
+            recipeDtos = mapToDto(recipeDaos);
+        }
+
+        return recipeDtos;
+    }
+
+
     private RecipeDto mapToDto(RecipeDao recipeDao) {
         RecipeDto recipeDto = new RecipeDto();
 

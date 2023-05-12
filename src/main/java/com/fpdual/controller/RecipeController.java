@@ -1,6 +1,5 @@
 package com.fpdual.controller;
 
-import com.fpdual.api.dto.IngredientDto;
 import com.fpdual.api.dto.RecipeDto;
 import com.fpdual.api.dto.RecipeFilterDto;
 import com.fpdual.service.RecipeService;
@@ -61,6 +60,30 @@ public class RecipeController {
                 rs = Response.status(400).build();
             } else {
                 List<RecipeDto> recipeRs = recipesService.findRecipesByIngredients(recipeFilterDto.getIngredients());
+                if (recipeRs != null) {
+                    rs = Response.ok().entity(recipeRs).build();
+                } else {
+                    rs = Response.status(500).build();//status No content
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            rs = Response.serverError().build();
+        }
+        return rs;
+    }
+
+    @POST
+    @Path("/findSuggestions")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findRecipeSuggestions(RecipeFilterDto recipeFilterDto) {
+        Response rs;
+
+        try {
+            if (recipeFilterDto == null) {
+                rs = Response.status(400).build();
+            } else {
+                List<RecipeDto> recipeRs = recipesService.findRecipeSuggestions(recipeFilterDto.getIngredients());
                 if (recipeRs == null) {
                     rs = Response.status(500).build();//status No content
                 } else {

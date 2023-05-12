@@ -1,5 +1,6 @@
 package com.fpdual.persistence.aplication.manager;
 
+import com.fpdual.api.dto.RecipeDto;
 import com.fpdual.api.dto.RecipeFilterDto;
 import com.fpdual.exceptions.RecipeAlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
@@ -139,24 +140,33 @@ public class RecipeManager {
 
     public List<RecipeDao> findRecipesByIngredients(List<Integer> ingredientIds) {
         try (Connection con = new MySQLConnector().getMySQLConnection(); Statement stm = con.createStatement()) {
-
-            String query =
-
-
-
-
-            String query = "SELECT * FROM recipe r, ingredient_recipe ir, ingredient i WHERE r.id = ir.id_recipe AND ir.id_ingredient IN (SELECT i.id FROM ingredient WHERE NAME IN (";
-            List<String> ingredients = recipeFilterDto.getIngredients();
-            for (int i = 0; i < ingredients.size(); i++) {
-                query += "'" + ingredients.get(i) + "'";
-                if (i < ingredients.size() - 1) {
+            String query = "SELECT r.*, COUNT(DISTINCT ir.id_ingredient) AS num_ingredients " +
+                    "FROM recipe r " +
+                    "INNER JOIN ingredient_recipe ir ON r.id = ir.id_recipe " +
+                    "WHERE ir.id_ingredient IN (";
+            for (int i = 0; i < ingredientIds.size(); i++) {
+                query += "'" + ingredientIds.get(i) + "'";
+                if (i < ingredientIds.size() - 1) {
                     query += ", ";
                 }
             }
-            query +=")) GROUP BY r.name";
-            ResultSet result = stm.executeQuery(query);
+            query += ") GROUP BY r.id, r.name " +
+                    "HAVING COUNT(DISTINCT ir.id_ingredient) = " + ingredientIds.size() +
+                    " AND NOT EXISTS (" +
+                    "   SELECT 1 " +
+                    "   FROM ingredient_recipe ir2 " +
+                    "   WHERE ir2.id_recipe = r.id " +
+                    "   AND ir2.id_ingredient NOT IN (";
+            for (int i = 0; i < ingredientIds.size(); i++) {
+                query += "'" + ingredientIds.get(i) + "'";
+                if (i < ingredientIds.size() - 1) {
+                    query += ", ";
+                }
+            }
+            query += ")" +
+                    ")";
 
-            result.beforeFirst();
+            ResultSet result = stm.executeQuery(query);
 
             List<RecipeDao> recipes = new ArrayList<>();
 
@@ -170,5 +180,55 @@ public class RecipeManager {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public List<RecipeDao> findRecipeSuggestions(List<Integer> ingredientIds) {
+        try (Connection con = new MySQLConnector().getMySQLConnection()) {
+            String query = "SELECT r.* FROM recipe r, ingredient_recipe ir WHERE r.id = ir.id_recipe ";
+            int count = 0;
+            for (int i = 0; i < ingredientIds.size(); i++) {
+                query += "AND EXISTS (SELECT * FROM ingredient_recipe ir" + i +
+                        " WHERE ir" + i + ".id_recipe = r.id AND ir" + i + ".id_ingredient = ?) ";
+                count++;
+            }
+            query += "GROUP BY r.id HAVING COUNT(*) > ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            for (int i = 0; i < ingredientIds.size(); i++) {
+                ps.setInt(i+1, ingredientIds.get(i));
+            }
+            ps.setInt(count+1, ingredientIds.size());
+            ResultSet result = ps.executeQuery();
+
+            List<RecipeDao> recipesSuggesions = new ArrayList<>();
+            while (result.next()) {
+                recipesSuggesions.add(new RecipeDao(result));
+            }
+
+            return recipesSuggesions;
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    private PreparedStatement createStatement (Connection con, String... ingredientes) throws SQLException {
+        StringBuilder query = new StringBuilder("SELECT DISTINCT recipe.* FROM recipe JOIN recipe_ingredient ON recipe.id = recipe_ingredient.recipe_id JOIN ingredient ON recipe_ingredient.ingredient_id = ingredient.id WHERE ingredient.name IN (");
+
+        for (int i = 0; i < ingredientes.length; i++) {
+            query.append("?");
+            if (i != ingredientes.length - 1) {
+                query.append(",");
+            }
+        }
+        query.append(")");
+
+        PreparedStatement stm = con.prepareStatement(query.toString());
+        for (int i = 0; i < ingredientes.length; i++) {
+            stm.setString(i + 1, ingredientes[i]);
+        }
+
+        return stm;
     }
 }

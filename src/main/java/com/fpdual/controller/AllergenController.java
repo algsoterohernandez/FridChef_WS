@@ -1,6 +1,8 @@
 package com.fpdual.controller;
 
+import com.fpdual.api.dto.AllergenDto;
 import com.fpdual.api.dto.IngredientDto;
+import com.fpdual.service.AllergenService;
 import com.fpdual.service.IngredientService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -10,36 +12,29 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
-@Path("/ingredients")
-public class IngredientController {
+@Path("/allergens")
+public class AllergenController {
 
-    private final IngredientService ingredientService;
+    private final AllergenService allergenService;
 
-    public IngredientController() {
-        ingredientService = new IngredientService();
+    public AllergenController() {
+        allergenService = new AllergenService();
     }
-
 
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findAll() {
+    public Response findAllAllergens() {
         Response rs;
 
-        List<IngredientDto> ingredientsList = ingredientService.findAll();
+        List<AllergenDto> allergenDtoList = allergenService.findAllAllergens();
 
-        if (ingredientsList != null) {
-            rs = Response.ok().entity(ingredientsList).build();
+        if (allergenDtoList != null) {
+            rs = Response.ok().entity(allergenDtoList).build();
         }
         else {
             rs = Response.status(500).build();//Server Error
         }
-
-        // Comprobar resultado
-
-        // Convertir a json
-
-        // Construir respuesta
 
         return rs;
     }

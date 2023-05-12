@@ -1,9 +1,6 @@
 package com.fpdual.api.dto;
 
-import com.fpdual.persistence.aplication.dao.AllergenDao;
 import lombok.*;
-
-import java.util.List;
 
 @Setter
 @Getter
@@ -12,9 +9,7 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @Builder
-public class IngredientDto {
-
+public class AllergenDto {
     private int id;
     private String name;
-
 }
