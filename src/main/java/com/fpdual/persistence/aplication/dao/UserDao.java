@@ -15,7 +15,7 @@ public class UserDao {
     private String name, surname1, surname2, email, password;
     private Date createTime;
 
-    public UserDao(ResultSet result) {
+    public UserDao (ResultSet result) throws SQLException {
 
         try {
 
@@ -28,7 +28,10 @@ public class UserDao {
             createTime = result.getDate("create_time");
 
         } catch (SQLException e) {
-            e.printStackTrace();
+
+            System.out.println(e.getMessage());
+            throw e;
+
         }
     }
 }

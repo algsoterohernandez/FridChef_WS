@@ -12,6 +12,7 @@ import lombok.Setter;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.SQLException;
 
 public class UserService {
 
@@ -26,7 +27,7 @@ public class UserService {
         this.userManager = userManager;
     }
 
-    public UserDto createUser(UserDto userDto) {
+    public UserDto createUser(UserDto userDto) throws SQLException, ClassNotFoundException {
 
         try (Connection con = connector.getMySQLConnection()) {
 
@@ -35,19 +36,24 @@ public class UserService {
 
 
         } catch (UserAlreadyExistsException uaee) {
+
             if (userDto != null) {
+
                 userDto.setAlreadyExists(true);
+
             }
         } catch (Exception e) {
+
             System.out.println(e.getMessage());
+            throw e;
         }
 
         return userDto;
 
     }
 
-    public boolean deleteUser(String email) {
-        boolean deleted = false;
+    public boolean deleteUser(String email) throws SQLException, ClassNotFoundException {
+        boolean deleted;
 
         try (Connection con = connector.getMySQLConnection()) {
 
@@ -55,13 +61,14 @@ public class UserService {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            throw e;
         }
 
         return deleted;
 
     }
 
-    public UserDto findUser(String email, String password) {
+    public UserDto findUser(String email, String password) throws SQLException, ClassNotFoundException {
         UserDto userDto = null;
 
         try (Connection con = connector.getMySQLConnection()) {
@@ -69,11 +76,15 @@ public class UserService {
             UserDao userDao = this.userManager.findByEmailPassword(con, email, password);
 
             if (userDao != null) {
+
                 userDto = mapToDto(userDao);
+
             }
 
         } catch (Exception e) {
+
             System.out.println(e.getMessage());
+            throw e;
         }
 
         return userDto;
