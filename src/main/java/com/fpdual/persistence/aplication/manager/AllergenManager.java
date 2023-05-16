@@ -17,7 +17,23 @@ public class AllergenManager {
         try (Connection con = new MySQLConnector().getMySQLConnection(); Statement stm = con.createStatement()) {
             ResultSet result = stm.executeQuery("select * from allergen");
 
-            result.beforeFirst();
+            List<AllergenDao> allergenDaoList = new ArrayList<>();
+
+            while (result.next()) {
+                allergenDaoList.add(new AllergenDao(result));
+            }
+
+            return allergenDaoList;
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<AllergenDao> findIngredientAllergens(int ingredientId) {
+        try (Connection con = new MySQLConnector().getMySQLConnection(); Statement stm = con.createStatement()) {
+            ResultSet result = stm.executeQuery("select a.* from allergen a inner join ingredient_allergen ia on ia.id_allergen = a.id where ia.id_ingredient = " + ingredientId);
 
             List<AllergenDao> allergenDaoList = new ArrayList<>();
 

@@ -3,14 +3,13 @@ com\fpdual\api\dto\UserDto.class
 com\fpdual\persistence\aplication\dao\IngredientAllergenDao.class
 com\fpdual\api\dto\AllergenDto.class
 com\fpdual\exceptions\RecipeAlreadyExistsException.class
-com\fpdual\controller\NotificationControllerMariano.class
 com\fpdual\persistence\aplication\dao\CategoryRecipeDao.class
 com\fpdual\persistence\aplication\dao\FavoriteDao.class
 com\fpdual\api\dto\IngredientDto$IngredientDtoBuilder.class
 com\fpdual\controller\AllergenController.class
 com\fpdual\api\dto\RecipeDto$RecipeDtoBuilder.class
+com\fpdual\utils\MappingUtils.class
 com\fpdual\service\IngredientService.class
-com\fpdual\api\dto\NotificationMariano$NotificationMarianoBuilder.class
 com\fpdual\persistence\aplication\connector\MySQLConnector.class
 com\fpdual\persistence\aplication\dao\UserDao.class
 com\fpdual\persistence\aplication\dao\RecipeDao.class
@@ -30,7 +29,6 @@ com\fpdual\service\RecipeService.class
 com\fpdual\persistence\aplication\manager\AllergenManager.class
 com\fpdual\persistence\aplication\manager\IngredientManager.class
 com\fpdual\persistence\aplication\manager\UserManager.class
-com\fpdual\api\dto\NotificationMariano.class
 com\fpdual\persistence\aplication\dao\RoleDao.class
 com\fpdual\controller\UserController.class
 com\fpdual\controller\IngredientController.class

@@ -91,22 +91,6 @@ public class RecipeController {
         return rs;
     }
 
-    @POST
-    @Path("/filterRecipeByAllergen")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response filterRecipesByAllergen(int allergenId) {
-        Response rs;
-
-        List<RecipeDto> recipeDtoList = recipesService.filterRecipesByAllergen(allergenId);
-
-        if (recipeDtoList != null) {
-            rs = Response.ok().entity(recipeDtoList).build();
-        } else {
-            rs = Response.status(500).build();//Server Error
-        }
-
-        return rs;
-    }
 
 }
 

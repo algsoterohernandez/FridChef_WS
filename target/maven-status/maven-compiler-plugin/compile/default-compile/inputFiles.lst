@@ -13,14 +13,13 @@ C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\apl
 C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\exceptions\UserAlreadyExistsException.java
 C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\dao\IngredientDao.java
 C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\controller\UserController.java
+C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\utils\MappingUtils.java
 C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\exceptions\RecipeAlreadyExistsException.java
-C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\api\dto\NotificationMariano.java
 C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\manager\IngredientManager.java
 C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\manager\UserManager.java
 C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\service\UserService.java
 C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\dao\IngredientRecipeDao.java
 C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\api\dto\IngredientDto.java
-C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\controller\NotificationControllerMariano.java
 C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\persistence\aplication\manager\AllergenManager.java
 C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\service\RecipeService.java
 C:\Users\maque\IdeaProjects\FridChef_WS\src\main\java\com\fpdual\api\dto\UserDto.java

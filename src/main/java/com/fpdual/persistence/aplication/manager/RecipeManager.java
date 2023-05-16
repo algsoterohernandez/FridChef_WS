@@ -16,6 +16,12 @@ import java.util.List;
 @Data
 public class RecipeManager {
 
+    private final IngredientManager ingredientManager;
+
+    public RecipeManager() {
+        ingredientManager = new IngredientManager();
+    }
+
     public RecipeDao insertRecipe(Connection con, RecipeDao recipe, List<IngredientDao> ingredients, IngredientRecipeDao ingredientRecipe) throws RecipeAlreadyExistsException {
         try (PreparedStatement stm = con.prepareStatement("INSERT INTO recipe (name, description, difficulty, time, unit_time, id_category, create_time, image) VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
 
@@ -118,7 +124,6 @@ public class RecipeManager {
         return success;
     }
 
-
     public List<RecipeDao> findAll() {
         try (Connection con = new MySQLConnector().getMySQLConnection(); Statement stm = con.createStatement()) {
             ResultSet result = stm.executeQuery("select * from recipe");
@@ -128,7 +133,10 @@ public class RecipeManager {
             List<RecipeDao> recipes = new ArrayList<>();
 
             while (result.next()) {
-                recipes.add(new RecipeDao(result));
+                RecipeDao recipe = new RecipeDao(result);
+                FillRecipeIngredients(recipe);
+
+                recipes.add(recipe);
             }
 
             return recipes;
@@ -172,7 +180,10 @@ public class RecipeManager {
             List<RecipeDao> recipes = new ArrayList<>();
 
             while (result.next()) {
-                recipes.add(new RecipeDao(result));
+                RecipeDao recipe = new RecipeDao(result);
+                FillRecipeIngredients(recipe);
+
+                recipes.add(recipe);
             }
 
             return recipes;
@@ -202,8 +213,12 @@ public class RecipeManager {
             ResultSet result = ps.executeQuery();
 
             List<RecipeDao> recipesSuggesions = new ArrayList<>();
+
             while (result.next()) {
-                recipesSuggesions.add(new RecipeDao(result));
+                RecipeDao recipe = new RecipeDao(result);
+                FillRecipeIngredients(recipe);
+
+                recipesSuggesions.add(recipe);
             }
 
             return recipesSuggesions;
@@ -214,27 +229,8 @@ public class RecipeManager {
         }
     }
 
-    public List<RecipeDao> filterRecipesByAllergen(int allergenId) {
-        try (Connection con = new MySQLConnector().getMySQLConnection()) {
-
-            String query = "SELECT r.* FROM recipe r " +
-                    " WHERE NOT EXISTS (SELECT * FROM ingredient_recipe ir, ingredient_allergen ia" +
-                    " WHERE ir.id_recipe = r.id AND ir.id_ingredient = ia.id_ingredient AND ia.id_allergen = ?)";
-            PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, allergenId);
-            ResultSet result = ps.executeQuery();
-
-            List<RecipeDao> recipesSuggesions = new ArrayList<>();
-            while (result.next()) {
-                recipesSuggesions.add(new RecipeDao(result));
-            }
-
-            return recipesSuggesions;
-
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
+    private void FillRecipeIngredients(RecipeDao recipeDao)
+    {
+        recipeDao.setIngredients(ingredientManager.findRecipeIngredients(recipeDao.getId()));
     }
-
 }

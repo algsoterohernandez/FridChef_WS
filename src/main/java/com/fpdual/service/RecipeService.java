@@ -4,6 +4,7 @@ import com.fpdual.api.dto.RecipeDto;
 import com.fpdual.persistence.aplication.dao.RecipeDao;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
 import com.fpdual.persistence.aplication.manager.RecipeManager;
+import com.fpdual.utils.MappingUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class RecipeService {
         List<RecipeDto> recipeDtos = null;
 
         if (recipeDaos != null) {
-            recipeDtos = mapToDto(recipeDaos);
+            recipeDtos = MappingUtils.mapRecipeDto(recipeDaos);
         }
 
         return recipeDtos;
@@ -48,7 +49,7 @@ public class RecipeService {
         List<RecipeDao> recipeDaos = recipeManager.findRecipesByIngredients(ingredientIds);
 
         if (recipeDaos != null) {
-            recipeDtos = mapToDto(recipeDaos);
+            recipeDtos = MappingUtils.mapRecipeDto(recipeDaos);
         }
 
         return recipeDtos;
@@ -72,53 +73,9 @@ public class RecipeService {
         List<RecipeDao> recipeDaos = recipeManager.findRecipeSuggestions(ingredientIds);
 
         if (recipeDaos != null) {
-            recipeDtos = mapToDto(recipeDaos);
+            recipeDtos = MappingUtils.mapRecipeDto(recipeDaos);
         }
 
         return recipeDtos;
     }
-
-    public List<RecipeDto> filterRecipesByAllergen(int allergenId) {
-
-        List<RecipeDao> recipeDaos = recipeManager.filterRecipesByAllergen(allergenId);
-
-        List<RecipeDto> recipeDtos = null;
-
-        if (recipeDaos != null) {
-            recipeDtos = mapToDto(recipeDaos);
-        }
-
-        return recipeDtos;
-    }
-
-
-
-
-    private RecipeDto mapToDto(RecipeDao recipeDao) {
-        RecipeDto recipeDto = new RecipeDto();
-
-        recipeDto.setId(recipeDao.getId());
-        recipeDto.setName(recipeDao.getName());
-        recipeDto.setDescription(recipeDao.getDescription());
-        recipeDto.setDifficulty(recipeDao.getDifficulty());
-        recipeDto.setTime(recipeDao.getTime());
-        recipeDto.setUnit_time(recipeDao.getUnitTime());
-        recipeDto.setId_category(recipeDao.getIdCategory());
-        recipeDto.setCreate_time(recipeDao.getCreateTime());
-
-
-        return recipeDto;
-    }
-
-    private List<RecipeDto> mapToDto(List<RecipeDao> recipeDaos) {
-        List<RecipeDto> recipesDtos = new ArrayList<>();
-
-        for (RecipeDao recipeDao : recipeDaos) {
-            RecipeDto recipeDto = mapToDto(recipeDao);
-            recipesDtos.add(recipeDto);
-        }
-
-        return recipesDtos;
-    }
-
 }
