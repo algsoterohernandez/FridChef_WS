@@ -78,6 +78,21 @@ public class RecipeService {
         return recipeDtos;
     }
 
+    public List<RecipeDto> filterRecipesByAllergen(int allergenId) {
+
+        List<RecipeDao> recipeDaos = recipeManager.filterRecipesByAllergen(allergenId);
+
+        List<RecipeDto> recipeDtos = null;
+
+        if (recipeDaos != null) {
+            recipeDtos = mapToDto(recipeDaos);
+        }
+
+        return recipeDtos;
+    }
+
+
+
 
     private RecipeDto mapToDto(RecipeDao recipeDao) {
         RecipeDto recipeDto = new RecipeDto();
@@ -105,4 +120,5 @@ public class RecipeService {
 
         return recipesDtos;
     }
+
 }

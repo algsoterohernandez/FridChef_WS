@@ -12,7 +12,6 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
-@Path("/recipes")
 public class RecipeController {
 
     private final RecipeService recipesService;
@@ -22,13 +21,11 @@ public class RecipeController {
     }
 
     @GET
-    @Path("/ping")
     public Response ping() {
         return Response.ok().entity("Service online").build();
     }
 
     @GET
-    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
         Response rs;
@@ -51,7 +48,6 @@ public class RecipeController {
     }
 
     @POST
-    @Path("/findbyingredients")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findByIngredients(RecipeFilterDto recipeFilterDto) {
         Response rs;
@@ -74,7 +70,6 @@ public class RecipeController {
     }
 
     @POST
-    @Path("/findSuggestions")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findRecipeSuggestions(RecipeFilterDto recipeFilterDto) {
         Response rs;
@@ -94,6 +89,22 @@ public class RecipeController {
             System.out.println(e.getMessage());
             rs = Response.serverError().build();
         }
+        return rs;
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response filterRecipesByAllergen(int allergenId) {
+        Response rs;
+
+        List<RecipeDto> recipeDtoList = recipesService.filterRecipesByAllergen(allergenId);
+
+        if (recipeDtoList != null) {
+            rs = Response.ok().entity(recipeDtoList).build();
+        } else {
+            rs = Response.status(500).build();//Server Error
+        }
+
         return rs;
     }
 
