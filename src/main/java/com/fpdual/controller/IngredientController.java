@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
+@Path("/ingredients")
 
 public class IngredientController {
 
@@ -20,6 +21,7 @@ public class IngredientController {
 
 
     @GET
+    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
         Response rs;

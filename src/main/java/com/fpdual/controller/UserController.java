@@ -7,6 +7,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import com.fpdual.api.dto.UserDto;
+@Path("/user")
 
 public class UserController {
     private final UserService userService;
@@ -16,12 +17,14 @@ public class UserController {
     }
 
     @GET
+    @Path("/ping")
     public Response ping() {
         return Response.ok().entity("Service online").build();
     }
 
 
     @POST
+    @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createUser(UserDto userDto) {
         Response rs = null;
@@ -49,6 +52,7 @@ public class UserController {
     }
 
     @DELETE
+    @Path("/delete/{email}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteUser(@PathParam("email") String email) {
         Response rs;
@@ -65,6 +69,7 @@ public class UserController {
     }
 
     @POST
+    @Path("/find")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findUser(UserDto userDto) {
         Response rs;

@@ -9,7 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
-
+@Path("/allergens")
 public class AllergenController {
 
     private final AllergenService allergenService;

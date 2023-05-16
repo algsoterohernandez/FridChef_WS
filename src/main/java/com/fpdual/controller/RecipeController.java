@@ -11,7 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
-
+@Path("/recipes")
 public class RecipeController {
 
     private final RecipeService recipesService;
@@ -20,12 +20,9 @@ public class RecipeController {
         recipesService = new RecipeService();
     }
 
-    @GET
-    public Response ping() {
-        return Response.ok().entity("Service online").build();
-    }
 
     @GET
+    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
         Response rs;
@@ -48,6 +45,7 @@ public class RecipeController {
     }
 
     @POST
+    @Path("/findbyingredients")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findByIngredients(RecipeFilterDto recipeFilterDto) {
         Response rs;
@@ -70,6 +68,7 @@ public class RecipeController {
     }
 
     @POST
+    @Path("/findSuggestions")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findRecipeSuggestions(RecipeFilterDto recipeFilterDto) {
         Response rs;
@@ -93,6 +92,7 @@ public class RecipeController {
     }
 
     @POST
+    @Path("/filterRecipeByAllergen")
     @Produces(MediaType.APPLICATION_JSON)
     public Response filterRecipesByAllergen(int allergenId) {
         Response rs;
