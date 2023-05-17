@@ -1,4 +1,4 @@
-package com.fpdual.javaweb.tests;
+package com.fpdual.javaweb.ManagerTest;
 
 import com.fpdual.exceptions.UserAlreadyExistsException;
 import com.fpdual.persistence.aplication.dao.UserDao;
