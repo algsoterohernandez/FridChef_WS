@@ -1,4 +1,4 @@
-package com.fpdual.javaweb.ServiceTest;
+package com.fpdual.service;
 
 import com.fpdual.api.dto.UserDto;
 import com.fpdual.exceptions.UserAlreadyExistsException;
