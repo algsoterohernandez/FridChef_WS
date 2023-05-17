@@ -3,9 +3,11 @@ package com.fpdual.service;
 import com.fpdual.api.dto.AllergenDto;
 import com.fpdual.persistence.aplication.dao.AllergenDao;
 import com.fpdual.persistence.aplication.manager.AllergenManager;
+import com.fpdual.utils.MappingUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AllergenService {
 
@@ -21,30 +23,10 @@ public class AllergenService {
         List<AllergenDao> allergenDaos = allergenManager.findAllAllergens();
 
         if (allergenDaos != null) {
-            allergenDtoList = mapToDto(allergenDaos);
+            allergenDtoList =  MappingUtils.mapAllergenDto(allergenDaos);
         }
 
         return allergenDtoList;
     }
 
-    private AllergenDto mapToDto(AllergenDao allergenDao) {
-        AllergenDto allergenDto = new AllergenDto();
-
-        allergenDto.setId(allergenDao.getId());
-        allergenDto.setName(allergenDao.getName());
-
-
-        return allergenDto;
-    }
-
-    private List<AllergenDto> mapToDto(List<AllergenDao> allergenDaos) {
-        List<AllergenDto> allergenDtoList = new ArrayList<>();
-
-        for (AllergenDao allergenDao : allergenDaos) {
-            AllergenDto allergenDto = mapToDto(allergenDao);
-            allergenDtoList.add(allergenDto);
-        }
-
-        return allergenDtoList;
-    }
 }

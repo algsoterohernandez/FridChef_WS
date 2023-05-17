@@ -11,6 +11,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.Optional;
+
 @Path("/recipes")
 public class RecipeController {
 
@@ -25,47 +27,31 @@ public class RecipeController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
-        Response rs;
-
-        List<RecipeDto> ingredientsList = recipesService.findAll();
-
-        if (ingredientsList != null) {
-            rs = Response.ok().entity(ingredientsList).build();
-        } else {
-            rs = Response.status(500).build();//Server Error
-        }
-
-        // Comprobar resultado
-
-        // Convertir a json
-
-        // Construir respuesta
-
-        return rs;
+        List<RecipeDto> recipeList = recipesService.findAll();
+        return Optional.ofNullable(recipeList)
+                .map(list -> Response.ok().entity(list).build())
+                .orElse(Response.status(500).build());
     }
+
 
     @POST
     @Path("/findbyingredients")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findByIngredients(RecipeFilterDto recipeFilterDto) {
-        Response rs;
         try {
             if (recipeFilterDto == null) {
-                rs = Response.status(400).build();
-            } else {
-                List<RecipeDto> recipeRs = recipesService.findRecipesByIngredients(recipeFilterDto.getIngredients());
-                if (recipeRs != null) {
-                    rs = Response.ok().entity(recipeRs).build();
-                } else {
-                    rs = Response.status(500).build();//status No content
-                }
+                return Response.status(400).build();
             }
+            List<RecipeDto> recipeList = recipesService.findRecipesByIngredients(recipeFilterDto.getIngredients());
+            return Optional.ofNullable(recipeList)
+                    .map(list -> Response.ok().entity(list).build())
+                    .orElse(Response.status(204).build()); // No content
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            rs = Response.serverError().build();
+            return Response.serverError().build();
         }
-        return rs;
     }
+
 
     @POST
     @Path("/findSuggestions")

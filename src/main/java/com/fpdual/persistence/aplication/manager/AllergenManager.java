@@ -2,7 +2,6 @@ package com.fpdual.persistence.aplication.manager;
 
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.AllergenDao;
-import com.fpdual.persistence.aplication.dao.IngredientDao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

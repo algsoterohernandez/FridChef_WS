@@ -9,6 +9,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.Optional;
+
 @Path("/ingredients")
 
 public class IngredientController {
@@ -24,24 +26,11 @@ public class IngredientController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
-        Response rs;
-
         List<IngredientDto> ingredientsList = ingredientService.findAll();
-
-        if (ingredientsList != null) {
-            rs = Response.ok().entity(ingredientsList).build();
-        }
-        else {
-            rs = Response.status(500).build();//Server Error
-        }
-
-        // Comprobar resultado
-
-        // Convertir a json
-
-        // Construir respuesta
-
-        return rs;
+        return Optional.ofNullable(ingredientsList)
+                .map(list -> Response.ok().entity(list).build())
+                .orElse(Response.status(500).build());
     }
+
 
 }
