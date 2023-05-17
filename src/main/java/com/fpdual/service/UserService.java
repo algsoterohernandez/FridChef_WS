@@ -100,7 +100,7 @@ public class UserService {
         userDao.setSurname2(userDto.getSurname2());
         userDao.setEmail(userDto.getEmail());
         userDao.setPassword(userDto.getPassword());
-        userDao.setCreateTime(new Date(System.currentTimeMillis()));
+        userDao.setCreateDate(new Date(System.currentTimeMillis()));
 
         return userDao;
     }
