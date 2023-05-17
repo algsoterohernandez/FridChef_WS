@@ -9,8 +9,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
-
 @Path("/ingredients")
+
 public class IngredientController {
 
     private final IngredientService ingredientService;

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,6 +18,7 @@ import java.util.List;
 public class IngredientDao {
     private int id;
     private String name;
+    private List<AllergenDao> allergens;
 
     public IngredientDao(ResultSet result) {
         try {

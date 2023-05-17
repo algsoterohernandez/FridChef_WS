@@ -7,8 +7,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import com.fpdual.api.dto.UserDto;
-
 @Path("/user")
+
 public class UserController {
     private final UserService userService;
 

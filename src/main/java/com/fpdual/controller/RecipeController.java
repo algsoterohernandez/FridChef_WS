@@ -11,7 +11,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
-
 @Path("/recipes")
 public class RecipeController {
 
@@ -21,11 +20,6 @@ public class RecipeController {
         recipesService = new RecipeService();
     }
 
-    @GET
-    @Path("/ping")
-    public Response ping() {
-        return Response.ok().entity("Service online").build();
-    }
 
     @GET
     @Path("/")
@@ -96,6 +90,7 @@ public class RecipeController {
         }
         return rs;
     }
+
 
 }
 

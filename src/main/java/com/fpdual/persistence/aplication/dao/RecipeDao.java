@@ -27,6 +27,7 @@ public class RecipeDao {
     private int idCategory;
     private Date createTime;
     private Blob image;
+    private List<IngredientDao> ingredients;
 
 
     public RecipeDao(ResultSet result) {
@@ -40,9 +41,18 @@ public class RecipeDao {
             this.idCategory = result.getInt("id_category");
             this.createTime = result.getDate("create_time");
             this.image = result.getBlob("image");
+            this.ingredients = new ArrayList<>();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setIngredients(List<IngredientDao> ingredientList) {
+        this.ingredients = ingredientList;
+    }
+
+    public List<IngredientDao> getIngredients() {
+        return ingredients;
     }
 
     public Date getCreateTime() {

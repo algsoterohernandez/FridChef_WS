@@ -3,8 +3,8 @@ package com.fpdual.service;
 import com.fpdual.api.dto.IngredientDto;
 import com.fpdual.persistence.aplication.dao.IngredientDao;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
+import com.fpdual.utils.MappingUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientService {
@@ -21,31 +21,9 @@ public class IngredientService {
         List<IngredientDto> ingredientDtos = null;
 
         if (ingredientDaos != null) {
-            ingredientDtos = mapToDto(ingredientDaos);
+            ingredientDtos = MappingUtils.mapIngredientDto(ingredientDaos);
         }
 
         return ingredientDtos;
     }
-
-    private IngredientDto mapToDto(IngredientDao ingredientDao) {
-        IngredientDto ingredientDto = new IngredientDto();
-
-        ingredientDto.setId(ingredientDao.getId());
-        ingredientDto.setName(ingredientDao.getName());
-
-
-        return ingredientDto;
-    }
-
-    private List<IngredientDto> mapToDto(List<IngredientDao> ingredientDaos) {
-        List<IngredientDto> ingredientDtos = new ArrayList<>();
-
-        for (IngredientDao ingredientDao : ingredientDaos) {
-            IngredientDto ingredientDto = mapToDto(ingredientDao);
-            ingredientDtos.add(ingredientDto);
-        }
-
-        return ingredientDtos;
-    }
-
 }
