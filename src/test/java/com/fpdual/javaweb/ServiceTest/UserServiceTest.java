@@ -1,4 +1,4 @@
-package com.fpdual.javaweb.tests;
+package com.fpdual.javaweb.ServiceTest;
 
 import com.fpdual.api.dto.UserDto;
 import com.fpdual.exceptions.UserAlreadyExistsException;
@@ -29,7 +29,7 @@ public class UserServiceTest {
 
     private UserDto exampleUserDto;
     private UserDao exampleUserDao;
-    private static UserService userService;
+    private UserService userService;
 
     @BeforeEach
     public void init() {
@@ -136,7 +136,7 @@ public class UserServiceTest {
         assertThrows(SQLException.class, () -> userService.deleteUser(exampleUserDto.getEmail()));
     }
 
-    @Test////////////////////////////////
+    @Test
     public void testFindUser_validEmailPassword_userDtoNotNull() throws Exception {
 
         //Prepare method dependencies
