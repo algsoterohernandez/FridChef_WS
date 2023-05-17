@@ -1,4 +1,4 @@
-package com.fpdual.javaweb.DaoTest;
+package com.fpdual.persistence.aplication.dao;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
