@@ -3,10 +3,13 @@ package com.fpdual.utils;
 import com.fpdual.api.dto.AllergenDto;
 import com.fpdual.api.dto.IngredientDto;
 import com.fpdual.api.dto.RecipeDto;
+import com.fpdual.api.dto.UserDto;
 import com.fpdual.persistence.aplication.dao.AllergenDao;
 import com.fpdual.persistence.aplication.dao.IngredientDao;
 import com.fpdual.persistence.aplication.dao.RecipeDao;
+import com.fpdual.persistence.aplication.dao.UserDao;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,4 +80,36 @@ public class MappingUtils {
                 .map(MappingUtils::mapAllergenDto)
                 .collect(Collectors.toList());
     }
+
+    public UserDto mapToDto(UserDao userDao) {
+
+        UserDto userDto = new UserDto();
+
+        userDto.setId(userDao.getId());
+        userDto.setName(userDao.getName());
+        userDto.setSurname1(userDao.getSurname1());
+        userDto.setSurname2(userDao.getSurname2());
+        userDto.setEmail(userDao.getEmail());
+        userDto.setPassword(userDao.getPassword());
+
+        return userDto;
+
+    }
+
+    public UserDao mapToDao(UserDto userDto) {
+
+        UserDao userDao = new UserDao();
+
+        userDao.setId(userDto.getId());
+        userDao.setName(userDto.getName());
+        userDao.setSurname1(userDto.getSurname1());
+        userDao.setSurname2(userDto.getSurname2());
+        userDao.setEmail(userDto.getEmail());
+        userDao.setPassword(userDto.getPassword());
+        userDao.setCreateTime(new Date(System.currentTimeMillis()));
+
+        return userDao;
+
+    }
+
 }

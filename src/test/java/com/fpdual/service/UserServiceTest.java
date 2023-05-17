@@ -5,7 +5,6 @@ import com.fpdual.exceptions.UserAlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.UserDao;
 import com.fpdual.persistence.aplication.manager.UserManager;
-import com.fpdual.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
