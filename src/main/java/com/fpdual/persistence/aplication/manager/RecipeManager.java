@@ -199,7 +199,7 @@ public class RecipeManager {
     }
 
     public List<RecipeDao> findRecipeSuggestions(Connection con, List<Integer> ingredientIds) {
-        List<RecipeDao> recipesSuggesions = new ArrayList<>();
+        List<RecipeDao> recipesSuggestions = new ArrayList<>();
         try {
 
             String query = "SELECT r.* FROM recipe r, ingredient_recipe ir WHERE r.id = ir.id_recipe ";
@@ -223,14 +223,14 @@ public class RecipeManager {
                 RecipeDao recipe = new RecipeDao(result);
                 FillRecipeIngredients(con, recipe);
 
-                recipesSuggesions.add(recipe);
+                recipesSuggestions.add(recipe);
             }
 
-            return recipesSuggesions;
+            return recipesSuggestions;
 
         } catch (SQLException  e) {
             e.printStackTrace();
-            return recipesSuggesions;
+            return recipesSuggestions;
         }
     }
 
