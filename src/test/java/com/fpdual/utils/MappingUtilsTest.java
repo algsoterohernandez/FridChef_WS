@@ -37,7 +37,6 @@ public class MappingUtilsTest {
     @Test
     public void testMapToDto_validUserDao_userDto() {
 
-        //Prepare method dependencies
 
         //Execute method
         UserDto userDto = mappingUtils.mapToDto(exampleUserDao);
@@ -58,7 +57,6 @@ public class MappingUtilsTest {
     @Test
     public void testMapToDao_validUserDto_userDao() {
 
-        //Prepare method dependencies
 
         //Execute method
         UserDao userDao = mappingUtils.mapToDao(exampleUserDto);

@@ -87,8 +87,6 @@ public class UserServiceTest {
         //Prepare method dependencies
         when(mySQLConnector.getMySQLConnection()).thenThrow(ClassNotFoundException.class);
 
-        //Execute method
-
         //Asserts
         assertThrows(ClassNotFoundException.class, () -> userService.createUser(exampleUserDto));
     }
@@ -129,8 +127,6 @@ public class UserServiceTest {
         //Prepare method dependencies
         when(userManager.deleteUser(any(),anyString())).thenThrow(SQLException.class);
 
-        //Execute method
-
         //Asserts
         assertThrows(SQLException.class, () -> userService.deleteUser(exampleUserDto.getEmail()));
     }
@@ -158,8 +154,6 @@ public class UserServiceTest {
 
         //Prepare method dependencies
         when(mySQLConnector.getMySQLConnection()).thenThrow(ClassNotFoundException.class);
-
-        //Execute method
 
         //Asserts
         assertThrows(ClassNotFoundException.class,
