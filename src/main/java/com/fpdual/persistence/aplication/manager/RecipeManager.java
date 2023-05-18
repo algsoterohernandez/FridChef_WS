@@ -180,8 +180,6 @@ public class RecipeManager {
 
             ResultSet result = stm.executeQuery(query);
 
-
-
             while (result.next()) {
                 RecipeDao recipe = new RecipeDao(result);
                 FillRecipeIngredients(con, recipe);
