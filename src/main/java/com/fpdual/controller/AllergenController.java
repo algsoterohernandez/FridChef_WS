@@ -1,6 +1,8 @@
 package com.fpdual.controller;
 
 import com.fpdual.api.dto.AllergenDto;
+import com.fpdual.persistence.aplication.connector.MySQLConnector;
+import com.fpdual.persistence.aplication.manager.AllergenManager;
 import com.fpdual.service.AllergenService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -15,7 +17,7 @@ public class AllergenController {
     private final AllergenService allergenService;
 
     public AllergenController() {
-        allergenService = new AllergenService();
+        allergenService = new AllergenService(new MySQLConnector(), new AllergenManager());
     }
 
     @GET

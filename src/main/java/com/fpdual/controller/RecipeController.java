@@ -2,6 +2,9 @@ package com.fpdual.controller;
 
 import com.fpdual.api.dto.RecipeDto;
 import com.fpdual.api.dto.RecipeFilterDto;
+import com.fpdual.persistence.aplication.connector.MySQLConnector;
+import com.fpdual.persistence.aplication.manager.IngredientManager;
+import com.fpdual.persistence.aplication.manager.RecipeManager;
 import com.fpdual.service.RecipeService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -19,7 +22,7 @@ public class RecipeController {
     private final RecipeService recipesService;
 
     public RecipeController() {
-        recipesService = new RecipeService();
+        recipesService = new RecipeService(new MySQLConnector(), new RecipeManager(), new IngredientManager());
     }
 
 
