@@ -1,6 +1,8 @@
 package com.fpdual.controller;
 
 import com.fpdual.api.dto.IngredientDto;
+import com.fpdual.persistence.aplication.connector.MySQLConnector;
+import com.fpdual.persistence.aplication.manager.IngredientManager;
 import com.fpdual.service.IngredientService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -18,7 +20,7 @@ public class IngredientController {
     private final IngredientService ingredientService;
 
     public IngredientController() {
-        ingredientService = new IngredientService();
+        ingredientService = new IngredientService(new MySQLConnector(), new IngredientManager());
     }
 
 

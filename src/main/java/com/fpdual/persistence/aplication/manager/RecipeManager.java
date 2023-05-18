@@ -124,8 +124,10 @@ public class RecipeManager {
         return success;
     }
 
-    public List<RecipeDao> findAll() {
-        try (Connection con = new MySQLConnector().getMySQLConnection(); Statement stm = con.createStatement()) {
+    // Metodos creados y usados por Asun
+    public List<RecipeDao> findAll(Connection con) {
+
+        try (Statement stm = con.createStatement()) {
             ResultSet result = stm.executeQuery("select * from recipe");
 
             result.beforeFirst();
@@ -134,21 +136,22 @@ public class RecipeManager {
 
             while (result.next()) {
                 RecipeDao recipe = new RecipeDao(result);
-                FillRecipeIngredients(recipe);
+                FillRecipeIngredients(con, recipe);
 
                 recipes.add(recipe);
             }
 
             return recipes;
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public List<RecipeDao> findRecipesByIngredients(List<Integer> ingredientIds) {
-        try (Connection con = new MySQLConnector().getMySQLConnection(); Statement stm = con.createStatement()) {
+    public List<RecipeDao> findRecipesByIngredients(Connection con, List<Integer> ingredientIds) {
+        List<RecipeDao>  recipes = new ArrayList<>();
+        try (Statement stm = con.createStatement()) {
             String query = "SELECT r.*, COUNT(DISTINCT ir.id_ingredient) AS num_ingredients " +
                     "FROM recipe r " +
                     "INNER JOIN ingredient_recipe ir ON r.id = ir.id_recipe " +
@@ -177,25 +180,27 @@ public class RecipeManager {
 
             ResultSet result = stm.executeQuery(query);
 
-            List<RecipeDao> recipes = new ArrayList<>();
+
 
             while (result.next()) {
                 RecipeDao recipe = new RecipeDao(result);
-                FillRecipeIngredients(recipe);
+                FillRecipeIngredients(con, recipe);
 
                 recipes.add(recipe);
             }
 
             return recipes;
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+
+            return recipes;
         }
     }
 
-    public List<RecipeDao> findRecipeSuggestions(List<Integer> ingredientIds) {
-        try (Connection con = new MySQLConnector().getMySQLConnection()) {
+    public List<RecipeDao> findRecipeSuggestions(Connection con, List<Integer> ingredientIds) {
+        List<RecipeDao> recipesSuggesions = new ArrayList<>();
+        try {
 
             String query = "SELECT r.* FROM recipe r, ingredient_recipe ir WHERE r.id = ir.id_recipe ";
             int count = 0;
@@ -212,25 +217,25 @@ public class RecipeManager {
             ps.setInt(count + 1, ingredientIds.size());
             ResultSet result = ps.executeQuery();
 
-            List<RecipeDao> recipesSuggesions = new ArrayList<>();
+
 
             while (result.next()) {
                 RecipeDao recipe = new RecipeDao(result);
-                FillRecipeIngredients(recipe);
+                FillRecipeIngredients(con, recipe);
 
                 recipesSuggesions.add(recipe);
             }
 
             return recipesSuggesions;
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException  e) {
             e.printStackTrace();
-            return null;
+            return recipesSuggesions;
         }
     }
 
-    private void FillRecipeIngredients(RecipeDao recipeDao)
+    private void FillRecipeIngredients(Connection con, RecipeDao recipeDao)
     {
-        recipeDao.setIngredients(ingredientManager.findRecipeIngredients(recipeDao.getId()));
+        recipeDao.setIngredients(ingredientManager.findRecipeIngredients(con, recipeDao.getId()));
     }
 }
