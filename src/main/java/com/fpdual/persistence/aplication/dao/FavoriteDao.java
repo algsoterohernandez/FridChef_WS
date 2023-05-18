@@ -18,14 +18,14 @@ public class FavoriteDao {
     private int id;
     private int idRecipe;
     private int idUser;
-    private Date createDate;
+    private Date createTime;
 
     public FavoriteDao(ResultSet result) {
         try {
             this.id = result.getInt("id");
             this.idRecipe = result.getInt("id_recipe");
             this.idUser = result.getInt("id_user");
-            this.createDate = result.getDate("create_date");
+            this.createTime = result.getDate("create_time");
         } catch (SQLException e) {
             e.printStackTrace();
         }

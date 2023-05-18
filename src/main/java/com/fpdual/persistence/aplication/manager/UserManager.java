@@ -11,16 +11,14 @@ public class UserManager {
 
     public UserDao insertUser(Connection con, UserDao user) throws UserAlreadyExistsException {
         try (PreparedStatement stm = con.prepareStatement("INSERT INTO user (name, surname1, " +
-                "surname2, email, password, create_date) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
+                "surname2, email, password, create_time) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
 
             stm.setString(1, user.getName());
             stm.setString(2, user.getSurname1());
             stm.setString(3, user.getSurname2());
             stm.setString(4, user.getEmail());
             stm.setString(5, user.getPassword());
-            stm.setDate(6, user.getCreateDate());
-
-
+            stm.setDate(6, user.getCreateTime());
 
 
             stm.executeUpdate();

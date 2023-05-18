@@ -13,8 +13,7 @@ import java.sql.SQLException;
 public class UserDao {
     private int id;
     private String name, surname1, surname2, email, password;
-    private boolean isAdmin;
-    private Date createDate;
+    private Date createTime;
 
     public UserDao(ResultSet result) throws SQLException {
 
@@ -26,8 +25,7 @@ public class UserDao {
             surname2 = result.getString("surname2");
             email = result.getString("email");
             password = result.getString("password");
-            createDate = result.getDate("create_date");
-            isAdmin = result.getBoolean("is_admin");
+            createTime = result.getDate("create_time");
 
         } catch (SQLException e) {
 
