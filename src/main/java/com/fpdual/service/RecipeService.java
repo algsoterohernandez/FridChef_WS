@@ -34,12 +34,11 @@ public class RecipeService {
                 recipeDtos = MappingUtils.mapRecipeDto(recipeDaos);
             }
 
-            return recipeDtos;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+        return recipeDtos;
     }
 
     public List<RecipeDto> findRecipesByIngredients(List<String> recipeIngredients) {
@@ -47,6 +46,7 @@ public class RecipeService {
 
         try (Connection con = connector.getMySQLConnection()) {
             List<Integer> ingredientIds = new ArrayList<>();
+
             for (String ingredientName : recipeIngredients) {
                 Integer ingredientId = ingredientManager.getIngredientIdByName(con, ingredientName);
 
@@ -57,20 +57,16 @@ public class RecipeService {
                 ingredientIds.add(ingredientId);
             }
 
-
-
             List<RecipeDao> recipeDaos = recipeManager.findRecipesByIngredients(con, ingredientIds);
 
             if (recipeDaos != null) {
                 recipeDtos = MappingUtils.mapRecipeDto(recipeDaos);
             }
-
-            return recipeDtos;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+
+        return recipeDtos;
     }
 
     public List<RecipeDto> findRecipeSuggestions(List<String> recipeIngredients) {
@@ -94,11 +90,9 @@ public class RecipeService {
                 recipeDtos = MappingUtils.mapRecipeDto(recipeDaos);
             }
 
-            return recipeDtos;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+        return recipeDtos;
     }
 }

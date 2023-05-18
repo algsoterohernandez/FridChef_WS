@@ -27,12 +27,17 @@ public class IngredientController {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
+    //método comentado para entender su funcionamiento e implementación con lambda
     public Response findAll() {
+        // Llamada al método findAll() del servicio de ingredientes para obtener la lista de ingredientes
         List<IngredientDto> ingredientsList = ingredientService.findAll();
+
+        // Verificar si la lista de ingredientes es nula o vacía usando lambda
         return Optional.ofNullable(ingredientsList)
+                // Si la lista no es nula, construir una respuesta exitosa con la lista de ingredientes como entidad
                 .map(list -> Response.ok().entity(list).build())
+                // Si la lista es nula, devolver una respuesta de estado 500 (Error interno del servidor)
                 .orElse(Response.status(500).build());
     }
-
 
 }
