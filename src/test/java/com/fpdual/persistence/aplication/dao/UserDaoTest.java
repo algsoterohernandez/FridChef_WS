@@ -24,8 +24,6 @@ public class UserDaoTest {
         //Prepare method dependencies
         when(result.getInt(any())).thenThrow(SQLException.class);
 
-        //Execute methods
-
         //Asserts
         assertThrows(SQLException.class, () -> result.getInt("email"));
 
