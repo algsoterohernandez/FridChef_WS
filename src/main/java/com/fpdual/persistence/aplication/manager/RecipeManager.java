@@ -234,7 +234,7 @@ public class RecipeManager {
         recipeDao.setIngredients(ingredientManager.findRecipeIngredients(recipeDao.getId()));
     }
 
-    /*public List<RecipeDao> findRecipeByCategory(String category) {
+    public List<RecipeDao> findRecipeByCategory(String category) {
         try (Connection con = new MySQLConnector().getMySQLConnection()) {
             String query = "SELECT * FROM recipe WHERE category = ?";
             PreparedStatement ps = con.prepareStatement(query);
@@ -256,6 +256,6 @@ public class RecipeManager {
             e.printStackTrace();
             return null;
         }
-    }*/
+    }
 
 }

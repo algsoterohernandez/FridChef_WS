@@ -78,7 +78,7 @@ public class RecipeService {
 
         return recipeDtos;
     }
-    /*public List<RecipeDto> findRecipeByCategory(String category) {
+    public List<RecipeDto> findRecipeByCategory(String category) {
         List<RecipeDto> recipeDtos = null;
         List<RecipeDao> recipeDaos = recipeManager.findRecipeByCategory(category);
 
@@ -87,6 +87,6 @@ public class RecipeService {
         }
 
         return recipeDtos;
-    }*/
+    }
 
 }
