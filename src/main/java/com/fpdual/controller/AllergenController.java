@@ -1,6 +1,7 @@
 package com.fpdual.controller;
 
 import com.fpdual.api.dto.AllergenDto;
+import com.fpdual.enums.HttpStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.manager.AllergenManager;
 import com.fpdual.service.AllergenService;
@@ -31,7 +32,7 @@ public class AllergenController {
             rs = Response.ok().entity(allergenDtoList).build();
         }
         else {
-            rs = Response.status(500).build();//Server Error
+            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();//Server Error
         }
 
         return rs;

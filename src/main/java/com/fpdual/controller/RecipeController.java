@@ -2,6 +2,7 @@ package com.fpdual.controller;
 
 import com.fpdual.api.dto.RecipeDto;
 import com.fpdual.api.dto.RecipeFilterDto;
+import com.fpdual.enums.HttpStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
 import com.fpdual.persistence.aplication.manager.RecipeManager;
@@ -33,7 +34,7 @@ public class RecipeController {
         List<RecipeDto> recipeList = recipesService.findAll();
         return Optional.ofNullable(recipeList)
                 .map(list -> Response.ok().entity(list).build())
-                .orElse(Response.status(500).build());
+                .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
     }
 
 
@@ -43,12 +44,12 @@ public class RecipeController {
     public Response findByIngredients(RecipeFilterDto recipeFilterDto) {
         try {
             if (recipeFilterDto == null) {
-                return Response.status(400).build();
+                return Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
             }
             List<RecipeDto> recipeList = recipesService.findRecipesByIngredients(recipeFilterDto.getIngredients());
             return Optional.ofNullable(recipeList)
                     .map(list -> Response.ok().entity(list).build())
-                    .orElse(Response.status(204).build()); // No content
+                    .orElse(Response.status(HttpStatus.NO_CONTENT.getStatusCode()).build()); // No content
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return Response.serverError().build();
@@ -64,11 +65,11 @@ public class RecipeController {
 
         try {
             if (recipeFilterDto == null) {
-                rs = Response.status(400).build();
+                rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
             } else {
                 List<RecipeDto> recipeRs = recipesService.findRecipeSuggestions(recipeFilterDto.getIngredients());
                 if (recipeRs == null) {
-                    rs = Response.status(500).build();//status No content
+                    rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();//status No content
                 } else {
                     rs = Response.ok().entity(recipeRs).build();
                 }
@@ -82,5 +83,3 @@ public class RecipeController {
 
 
 }
-
-

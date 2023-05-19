@@ -72,7 +72,6 @@ public class UserManager {
             stm.setString(2, password);
 
             ResultSet result = stm.executeQuery();
-            result.beforeFirst();
 
             UserDao user = null;
 
