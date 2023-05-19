@@ -1,6 +1,7 @@
 package com.fpdual.controller;
 
 import com.fpdual.api.dto.IngredientDto;
+import com.fpdual.enums.HttpStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
 import com.fpdual.service.IngredientService;
@@ -31,8 +32,7 @@ public class IngredientController {
         List<IngredientDto> ingredientsList = ingredientService.findAll();
         return Optional.ofNullable(ingredientsList)
                 .map(list -> Response.ok().entity(list).build())
-                .orElse(Response.status(500).build());
+                .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
     }
-
 
 }
