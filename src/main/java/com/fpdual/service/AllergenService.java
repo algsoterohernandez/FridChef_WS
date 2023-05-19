@@ -32,12 +32,10 @@ public class AllergenService {
                 allergenDtoList = MappingUtils.mapAllergenDto(allergenDaos);
             }
 
-            return allergenDtoList;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
 
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return allergenDtoList;
     }
 }

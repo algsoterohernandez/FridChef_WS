@@ -130,8 +130,6 @@ public class RecipeManager {
         try (Statement stm = con.createStatement()) {
             ResultSet result = stm.executeQuery("select * from recipe");
 
-            result.beforeFirst();
-
             List<RecipeDao> recipes = new ArrayList<>();
 
             while (result.next()) {
@@ -162,7 +160,7 @@ public class RecipeManager {
                     query += ", ";
                 }
             }
-            query += ") GROUP BY r.id, r.name " +
+            query += ") AND r.status = 'ACCEPTED' GROUP BY r.id, r.name " +
                     "HAVING COUNT(DISTINCT ir.id_ingredient) = " + ingredientIds.size() +
                     " AND NOT EXISTS (" +
                     "   SELECT 1 " +
@@ -179,8 +177,6 @@ public class RecipeManager {
                     ")";
 
             ResultSet result = stm.executeQuery(query);
-
-
 
             while (result.next()) {
                 RecipeDao recipe = new RecipeDao(result);
@@ -202,10 +198,10 @@ public class RecipeManager {
         List<RecipeDao> recipesSuggestions = new ArrayList<>();
         try {
 
-            String query = "SELECT r.* FROM recipe r, ingredient_recipe ir WHERE r.id = ir.id_recipe ";
+            String query = "SELECT r.* FROM recipe r, ingredient_recipe ir WHERE r.id = ir.id_recipe AND r.status = 'ACCEPTED'";
             int count = 0;
             for (int i = 0; i < ingredientIds.size(); i++) {
-                query += "AND EXISTS (SELECT * FROM ingredient_recipe ir" + i +
+                query += " AND EXISTS (SELECT * FROM ingredient_recipe ir" + i +
                         " WHERE ir" + i + ".id_recipe = r.id AND ir" + i + ".id_ingredient = ?) ";
                 count++;
             }

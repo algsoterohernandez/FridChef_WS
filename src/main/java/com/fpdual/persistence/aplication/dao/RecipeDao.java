@@ -1,5 +1,6 @@
 package com.fpdual.persistence.aplication.dao;
 
+import com.fpdual.enums.RecipeStatus;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ public class RecipeDao {
     private int idCategory;
     private Date createTime;
     private Blob image;
+    private RecipeStatus status;
     private List<IngredientDao> ingredients;
 
 
@@ -41,6 +43,9 @@ public class RecipeDao {
             this.idCategory = result.getInt("id_category");
             this.createTime = result.getDate("create_time");
             this.image = result.getBlob("image");
+            this.ingredients = new ArrayList<>();
+            // Asignar el estado de la receta utilizando el método fromString() del enum RecipeStatus
+            this.status = RecipeStatus.fromString(result.getString("status"));
             this.ingredients = new ArrayList<>();
         } catch (SQLException e) {
             e.printStackTrace();
