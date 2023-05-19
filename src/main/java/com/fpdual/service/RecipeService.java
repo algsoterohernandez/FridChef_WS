@@ -78,4 +78,15 @@ public class RecipeService {
 
         return recipeDtos;
     }
+    /*public List<RecipeDto> findRecipeByCategory(String category) {
+        List<RecipeDto> recipeDtos = null;
+        List<RecipeDao> recipeDaos = recipeManager.findRecipeByCategory(category);
+
+        if (recipeDaos != null) {
+            recipeDtos = MappingUtils.mapRecipeDto(recipeDaos);
+        }
+
+        return recipeDtos;
+    }*/
+
 }

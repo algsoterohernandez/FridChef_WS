@@ -233,4 +233,29 @@ public class RecipeManager {
     {
         recipeDao.setIngredients(ingredientManager.findRecipeIngredients(recipeDao.getId()));
     }
+
+    /*public List<RecipeDao> findRecipeByCategory(String category) {
+        try (Connection con = new MySQLConnector().getMySQLConnection()) {
+            String query = "SELECT * FROM recipe WHERE category = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, category);
+            ResultSet result = ps.executeQuery();
+
+            List<RecipeDao> recipes = new ArrayList<>();
+
+            while (result.next()) {
+                RecipeDao recipe = new RecipeDao(result);
+                FillRecipeIngredients(recipe);
+
+                recipes.add(recipe);
+            }
+
+            return recipes;
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }*/
+
 }
