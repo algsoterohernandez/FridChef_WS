@@ -1,6 +1,5 @@
 package com.fpdual.persistence.aplication.manager;
 
-import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.AllergenDao;
 
 import java.sql.Connection;
