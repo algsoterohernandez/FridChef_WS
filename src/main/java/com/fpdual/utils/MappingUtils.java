@@ -4,6 +4,7 @@ import com.fpdual.api.dto.AllergenDto;
 import com.fpdual.api.dto.IngredientDto;
 import com.fpdual.api.dto.RecipeDto;
 import com.fpdual.api.dto.UserDto;
+import com.fpdual.enums.RecipeStatus;
 import com.fpdual.persistence.aplication.dao.AllergenDao;
 import com.fpdual.persistence.aplication.dao.IngredientDao;
 import com.fpdual.persistence.aplication.dao.RecipeDao;
@@ -23,9 +24,11 @@ public class MappingUtils {
         recipeDto.setDescription(recipeDao.getDescription());
         recipeDto.setDifficulty(recipeDao.getDifficulty());
         recipeDto.setTime(recipeDao.getTime());
-        recipeDto.setUnit_time(recipeDao.getUnitTime());
-        recipeDto.setId_category(recipeDao.getIdCategory());
-        recipeDto.setCreate_time(recipeDao.getCreateTime());
+        recipeDto.setUnitTime(recipeDao.getUnitTime());
+        recipeDto.setIdCategory(recipeDao.getIdCategory());
+        recipeDto.setCreateTime(recipeDao.getCreateTime());
+        recipeDto.setStatus(recipeDao.getStatus());
+
 
         List<IngredientDto> ingredients = recipeDao.getIngredients().stream()
                 .map(MappingUtils::mapIngredientDto)
