@@ -1,6 +1,7 @@
 package com.fpdual.controller;
 
 import com.fpdual.api.dto.IngredientDto;
+import com.fpdual.enums.HttpStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
 import com.fpdual.service.IngredientService;
@@ -37,7 +38,7 @@ public class IngredientController {
                 // Si la lista no es nula, construir una respuesta exitosa con la lista de ingredientes como entidad
                 .map(list -> Response.ok().entity(list).build())
                 // Si la lista es nula, devolver una respuesta de estado 500 (Error interno del servidor)
-                .orElse(Response.status(500).build());
+                .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
     }
 
 }

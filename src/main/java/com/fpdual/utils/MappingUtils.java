@@ -5,7 +5,6 @@ import com.fpdual.persistence.aplication.dao.*;
 import com.fpdual.api.dto.IngredientRecipeDto;
 import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 
-
 import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -142,7 +141,7 @@ public class MappingUtils {
                 .collect(Collectors.toList());
     }
 
-    public UserDto mapToDto(UserDao userDao) {
+    public static UserDto mapToDto(UserDao userDao) {
 
         UserDto userDto = new UserDto();
 
@@ -157,7 +156,7 @@ public class MappingUtils {
 
     }
 
-    public UserDao mapToDao(UserDto userDto) {
+    public static UserDao mapToDao(UserDto userDto) {
 
         UserDao userDao = new UserDao();
 
@@ -171,6 +170,21 @@ public class MappingUtils {
 
         return userDao;
 
+    }
+
+    public static RolUserDto mapRolUserDto(RolUserDao rolUserDao) {
+
+        RolUserDto rolUserDto = new RolUserDto();
+
+        rolUserDto.setIdUser(rolUserDao.getIdUser());
+        rolUserDto.setIdRol(rolUserDao.getIdRol());
+
+        return rolUserDto;
+    }
+    public static List<RolUserDto> mapRolUserDto(List<RolUserDao> rolUserDao) {
+        return rolUserDao.stream()
+                .map(MappingUtils::mapRolUserDto)
+                .collect(Collectors.toList());
     }
 
 }

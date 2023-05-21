@@ -1,9 +1,13 @@
 package com.fpdual.service;
 
+import com.fpdual.api.dto.RolUserDto;
 import com.fpdual.api.dto.UserDto;
+import com.fpdual.exceptions.FridChefException;
 import com.fpdual.exceptions.UserAlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
+import com.fpdual.persistence.aplication.dao.RolUserDao;
 import com.fpdual.persistence.aplication.dao.UserDao;
+import com.fpdual.persistence.aplication.manager.RolManager;
 import com.fpdual.persistence.aplication.manager.UserManager;
 import com.fpdual.utils.MappingUtils;
 import lombok.AccessLevel;
@@ -13,28 +17,31 @@ import lombok.Setter;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 public class UserService {
 
     private final MySQLConnector connector;
     private final UserManager userManager;
+    private final RolManager rolManager;
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private MessageDigest md5;
-    private MappingUtils mapper;
 
-    public UserService(MySQLConnector connector, UserManager userManager) {
+    public UserService(MySQLConnector connector, UserManager userManager, RolManager rolManager) {
         this.connector = connector;
         this.userManager = userManager;
-        this.mapper = new MappingUtils();
+        this.rolManager = rolManager;
     }
 
-    public UserDto createUser(UserDto userDto) throws SQLException, ClassNotFoundException {
+    public UserDto createUser(UserDto userDto) throws SQLException, ClassNotFoundException, FridChefException {
 
         try (Connection con = connector.getMySQLConnection()) {
 
-            UserDao userDao = this.userManager.insertUser(con, mapper.mapToDao(userDto));
-            userDto = mapper.mapToDto(userDao);
+            UserDao userDao = this.userManager.insertUser(con, MappingUtils.mapToDao(userDto));
+            userDto = MappingUtils.mapToDto(userDao);
+
+            boolean insertRolOk =this.rolManager.insertRol(con,userDto);
 
 
         } catch (UserAlreadyExistsException uaee) {
@@ -72,15 +79,20 @@ public class UserService {
 
     public UserDto findUser(String email, String password) throws SQLException, ClassNotFoundException {
         UserDto userDto = null;
+        List<RolUserDto> rolUserDto;
 
         try (Connection con = connector.getMySQLConnection()) {
 
             UserDao userDao = this.userManager.findByEmailPassword(con, email, password);
 
+            List<RolUserDao> rolUserDao=this.rolManager.findRolesById(con, userDao.getId());
+
             if (userDao != null) {
 
-                userDto = mapper.mapToDto(userDao);
+                userDto = MappingUtils.mapToDto(userDao);
+                rolUserDto = MappingUtils.mapRolUserDto(rolUserDao);
 
+                userDto.setRolUserDto(rolUserDto);
             }
 
         } catch (Exception e) {

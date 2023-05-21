@@ -4,6 +4,7 @@ import com.fpdual.api.dto.UserDto;
 import com.fpdual.exceptions.UserAlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.UserDao;
+import com.fpdual.persistence.aplication.manager.RolManager;
 import com.fpdual.persistence.aplication.manager.UserManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,8 @@ public class UserServiceTest {
     private MySQLConnector mySQLConnector;
     @Mock
     private UserManager userManager;
+    @Mock
+    private RolManager rolManager;
 
     private UserDto exampleUserDto;
     private UserDao exampleUserDao;
@@ -32,7 +35,7 @@ public class UserServiceTest {
 
     @BeforeEach
     public void init() {
-        userService = new UserService(mySQLConnector, userManager);
+        userService = new UserService(mySQLConnector, userManager,rolManager);
 
         exampleUserDto = new UserDto();
         exampleUserDto.setName("example");
