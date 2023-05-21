@@ -5,7 +5,6 @@ import com.fpdual.persistence.aplication.dao.IngredientDao;
 import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 import com.fpdual.persistence.aplication.dao.RecipeDao;
 import com.fpdual.persistence.aplication.manager.CategoryManager;
-import com.fpdual.persistence.aplication.manager.IngredientRecipeManager;
 import com.fpdual.persistence.aplication.manager.RecipeManager;
 import com.fpdual.utils.MappingUtils;
 import lombok.*;
@@ -21,13 +20,11 @@ public class CategoryService {
     private final Connection connector;
     private final CategoryManager categoryManager;
     private final RecipeManager recipeManager;
-    private final IngredientRecipeManager ingredientRecipeManager;
 
     public CategoryService(Connection connector) {
         this.connector = connector;
         this.categoryManager = new CategoryManager();
         this.recipeManager = new RecipeManager();
-        this.ingredientRecipeManager = new IngredientRecipeManager();
     }
 
     public CategoryDto findCategoryById(int id) {
@@ -80,17 +77,12 @@ public class CategoryService {
         MappingUtils mappingUtils = new MappingUtils();
 
         int idCategory = categoryDto.getId();
-
-        for(RecipeDao recipeDao : recipeManager.findAllRecipes(connector)){
-            if(recipeDao.getIdCategory() == idCategory){
-                RecipeDto recipeDto = mappingUtils.mapRecipeDto(recipeDao);
-                filteredRecipes.add(recipeDto);
-            }
+        List<RecipeDao> recipes = recipeManager.findAllRecipesByCategoryId(connector, categoryDto.getId());
+        for(RecipeDao recipeDao : recipes){
+            RecipeDto recipeDto = mappingUtils.mapRecipeDto(recipeDao);
+            filteredRecipes.add(recipeDto);
         }
 
-        for(RecipeDto recipe2 : filteredRecipes){
-            System.out.println(recipe2);
-        }
         return filteredRecipes;
     }
 

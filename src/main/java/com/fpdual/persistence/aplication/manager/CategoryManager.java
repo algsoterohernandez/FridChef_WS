@@ -1,7 +1,6 @@
 package com.fpdual.persistence.aplication.manager;
 
 import com.fpdual.api.dto.CategoryDto;
-import com.fpdual.api.dto.CategoryFilterDto;
 import com.fpdual.api.dto.RecipeDto;
 import com.fpdual.exceptions.CategoryAlreadyExistsException;
 
@@ -82,8 +81,9 @@ public class CategoryManager {
             List<CategoryDto> categories = new ArrayList<>();
 
             while(result.next()){
+                Integer id = result.getInt("id");
                 String name = result.getString("name");
-                CategoryDto category = new CategoryDto(name);
+                CategoryDto category = new CategoryDto(id, name);
                 categories.add(category);
             }
             return categories;
@@ -91,14 +91,5 @@ public class CategoryManager {
             System.out.println(e.getMessage());
             return null;
         }
-    }
-
-    public List<RecipeDto> findRecipesByCategory(Connection con, int idCategory){
-        try(PreparedStatement stm = con.prepareStatement("SELECT * FROM recipe WHERE id_category = ?")){
-            stm.setInt(1, idCategory);
-        }catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-        return null;
     }
 }

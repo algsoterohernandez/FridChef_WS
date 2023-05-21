@@ -38,22 +38,21 @@ public class RecipeController {
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create(RecipeDto recipeDto, List<IngredientRecipeDto> ingredientRecipeDto) {
+    public Response create(RecipeDto recipeDto) {
         Response rs = null;
 
         try {
             if (recipeDto == null) {
                 rs = Response.status(400).build();
             } else {
-                RecipeDto recipeRs = recipesService.createRecipe(recipeDto, ingredientRecipeDto);
+                RecipeDto recipeRs = recipesService.createRecipe(recipeDto);
                 if(recipeRs != null){
-                    rs = Response.status(201).entity(recipeRs).build();
+                    rs = Response.status(200).entity(recipeRs).build();
                 }else{
                     rs = Response.status(500).build();
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             rs = Response.serverError().build();
         }
         return rs;

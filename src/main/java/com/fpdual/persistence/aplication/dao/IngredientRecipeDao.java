@@ -19,14 +19,17 @@ public class IngredientRecipeDao {
     private int id;
     private int idRecipe;
     private int idIngredient;
+    private String nameIngredient;
     private int quantity;
     private String unit;
+    private List<AllergenDao> allergens;
 
     public IngredientRecipeDao(ResultSet result) {
         try {
             this.id = result.getInt("id");
             this.idRecipe = result.getInt("id_recipe");
-            this.idIngredient = result.getInt("id_idIngredient");
+            this.nameIngredient = result.getString("name_ingredient");
+            this.idIngredient = result.getInt("id_ingredient");
             this.quantity = result.getInt("quantity");
             this.unit = result.getString("unit");
 

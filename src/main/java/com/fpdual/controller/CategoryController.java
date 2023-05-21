@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,13 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     public CategoryController(){
-        categoryService = new CategoryService((Connection) new MySQLConnector());
+        Connection con = null;
+        try {
+            con = new MySQLConnector().getMySQLConnection();
+        } catch (Exception e){
+        } finally {
+            categoryService = new CategoryService(con);
+        }
     }
 
     @GET
@@ -51,10 +58,10 @@ public class CategoryController {
 
             CategoryDto category = new CategoryDto();
             category.setId(idCategory);
-            List<RecipeDto> recipe2List = categoryService.findRecipesByCategory(category);
+            List<RecipeDto> recipeList = categoryService.findRecipesByCategory(category);
 
-            if(!recipe2List.isEmpty()){
-                return Response.ok(recipe2List).build();
+            if(!recipeList.isEmpty()){
+                return Response.ok(recipeList).build();
             } else{
                 return Response.status(Response.Status.NO_CONTENT).build();
             }

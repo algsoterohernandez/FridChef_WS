@@ -17,7 +17,7 @@ public class RecipeManager {
         ingredientManager = new IngredientManager();
     }
 
-    public RecipeDao createRecipe(Connection con, RecipeDao recipe, List<IngredientRecipeDao> ingredientRecipes) throws SQLException {
+    public RecipeDao createRecipe(Connection con, RecipeDao recipe) throws SQLException {
 
         try (PreparedStatement stm = con.prepareStatement("INSERT INTO recipe (name, description, difficulty, time, unit_time, id_category, create_time, image) VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
 
@@ -38,19 +38,24 @@ public class RecipeManager {
             }
 
             PreparedStatement ingredientRecipeStm = con.prepareStatement("INSERT INTO ingredient_recipe (id_recipe, id_ingredient, quantity, unit) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            {
-                for (IngredientRecipeDao ingredientRecipe : ingredientRecipes) {
-                    ingredientRecipeStm.setInt(1, recipe.getId());
-                    ingredientRecipeStm.setInt(2, ingredientRecipe.getIdIngredient());
-                    ingredientRecipeStm.setDouble(3, ingredientRecipe.getQuantity());
-                    ingredientRecipeStm.setString(4, ingredientRecipe.getUnit());
-                    ingredientRecipeStm.executeUpdate();
-                }
-                ingredientRecipeStm.close();
-                stm.close();
 
-                return recipe;
+            for (IngredientRecipeDao ingredientRecipe : recipe.getIngredients()) {
+                ingredientRecipeStm.setInt(1, recipe.getId());
+                ingredientRecipeStm.setInt(2, ingredientRecipe.getIdIngredient());
+                ingredientRecipeStm.setDouble(3, ingredientRecipe.getQuantity());
+                ingredientRecipeStm.setString(4, ingredientRecipe.getUnit());
+                ingredientRecipeStm.executeUpdate();
+                ResultSet res = stm.getGeneratedKeys();
+                if (res.next()) {
+                    int pk = res.getInt(1);
+                    ingredientRecipe.setId(pk);
+                    ingredientRecipe.setIdRecipe(recipe.getId());
+                }
             }
+            ingredientRecipeStm.close();
+            stm.close();
+
+            return recipe;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
@@ -59,41 +64,20 @@ public class RecipeManager {
     }
 
     // obtiene receta por id de la base de datos
-    public RecipeDao readRecipeById(Connection con, int id) {
+    public RecipeDao getRecipeById(Connection con, int id) {
         try (PreparedStatement stm = con.prepareStatement("SELECT * FROM recipe WHERE id = ?")) {
             stm.setInt(1, id);
             ResultSet result = stm.executeQuery();
             if (result.next()) {
-                return new RecipeDao(result);
+                RecipeDao recipeDao = new RecipeDao(result);
+                fillRecipeIngredients(con, recipeDao);
+                return recipeDao;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
-
-    public RecipeDao updateRecipe(Connection con, RecipeDao recipe) {
-        try (PreparedStatement stm = con.prepareStatement("UPDATE recipe SET name= ?, description=?, difficulty=?, time=?, unit_time=?, id_category=?, create_time=?, image=? WHERE id=?")) {
-            stm.setString(1, recipe.getName());
-            stm.setString(2, recipe.getDescription());
-            stm.setInt(3, recipe.getDifficulty());
-            stm.setInt(4, recipe.getTime());
-            stm.setString(5, recipe.getUnitTime());
-            stm.setInt(6, recipe.getIdCategory());
-            stm.setDate(7, (Date) recipe.getCreateTime());
-            stm.setBlob(8, recipe.getImage());
-            stm.setInt(9, recipe.getId());
-
-            int rows = stm.executeUpdate();
-            if (rows > 0) {
-                return recipe;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 
     public boolean deleteRecipe(Connection con, int recipeId) {
         boolean success = false;
@@ -119,7 +103,7 @@ public class RecipeManager {
 
             while (result.next()) {
                 RecipeDao recipe = new RecipeDao(result);
-                FillRecipeIngredients(con, recipe);
+                fillRecipeIngredients(con, recipe);
 
                 recipes.add(recipe);
             }
@@ -132,10 +116,11 @@ public class RecipeManager {
         }
     }
 
-    public List<RecipeDao> findAllRecipes(Connection con) {
+    public List<RecipeDao> findAllRecipesByCategoryId(Connection con, Integer idCategory) {
 
-        try (Statement stm = con.createStatement()) {
-            ResultSet result = stm.executeQuery("select * from recipe");
+        try (PreparedStatement stm = con.prepareStatement("SELECT * FROM recipe WHERE id_category = ?")) {
+            stm.setInt(1, idCategory);
+            ResultSet result = stm.executeQuery();
 
             List<RecipeDao> recipes = new ArrayList<>();
 
@@ -160,7 +145,7 @@ public class RecipeManager {
             String query = "SELECT r.*, COUNT(DISTINCT ir.id_ingredient) AS num_ingredients " +
                     "FROM recipe r " +
                     "INNER JOIN ingredient_recipe ir ON r.id = ir.id_recipe " +
-                    "ir.id_ingredient IN (";
+                    "WHERE ir.id_ingredient IN (";
             for (int i = 0; i < ingredientIds.size(); i++) {
                 query += "'" + ingredientIds.get(i) + "'";
                 if (i < ingredientIds.size() - 1) {
@@ -187,7 +172,7 @@ public class RecipeManager {
 
             while (result.next()) {
                 RecipeDao recipe = new RecipeDao(result);
-                FillRecipeIngredients(con, recipe);
+                fillRecipeIngredients(con, recipe);
 
                 recipes.add(recipe);
             }
@@ -223,7 +208,7 @@ public class RecipeManager {
 
             while (result.next()) {
                 RecipeDao recipe = new RecipeDao(result);
-                FillRecipeIngredients(con, recipe);
+                fillRecipeIngredients(con, recipe);
 
                 recipesSuggestions.add(recipe);
             }
@@ -236,15 +221,7 @@ public class RecipeManager {
         }
     }
 
-    private void FillRecipeIngredients(Connection con, RecipeDao recipeDao) {
-        recipeDao.setIngredients(ingredientManager.findRecipeIngredients(con, recipeDao.getId()));
-    }
-
     private void fillRecipeIngredients(Connection con, RecipeDao recipeDao) {
-        recipeDao.setIngredientsRecipe(ingredientManager.findIngredientsByRecipeId(con, recipeDao.getId()));
+        recipeDao.setIngredients(ingredientManager.findIngredientsByRecipeId(con, recipeDao.getId()));
     }
-
-//    private void FindRecipeIngredients(Connection con, Recipe2Dao recipe2Dao, IngredientRecipeDao ingredientRecipeDao) {
-//       recipe2Dao.getId(con, ingredientRecipeDao.setIdIngredient());
-//    }
 }

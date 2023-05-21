@@ -101,13 +101,11 @@ public class RecipeService {
         return recipeDtos;
     }
 
-    public RecipeDto createRecipe(RecipeDto recipeDto, List<IngredientRecipeDto> ingredientRecipeDtoList) throws SQLException, ClassNotFoundException {
+    public RecipeDto createRecipe(RecipeDto recipeDto) throws SQLException, ClassNotFoundException {
 
         try (Connection con = connector.getMySQLConnection()) {
 
-            List<IngredientRecipeDao> ingredientRecipeDaoList = MappingUtils.mapToDao(ingredientRecipeDtoList);
-
-            RecipeDao recipeDao = this.recipeManager.createRecipe(con, mapper.mapToDao(recipeDto), ingredientRecipeDaoList);
+            RecipeDao recipeDao = this.recipeManager.createRecipe(con, mapper.mapToDao(recipeDto));
             recipeDto = MappingUtils.mapRecipeDto(recipeDao);
 
         } catch (Exception e) {

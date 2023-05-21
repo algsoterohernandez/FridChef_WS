@@ -24,19 +24,17 @@ public class MappingUtils {
         recipeDto.setIdCategory(recipeDao.getIdCategory());
         recipeDto.setCreateTime(recipeDao.getCreateTime());
         recipeDto.setStatus(recipeDao.getStatus());
+        recipeDto.setIngredients(mapToDto(recipeDao.getIngredients()));
 
 
-        List<IngredientDto> ingredients = recipeDao.getIngredients().stream()
-                .map(MappingUtils::mapIngredientDto)
+        List<IngredientRecipeDto> ingredients = recipeDao.getIngredients().stream()
+                .map(MappingUtils::mapToDto)
                 .collect(Collectors.toList());
 
         recipeDto.setIngredients(ingredients);
 
         return recipeDto;
     }
-    // TODO: cuando se verifique el ingredientRecipeDao, se podrá continuar insertando los ingredientes en la receta
-    // recipeDto.setIngredients(mapIngredientRecipeDaoListToDtoList(recipeDao.getIngredients(), recipeDao));
-
     public RecipeDao mapToDao(RecipeDto recipeDto) {
 
         RecipeDao recipeDao = new RecipeDao();
@@ -46,11 +44,12 @@ public class MappingUtils {
         recipeDao.setDescription(recipeDto.getDescription());
         recipeDao.setDifficulty(recipeDto.getDifficulty());
         recipeDao.setTime(recipeDto.getTime());
+        recipeDao.setUnitTime(recipeDto.getUnitTime());
         recipeDao.setIdCategory(recipeDto.getIdCategory());
         recipeDao.setCreateTime(new Date(System.currentTimeMillis()));
         recipeDao.setImage(recipeDto.getImage());
         recipeDao.setStatus(recipeDto.getStatus());
-
+        recipeDao.setIngredients(mapToDao(recipeDto.getIngredients()));
         return recipeDao;
 
     }
@@ -65,11 +64,17 @@ public class MappingUtils {
         IngredientRecipeDto ingredientRecipeDto = new IngredientRecipeDto();
 
         ingredientRecipeDto.setId(ingredientRecipeDao.getId());
+        ingredientRecipeDto.setNameIngredient(ingredientRecipeDao.getNameIngredient());
         ingredientRecipeDto.setIdRecipe(ingredientRecipeDao.getIdRecipe());
         ingredientRecipeDto.setIdIngredient(ingredientRecipeDao.getIdIngredient());
         ingredientRecipeDto.setQuantity(ingredientRecipeDao.getQuantity());
         ingredientRecipeDto.setUnit(ingredientRecipeDao.getUnit());
-
+        if (ingredientRecipeDto.getAllergens() != null) {
+            List<AllergenDto> allergens = ingredientRecipeDao.getAllergens().stream()
+                    .map(MappingUtils::mapAllergenDto)
+                    .collect(Collectors.toList());
+            ingredientRecipeDto.setAllergens(allergens);
+        }
         return ingredientRecipeDto;
     }
 

@@ -29,9 +29,7 @@ public class RecipeDao {
     private Date createTime;
     private Blob image;
     private RecipeStatus status;
-    private List<IngredientDao> ingredients;
-    private List<IngredientRecipeDao> ingredientsRecipe;
-
+    private List<IngredientRecipeDao> ingredients;
 
     public RecipeDao(ResultSet result) {
         try {
@@ -47,21 +45,17 @@ public class RecipeDao {
             this.ingredients = new ArrayList<>();
             // Asignar el estado de la receta utilizando el método fromString() del enum RecipeStatus
             this.status = RecipeStatus.fromString(result.getString("status"));
-            this.ingredientsRecipe = new ArrayList<>();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void setIngredients(List<IngredientDao> ingredientList) {
+    public void setIngredients(List<IngredientRecipeDao> ingredientList) {
         this.ingredients = ingredientList;
     }
 
-    public void setIngredientsRecipe(List<IngredientRecipeDao> ingredientList) {
-        this.ingredientsRecipe = ingredientList;
-    }
 
-    public List<IngredientDao> getIngredients() {
+    public List<IngredientRecipeDao> getIngredients() {
         return ingredients;
     }
 
