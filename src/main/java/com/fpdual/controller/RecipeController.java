@@ -2,19 +2,25 @@ package com.fpdual.controller;
 
 import com.fpdual.api.dto.RecipeDto;
 import com.fpdual.api.dto.RecipeFilterDto;
+import com.fpdual.enums.HttpStatus;
+import com.fpdual.persistence.aplication.connector.MySQLConnector;
+import com.fpdual.persistence.aplication.manager.IngredientManager;
+import com.fpdual.persistence.aplication.manager.RecipeManager;
 import com.fpdual.service.RecipeService;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.Optional;
+
 @Path("/recipes")
 public class RecipeController {
 
     private final RecipeService recipesService;
 
     public RecipeController() {
-        recipesService = new RecipeService();
+        recipesService = new RecipeService(new MySQLConnector(), new RecipeManager(), new IngredientManager());
     }
 
 
@@ -22,47 +28,31 @@ public class RecipeController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
-        Response rs;
-
-        List<RecipeDto> ingredientsList = recipesService.findAll();
-
-        if (ingredientsList != null) {
-            rs = Response.ok().entity(ingredientsList).build();
-        } else {
-            rs = Response.status(500).build();//Server Error
-        }
-
-        // Comprobar resultado
-
-        // Convertir a json
-
-        // Construir respuesta
-
-        return rs;
+        List<RecipeDto> recipeList = recipesService.findAll();
+        return Optional.ofNullable(recipeList)
+                .map(list -> Response.ok().entity(list).build())
+                .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
     }
+
 
     @POST
     @Path("/findbyingredients")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findByIngredients(RecipeFilterDto recipeFilterDto) {
-        Response rs;
         try {
             if (recipeFilterDto == null) {
-                rs = Response.status(400).build();
-            } else {
-                List<RecipeDto> recipeRs = recipesService.findRecipesByIngredients(recipeFilterDto.getIngredients());
-                if (recipeRs != null) {
-                    rs = Response.ok().entity(recipeRs).build();
-                } else {
-                    rs = Response.status(500).build();//status No content
-                }
+                return Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
             }
+            List<RecipeDto> recipeList = recipesService.findRecipesByIngredients(recipeFilterDto.getIngredients());
+            return Optional.ofNullable(recipeList)
+                    .map(list -> Response.ok().entity(list).build())
+                    .orElse(Response.status(HttpStatus.NO_CONTENT.getStatusCode()).build()); // No content
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            rs = Response.serverError().build();
+            return Response.serverError().build();
         }
-        return rs;
     }
+
 
     @POST
     @Path("/findSuggestions")
@@ -72,11 +62,11 @@ public class RecipeController {
 
         try {
             if (recipeFilterDto == null) {
-                rs = Response.status(400).build();
+                rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
             } else {
                 List<RecipeDto> recipeRs = recipesService.findRecipeSuggestions(recipeFilterDto.getIngredients());
                 if (recipeRs == null) {
-                    rs = Response.status(500).build();//status No content
+                    rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();//status No content
                 } else {
                     rs = Response.ok().entity(recipeRs).build();
                 }
@@ -89,5 +79,3 @@ public class RecipeController {
     }
 
 }
-
-

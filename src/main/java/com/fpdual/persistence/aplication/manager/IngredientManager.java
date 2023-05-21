@@ -21,8 +21,8 @@ public class IngredientManager {
 
     //buscar todo
 
-    public List<IngredientDao> findAll() {
-        try (Connection con = new MySQLConnector().getMySQLConnection(); Statement stm = con.createStatement()) {
+    public List<IngredientDao> findAll(Connection con) {
+        try (Statement stm = con.createStatement()) {
             ResultSet result = stm.executeQuery("select * from ingredient order by name ASC");
 
             List<IngredientDao> ingredients = new ArrayList<>();
@@ -33,30 +33,30 @@ public class IngredientManager {
 
             return ingredients;
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public Integer getIngredientIdByName(String ingredientName) {
-        try (Connection con = new MySQLConnector().getMySQLConnection(); Statement stm = con.createStatement()) {
+    public Integer getIngredientIdByName(Connection con, String ingredientName) {
+        try (Statement stm = con.createStatement()) {
 
             ResultSet result = stm.executeQuery("select id from ingredient where name = '" + ingredientName  + "'");
 
             if (result.next()) {
                 return result.getInt("id");
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return null;
     }
 
-    public List<IngredientDao> findRecipeIngredients(int recipeId)
+    public List<IngredientDao> findRecipeIngredients(Connection con, int recipeId)
     {
-        try (Connection con = new MySQLConnector().getMySQLConnection(); Statement stm = con.createStatement()) {
+        try (Statement stm = con.createStatement()) {
 
             ResultSet result = stm.executeQuery("select i.* from ingredient i inner join ingredient_recipe ir on ir.id_ingredient = i.id where ir.id_recipe = " + recipeId);
 
@@ -64,7 +64,7 @@ public class IngredientManager {
 
             while (result.next()) {
                 IngredientDao ingredientDao = new IngredientDao(result);
-                FillIngredientAllergens(ingredientDao);
+                FillIngredientAllergens(con, ingredientDao);
 
                 ingredients.add(ingredientDao);
             }
@@ -74,14 +74,12 @@ public class IngredientManager {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
     }
 
-    private void FillIngredientAllergens(IngredientDao ingredientDao)
+    private void FillIngredientAllergens(Connection con, IngredientDao ingredientDao)
     {
-        ingredientDao.setAllergens(allergenManager.findIngredientAllergens(ingredientDao.getId()));
+        ingredientDao.setAllergens(allergenManager.findIngredientAllergens(con, ingredientDao.getId()));
     }
 }
 

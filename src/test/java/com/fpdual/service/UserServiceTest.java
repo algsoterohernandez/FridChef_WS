@@ -1,11 +1,10 @@
-package com.fpdual.javaweb.tests;
+package com.fpdual.service;
 
 import com.fpdual.api.dto.UserDto;
 import com.fpdual.exceptions.UserAlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.UserDao;
 import com.fpdual.persistence.aplication.manager.UserManager;
-import com.fpdual.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +28,7 @@ public class UserServiceTest {
 
     private UserDto exampleUserDto;
     private UserDao exampleUserDao;
-    private static UserService userService;
+    private UserService userService;
 
     @BeforeEach
     public void init() {
@@ -88,8 +87,6 @@ public class UserServiceTest {
         //Prepare method dependencies
         when(mySQLConnector.getMySQLConnection()).thenThrow(ClassNotFoundException.class);
 
-        //Execute method
-
         //Asserts
         assertThrows(ClassNotFoundException.class, () -> userService.createUser(exampleUserDto));
     }
@@ -130,13 +127,11 @@ public class UserServiceTest {
         //Prepare method dependencies
         when(userManager.deleteUser(any(),anyString())).thenThrow(SQLException.class);
 
-        //Execute method
-
         //Asserts
         assertThrows(SQLException.class, () -> userService.deleteUser(exampleUserDto.getEmail()));
     }
 
-    @Test////////////////////////////////
+    @Test
     public void testFindUser_validEmailPassword_userDtoNotNull() throws Exception {
 
         //Prepare method dependencies
@@ -159,8 +154,6 @@ public class UserServiceTest {
 
         //Prepare method dependencies
         when(mySQLConnector.getMySQLConnection()).thenThrow(ClassNotFoundException.class);
-
-        //Execute method
 
         //Asserts
         assertThrows(ClassNotFoundException.class,

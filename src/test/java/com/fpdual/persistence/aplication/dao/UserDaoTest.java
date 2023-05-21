@@ -1,4 +1,4 @@
-package com.fpdual.javaweb.tests;
+package com.fpdual.persistence.aplication.dao;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,8 +23,6 @@ public class UserDaoTest {
     public void testUserDaoConstructor_validRsultDao_userSqlException() throws SQLException{
         //Prepare method dependencies
         when(result.getInt(any())).thenThrow(SQLException.class);
-
-        //Execute methods
 
         //Asserts
         assertThrows(SQLException.class, () -> result.getInt("email"));

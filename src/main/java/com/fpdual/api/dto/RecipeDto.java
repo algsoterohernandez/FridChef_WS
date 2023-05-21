@@ -1,5 +1,6 @@
 package com.fpdual.api.dto;
 
+import com.fpdual.enums.RecipeStatus;
 import lombok.*;
 
 import java.sql.Blob;
@@ -20,14 +21,12 @@ public class RecipeDto {
     private String description;
     private int difficulty;
     private int time;
-    private String unit_time;
-    private int id_category;
-    private Date create_time;
+    private String unitTime;
+    private int idCategory;
+    private Date createTime;
     private Blob image;
+    private RecipeStatus status;
     private List<IngredientDto> ingredients;
 
 
-    public byte getIdCategory() {
-        return 0;
-    }
 }

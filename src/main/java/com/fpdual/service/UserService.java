@@ -5,13 +5,13 @@ import com.fpdual.exceptions.UserAlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.UserDao;
 import com.fpdual.persistence.aplication.manager.UserManager;
+import com.fpdual.utils.MappingUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.security.MessageDigest;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
 
 public class UserService {
@@ -21,18 +21,20 @@ public class UserService {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private MessageDigest md5;
+    private MappingUtils mapper;
 
     public UserService(MySQLConnector connector, UserManager userManager) {
         this.connector = connector;
         this.userManager = userManager;
+        this.mapper = new MappingUtils();
     }
 
     public UserDto createUser(UserDto userDto) throws SQLException, ClassNotFoundException {
 
         try (Connection con = connector.getMySQLConnection()) {
 
-            UserDao userDao = this.userManager.insertUser(con, mapToDao(userDto));
-            userDto = mapToDto(userDao);
+            UserDao userDao = this.userManager.insertUser(con, mapper.mapToDao(userDto));
+            userDto = mapper.mapToDto(userDao);
 
 
         } catch (UserAlreadyExistsException uaee) {
@@ -77,7 +79,7 @@ public class UserService {
 
             if (userDao != null) {
 
-                userDto = mapToDto(userDao);
+                userDto = mapper.mapToDto(userDao);
 
             }
 
@@ -89,33 +91,6 @@ public class UserService {
 
         return userDto;
 
-    }
-
-    private UserDao mapToDao(UserDto userDto) {
-        UserDao userDao = new UserDao();
-
-        userDao.setId(userDto.getId());
-        userDao.setName(userDto.getName());
-        userDao.setSurname1(userDto.getSurname1());
-        userDao.setSurname2(userDto.getSurname2());
-        userDao.setEmail(userDto.getEmail());
-        userDao.setPassword(userDto.getPassword());
-        userDao.setCreateTime(new Date(System.currentTimeMillis()));
-
-        return userDao;
-    }
-
-    private UserDto mapToDto(UserDao userDao) {
-        UserDto userDto = new UserDto();
-
-        userDto.setId(userDao.getId());
-        userDto.setName(userDao.getName());
-        userDto.setSurname1(userDao.getSurname1());
-        userDto.setSurname2(userDao.getSurname2());
-        userDto.setEmail(userDao.getEmail());
-        userDto.setPassword(userDao.getPassword());
-
-        return userDto;
     }
 
 }

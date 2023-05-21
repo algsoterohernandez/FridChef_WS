@@ -1,50 +1,41 @@
 package com.fpdual.service;
 
 import com.fpdual.api.dto.AllergenDto;
+import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.AllergenDao;
 import com.fpdual.persistence.aplication.manager.AllergenManager;
+import com.fpdual.utils.MappingUtils;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AllergenService {
-
+    private final MySQLConnector connector;
     private final AllergenManager allergenManager;
 
-    public AllergenService() {
-        allergenManager = new AllergenManager();
+    public AllergenService(MySQLConnector connector, AllergenManager allergenManager) {
+        this.allergenManager = allergenManager;
+        this.connector = connector;
     }
 
     public List<AllergenDto> findAllAllergens() {
         List<AllergenDto> allergenDtoList = null;
 
-        List<AllergenDao> allergenDaos = allergenManager.findAllAllergens();
+        try (Connection con = connector.getMySQLConnection()) {
 
-        if (allergenDaos != null) {
-            allergenDtoList = mapToDto(allergenDaos);
+            List<AllergenDao> allergenDaos = allergenManager.findAllAllergens(con);
+
+            if (allergenDaos != null) {
+                allergenDtoList = MappingUtils.mapAllergenDto(allergenDaos);
+            }
+
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
-
-        return allergenDtoList;
-    }
-
-    private AllergenDto mapToDto(AllergenDao allergenDao) {
-        AllergenDto allergenDto = new AllergenDto();
-
-        allergenDto.setId(allergenDao.getId());
-        allergenDto.setName(allergenDao.getName());
-
-
-        return allergenDto;
-    }
-
-    private List<AllergenDto> mapToDto(List<AllergenDao> allergenDaos) {
-        List<AllergenDto> allergenDtoList = new ArrayList<>();
-
-        for (AllergenDao allergenDao : allergenDaos) {
-            AllergenDto allergenDto = mapToDto(allergenDao);
-            allergenDtoList.add(allergenDto);
-        }
-
         return allergenDtoList;
     }
 }
