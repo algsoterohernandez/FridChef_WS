@@ -21,8 +21,6 @@ public class IngredientRecipeDao {
     private int idIngredient;
     private int quantity;
     private String unit;
-    private List<RecipeDao> recipes;
-    private List<IngredientDao> ingredients;
 
     public IngredientRecipeDao(ResultSet result) {
         try {
@@ -31,8 +29,7 @@ public class IngredientRecipeDao {
             this.idIngredient = result.getInt("id_idIngredient");
             this.quantity = result.getInt("quantity");
             this.unit = result.getString("unit");
-            this.recipes = new ArrayList<>();
-            this.ingredients = new ArrayList<>();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

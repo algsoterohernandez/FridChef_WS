@@ -1,7 +1,6 @@
 package com.fpdual.controller;
 
-import com.fpdual.api.dto.RecipeDto;
-import com.fpdual.api.dto.RecipeFilterDto;
+import com.fpdual.api.dto.*;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
 import com.fpdual.persistence.aplication.manager.RecipeManager;
@@ -34,6 +33,30 @@ public class RecipeController {
         return Optional.ofNullable(recipeList)
                 .map(list -> Response.ok().entity(list).build())
                 .orElse(Response.status(500).build());
+    }
+
+    @POST
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response create(RecipeDto recipeDto, List<IngredientRecipeDto> ingredientRecipeDto) {
+        Response rs = null;
+
+        try {
+            if (recipeDto == null) {
+                rs = Response.status(400).build();
+            } else {
+                RecipeDto recipeRs = recipesService.createRecipe(recipeDto, ingredientRecipeDto);
+                if(recipeRs != null){
+                    rs = Response.status(201).entity(recipeRs).build();
+                }else{
+                    rs = Response.status(500).build();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            rs = Response.serverError().build();
+        }
+        return rs;
     }
 
 

@@ -1,8 +1,7 @@
 package com.fpdual.persistence.aplication.manager;
 
-import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.IngredientDao;
-import com.fpdual.persistence.aplication.dao.RecipeDao;
+import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -66,6 +65,28 @@ public class IngredientManager {
                 IngredientDao ingredientDao = new IngredientDao(result);
                 FillIngredientAllergens(con, ingredientDao);
 
+                ingredients.add(ingredientDao);
+            }
+
+            return ingredients;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<IngredientRecipeDao> findIngredientsByRecipeId(Connection con, int recipeId)
+    {
+        try (Statement stm = con.createStatement()) {
+
+            ResultSet result = stm.executeQuery("" +
+                    "select i.*, ir.quantity, ir.unit from ingredient i inner join ingredient_recipe ir on ir.id_ingredient = i.id where ir.id_recipe = " + recipeId);
+
+            List<IngredientRecipeDao> ingredients = new ArrayList<>();
+
+            while (result.next()) {
+                IngredientRecipeDao ingredientDao = new IngredientRecipeDao(result);
                 ingredients.add(ingredientDao);
             }
 

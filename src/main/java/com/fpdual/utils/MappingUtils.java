@@ -1,14 +1,10 @@
 package com.fpdual.utils;
 
-import com.fpdual.api.dto.AllergenDto;
-import com.fpdual.api.dto.IngredientDto;
-import com.fpdual.api.dto.RecipeDto;
-import com.fpdual.api.dto.UserDto;
-import com.fpdual.enums.RecipeStatus;
-import com.fpdual.persistence.aplication.dao.AllergenDao;
-import com.fpdual.persistence.aplication.dao.IngredientDao;
-import com.fpdual.persistence.aplication.dao.RecipeDao;
-import com.fpdual.persistence.aplication.dao.UserDao;
+import com.fpdual.api.dto.*;
+import com.fpdual.persistence.aplication.dao.*;
+import com.fpdual.api.dto.IngredientRecipeDto;
+import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
+
 
 import java.sql.Date;
 import java.util.List;
@@ -38,10 +34,66 @@ public class MappingUtils {
 
         return recipeDto;
     }
+    // TODO: cuando se verifique el ingredientRecipeDao, se podrá continuar insertando los ingredientes en la receta
+    // recipeDto.setIngredients(mapIngredientRecipeDaoListToDtoList(recipeDao.getIngredients(), recipeDao));
+
+    public RecipeDao mapToDao(RecipeDto recipeDto) {
+
+        RecipeDao recipeDao = new RecipeDao();
+
+        recipeDao.setId(recipeDto.getId());
+        recipeDao.setName(recipeDto.getName());
+        recipeDao.setDescription(recipeDto.getDescription());
+        recipeDao.setDifficulty(recipeDto.getDifficulty());
+        recipeDao.setTime(recipeDto.getTime());
+        recipeDao.setIdCategory(recipeDto.getIdCategory());
+        recipeDao.setCreateTime(new Date(System.currentTimeMillis()));
+        recipeDao.setImage(recipeDto.getImage());
+        recipeDao.setStatus(recipeDto.getStatus());
+
+        return recipeDao;
+
+    }
 
     public static List<RecipeDto> mapRecipeDto(List<RecipeDao> recipeDaos) {
         return recipeDaos.stream()
                 .map(MappingUtils::mapRecipeDto)
+                .collect(Collectors.toList());
+    }
+
+    public static IngredientRecipeDto mapToDto(IngredientRecipeDao ingredientRecipeDao) {
+        IngredientRecipeDto ingredientRecipeDto = new IngredientRecipeDto();
+
+        ingredientRecipeDto.setId(ingredientRecipeDao.getId());
+        ingredientRecipeDto.setIdRecipe(ingredientRecipeDao.getIdRecipe());
+        ingredientRecipeDto.setIdIngredient(ingredientRecipeDao.getIdIngredient());
+        ingredientRecipeDto.setQuantity(ingredientRecipeDao.getQuantity());
+        ingredientRecipeDto.setUnit(ingredientRecipeDao.getUnit());
+
+        return ingredientRecipeDto;
+    }
+
+    public static IngredientRecipeDao mapToDao(IngredientRecipeDto ingredientRecipeDto) {
+        IngredientRecipeDao ingredientRecipeDao = new IngredientRecipeDao();
+
+        ingredientRecipeDao.setId(ingredientRecipeDto.getId());
+        ingredientRecipeDao.setIdRecipe(ingredientRecipeDto.getIdRecipe());
+        ingredientRecipeDao.setIdIngredient(ingredientRecipeDto.getIdIngredient());
+        ingredientRecipeDao.setQuantity(ingredientRecipeDto.getQuantity());
+        ingredientRecipeDao.setUnit(ingredientRecipeDto.getUnit());
+
+        return ingredientRecipeDao;
+    }
+
+    public static List<IngredientRecipeDto>mapToDto(List<IngredientRecipeDao> ingredientRecipeDaos){
+        return ingredientRecipeDaos.stream()
+                .map(MappingUtils::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    public static List<IngredientRecipeDao>mapToDao(List<IngredientRecipeDto> ingredientRecipeDtos){
+        return ingredientRecipeDtos.stream()
+                .map(MappingUtils::mapToDao)
                 .collect(Collectors.toList());
     }
 
@@ -67,6 +119,7 @@ public class MappingUtils {
                 .map(MappingUtils::mapIngredientDto)
                 .collect(Collectors.toList());
     }
+
 
     public static AllergenDto mapAllergenDto(AllergenDao allergenDao) {
 
