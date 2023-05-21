@@ -1,7 +1,5 @@
 package com.fpdual.persistence.aplication.manager;
 
-import com.fpdual.api.dto.RecipeDto;
-import com.fpdual.api.dto.RecipeFilterDto;
 import com.fpdual.exceptions.RecipeAlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.IngredientDao;
@@ -234,11 +232,11 @@ public class RecipeManager {
         recipeDao.setIngredients(ingredientManager.findRecipeIngredients(recipeDao.getId()));
     }
 
-    public List<RecipeDao> findRecipeByCategory(String category) {
+    public List<RecipeDao> findRecipesByIdCategory(Integer idCategory) {
         try (Connection con = new MySQLConnector().getMySQLConnection()) {
-            String query = "SELECT * FROM recipe WHERE category = ?";
+            String query = "SELECT * FROM recipe WHERE id_category = ?";
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1, category);
+            ps.setInt(1, idCategory);
             ResultSet result = ps.executeQuery();
 
             List<RecipeDao> recipes = new ArrayList<>();

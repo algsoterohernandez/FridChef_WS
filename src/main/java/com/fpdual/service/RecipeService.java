@@ -78,9 +78,9 @@ public class RecipeService {
 
         return recipeDtos;
     }
-    public List<RecipeDto> findRecipeByCategory(String category) {
+    public List<RecipeDto> findRecipesByIdCategory(Integer idCategory) {
         List<RecipeDto> recipeDtos = null;
-        List<RecipeDao> recipeDaos = recipeManager.findRecipeByCategory(category);
+        List<RecipeDao> recipeDaos = recipeManager.findRecipesByIdCategory(idCategory);
 
         if (recipeDaos != null) {
             recipeDtos = MappingUtils.mapRecipeDto(recipeDaos);

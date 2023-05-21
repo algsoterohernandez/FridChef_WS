@@ -27,4 +27,7 @@ public class RecipeDto {
     private List<IngredientDto> ingredients;
 
 
+    public byte getIdCategory() {
+        return 0;
+    }
 }
