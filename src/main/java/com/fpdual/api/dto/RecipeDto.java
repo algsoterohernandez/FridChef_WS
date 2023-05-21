@@ -28,5 +28,4 @@ public class RecipeDto {
     private RecipeStatus status;
     private List<IngredientDto> ingredients;
 
-
 }
