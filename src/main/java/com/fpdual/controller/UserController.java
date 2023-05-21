@@ -2,6 +2,7 @@ package com.fpdual.controller;
 
 import com.fpdual.enums.HttpStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
+import com.fpdual.persistence.aplication.manager.RolManager;
 import com.fpdual.persistence.aplication.manager.UserManager;
 import com.fpdual.service.UserService;
 import jakarta.ws.rs.*;
@@ -14,7 +15,7 @@ public class UserController {
     private final UserService userService;
 
     public UserController() {
-        userService = new UserService(new MySQLConnector(), new UserManager());
+        userService = new UserService(new MySQLConnector(), new UserManager(), new RolManager());
     }
 
     @GET
@@ -32,12 +33,12 @@ public class UserController {
 
         try {
             if (userDto == null) {
-                rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build(); //status Bad request
+                rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
             } else {
                 UserDto userRs = userService.createUser(userDto);
 
                 if (userRs != null && userRs.isAlreadyExists()) {
-                    rs = Response.status(HttpStatus.NOT_MODIFIED.getStatusCode()).build();//status Not modified
+                    rs = Response.status(HttpStatus.NOT_MODIFIED.getStatusCode()).build();
 
                 } else if (userRs != null && !userRs.isAlreadyExists()) {
                     rs = Response.ok().entity(userRs).build();
