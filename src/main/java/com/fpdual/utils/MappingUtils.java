@@ -1,14 +1,7 @@
 package com.fpdual.utils;
 
-import com.fpdual.api.dto.AllergenDto;
-import com.fpdual.api.dto.IngredientDto;
-import com.fpdual.api.dto.RecipeDto;
-import com.fpdual.api.dto.UserDto;
-import com.fpdual.enums.RecipeStatus;
-import com.fpdual.persistence.aplication.dao.AllergenDao;
-import com.fpdual.persistence.aplication.dao.IngredientDao;
-import com.fpdual.persistence.aplication.dao.RecipeDao;
-import com.fpdual.persistence.aplication.dao.UserDao;
+import com.fpdual.api.dto.*;
+import com.fpdual.persistence.aplication.dao.*;
 
 import java.sql.Date;
 import java.util.List;
@@ -84,7 +77,7 @@ public class MappingUtils {
                 .collect(Collectors.toList());
     }
 
-    public UserDto mapToDto(UserDao userDao) {
+    public static UserDto mapToDto(UserDao userDao) {
 
         UserDto userDto = new UserDto();
 
@@ -99,7 +92,7 @@ public class MappingUtils {
 
     }
 
-    public UserDao mapToDao(UserDto userDto) {
+    public static UserDao mapToDao(UserDto userDto) {
 
         UserDao userDao = new UserDao();
 
@@ -113,6 +106,21 @@ public class MappingUtils {
 
         return userDao;
 
+    }
+
+    public static RolUserDto mapRolUserDto(RolUserDao rolUserDao) {
+
+        RolUserDto rolUserDto = new RolUserDto();
+
+        rolUserDto.setIdUser(rolUserDao.getIdUser());
+        rolUserDto.setIdRol(rolUserDao.getIdRol());
+
+        return rolUserDto;
+    }
+    public static List<RolUserDto> mapRolUserDto(List<RolUserDao> rolUserDao) {
+        return rolUserDao.stream()
+                .map(MappingUtils::mapRolUserDto)
+                .collect(Collectors.toList());
     }
 
 }
