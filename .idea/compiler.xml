@@ -11,6 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="FridChef_WS" target="1.5" />
       <module name="FridChefWebService (1)" target="19" />
     </bytecodeTargetLevel>
   </component>
