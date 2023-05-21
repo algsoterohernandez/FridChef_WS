@@ -244,7 +244,7 @@ public class RecipeManager {
 
             while (result.next()) {
                 RecipeDao recipe = new RecipeDao(result);
-                FillRecipeIngredients(recipe);
+                FillRecipeIngredients(con, recipe);
 
                 recipes.add(recipe);
             }
