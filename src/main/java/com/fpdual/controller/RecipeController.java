@@ -2,6 +2,7 @@ package com.fpdual.controller;
 
 import com.fpdual.api.dto.*;
 import com.fpdual.enums.HttpStatus;
+import com.fpdual.enums.RecipeStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
 import com.fpdual.persistence.aplication.manager.RecipeManager;
@@ -10,6 +11,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +36,20 @@ public class RecipeController {
                 .map(list -> Response.ok().entity(list).build())
                 .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
     }
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response recipeDetails(@PathParam("id") int id){
+
+
+            RecipeDto recipe = recipesService.findRecipebyId(id);
+
+            return Optional.ofNullable(recipe)
+                .map(dto -> Response.ok().entity(dto).build())
+                .orElse(Response.status(404).build());
+    }
+
 
     @POST
     @Path("/")
