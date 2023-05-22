@@ -115,6 +115,18 @@ public class RecipeService {
         return recipeDto;
     }
 
+    public RecipeDto findRecipebyId(int id){
+        RecipeDto recipeDto = null;
+        try (Connection con = connector.getMySQLConnection()){
+
+            RecipeDao recipeDao = recipeManager.getRecipeById(con, id);
+            recipeDto = MappingUtils.mapRecipeDto(recipeDao);
+        }catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return recipeDto;
+    }
+
 
 
     public List<RecipeDto> findRecipesByIdCategory(Integer idCategory) {
