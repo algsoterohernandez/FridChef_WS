@@ -35,11 +35,11 @@ public class MappingUtilsTest {
     }
 
     @Test
-    public void testMapToDto_validUserDao_userDto() {
+    public void testMapUserDto_validUserDao_userDto() {
 
 
         //Execute method
-        UserDto userDto = mappingUtils.mapToDto(exampleUserDao);
+        UserDto userDto = mappingUtils.mapUserDto(exampleUserDao);
 
         //Asserts
         assertNotNull(exampleUserDto);
@@ -55,11 +55,11 @@ public class MappingUtilsTest {
     }
 
     @Test
-    public void testMapToDao_validUserDto_userDao() {
+    public void testMapUserDao_validUserDto_userDao() {
 
 
         //Execute method
-        UserDao userDao = mappingUtils.mapToDao(exampleUserDto);
+        UserDao userDao = mappingUtils.mapUserDao(exampleUserDto);
 
         //Asserts
         assertNotNull(exampleUserDao);

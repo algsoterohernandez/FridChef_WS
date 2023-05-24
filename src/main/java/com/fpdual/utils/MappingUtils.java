@@ -77,7 +77,7 @@ public class MappingUtils {
                 .collect(Collectors.toList());
     }
 
-    public static UserDto mapToDto(UserDao userDao) {
+    public static UserDto mapUserDto(UserDao userDao) {
 
         UserDto userDto = new UserDto();
 
@@ -92,7 +92,7 @@ public class MappingUtils {
 
     }
 
-    public static UserDao mapToDao(UserDto userDto) {
+    public static UserDao mapUserDao(UserDto userDto) {
 
         UserDao userDao = new UserDao();
 

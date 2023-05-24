@@ -38,8 +38,8 @@ public class UserService {
 
         try (Connection con = connector.getMySQLConnection()) {
 
-            UserDao userDao = this.userManager.insertUser(con, MappingUtils.mapToDao(userDto));
-            userDto = MappingUtils.mapToDto(userDao);
+            UserDao userDao = this.userManager.insertUser(con, MappingUtils.mapUserDao(userDto));
+            userDto = MappingUtils.mapUserDto(userDao);
 
             boolean insertRolOk =this.rolManager.insertRol(con,userDto);
 
@@ -89,7 +89,7 @@ public class UserService {
 
             if (userDao != null) {
 
-                userDto = MappingUtils.mapToDto(userDao);
+                userDto = MappingUtils.mapUserDto(userDao);
                 rolUserDto = MappingUtils.mapRolUserDto(rolUserDao);
 
                 userDto.setRolUserDto(rolUserDto);
