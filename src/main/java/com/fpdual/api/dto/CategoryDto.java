@@ -1,15 +1,16 @@
 package com.fpdual.api.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class CategoryDto {
     private int id;
     private String name;
 
-    public CategoryDto(String name){this.name = name;}
 }

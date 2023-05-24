@@ -1,11 +1,14 @@
 package com.fpdual.service;
 
+import com.fpdual.api.dto.IngredientRecipeDto;
 import com.fpdual.api.dto.RecipeDto;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
+import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 import com.fpdual.persistence.aplication.dao.RecipeDao;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
 import com.fpdual.persistence.aplication.manager.RecipeManager;
 import com.fpdual.utils.MappingUtils;
+
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,11 +20,13 @@ public class RecipeService {
     private final MySQLConnector connector;
     private final RecipeManager recipeManager;
     private final IngredientManager ingredientManager;
+    private final MappingUtils mapper;
 
     public RecipeService(MySQLConnector connector, RecipeManager recipeManager, IngredientManager ingredientManager) {
         this.recipeManager = recipeManager;
         this.ingredientManager = ingredientManager;
         this.connector = connector;
+        this.mapper = new MappingUtils();
     }
 
     public List<RecipeDto> findAll() {
@@ -95,6 +100,35 @@ public class RecipeService {
         }
         return recipeDtos;
     }
+
+    public RecipeDto createRecipe(RecipeDto recipeDto) throws SQLException, ClassNotFoundException {
+
+        try (Connection con = connector.getMySQLConnection()) {
+
+            RecipeDao recipeDao = this.recipeManager.createRecipe(con, mapper.mapToDao(recipeDto));
+            recipeDto = MappingUtils.mapRecipeDto(recipeDao);
+
+        } catch (Exception e) {
+            throw e;
+        }
+
+        return recipeDto;
+    }
+
+    public RecipeDto findRecipebyId(int id){
+        RecipeDto recipeDto = null;
+        try (Connection con = connector.getMySQLConnection()){
+
+            RecipeDao recipeDao = recipeManager.getRecipeById(con, id);
+            recipeDto = MappingUtils.mapRecipeDto(recipeDao);
+        }catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return recipeDto;
+    }
+
+
+
     public List<RecipeDto> findRecipesByIdCategory(Integer idCategory) {
         List<RecipeDto> recipeDtos = null;
         List<RecipeDao> recipeDaos = recipeManager.findRecipesByIdCategory(idCategory);

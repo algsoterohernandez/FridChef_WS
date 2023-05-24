@@ -52,9 +52,9 @@ class RecipeDaoTest {
     void testSetAndGetIngredients() {
         // Arrange
         RecipeDao recipe = new RecipeDao();
-        IngredientDao ingredient1 = new IngredientDao();
-        IngredientDao ingredient2 = new IngredientDao();
-        List<IngredientDao> ingredientList = new ArrayList<>();
+        IngredientRecipeDao ingredient1 = new IngredientRecipeDao();
+        IngredientRecipeDao ingredient2 = new IngredientRecipeDao();
+        List<IngredientRecipeDao> ingredientList = new ArrayList<>();
         ingredientList.add(ingredient1);
         ingredientList.add(ingredient2);
 

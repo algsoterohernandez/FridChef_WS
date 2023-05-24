@@ -26,6 +26,18 @@ public class RecipeDto {
     private Date createTime;
     private Blob image;
     private RecipeStatus status;
-    private List<IngredientDto> ingredients;
+    private List<IngredientRecipeDto> ingredients;
 
+    public RecipeDto(int id, String name, String description, int difficulty, int time, String unitTime, int idCategory, Date createTime, RecipeStatus status, List<IngredientRecipeDto> ingredients) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.difficulty = difficulty;
+        this.time = time;
+        this.unitTime = unitTime;
+        this.idCategory = idCategory;
+        this.createTime = createTime;
+        this.status = status;
+        this.ingredients = ingredients;
+    }
 }
