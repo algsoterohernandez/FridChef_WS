@@ -24,7 +24,7 @@ public class RecipeDto {
     private String unitTime;
     private int idCategory;
     private Date createTime;
-    private Blob image;
+    private String imageBase64;
     private RecipeStatus status;
     private List<IngredientRecipeDto> ingredients;
 
