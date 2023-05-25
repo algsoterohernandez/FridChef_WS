@@ -96,7 +96,6 @@ public class RecipeManager {
         return success;
     }
 
-    // Metodos creados y usados por Asun
     public List<RecipeDao> findAll(Connection con) {
 
         try (Statement stm = con.createStatement()) {

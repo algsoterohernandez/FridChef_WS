@@ -11,11 +11,12 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Blob;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Path("/recipes")
 public class RecipeController {
@@ -40,12 +41,12 @@ public class RecipeController {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response recipeDetails(@PathParam("id") int id){
+    public Response recipeDetails(@PathParam("id") int id) {
 
 
-            RecipeDto recipe = recipesService.findRecipebyId(id);
+        RecipeDto recipe = recipesService.findRecipebyId(id);
 
-            return Optional.ofNullable(recipe)
+        return Optional.ofNullable(recipe)
                 .map(dto -> Response.ok().entity(dto).build())
                 .orElse(Response.status(404).build());
     }
@@ -62,9 +63,9 @@ public class RecipeController {
                 rs = Response.status(400).build();
             } else {
                 RecipeDto recipeRs = recipesService.createRecipe(recipeDto);
-                if(recipeRs != null){
+                if (recipeRs != null) {
                     rs = Response.status(200).entity(recipeRs).build();
-                }else{
+                } else {
                     rs = Response.status(500).build();
                 }
             }
@@ -74,6 +75,16 @@ public class RecipeController {
         return rs;
     }
 
+    // Probar que llega la imagen correctamente al backend, generando el fihcero.
+//        File outputFile = new File("C:\\Users\\a.carmona.garrido\\Desktop\\test.png");
+//
+//        try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
+//            outputStream.write(imagenContent);
+//        } catch (FileNotFoundException e) {
+//            throw new RuntimeException(e);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
     @POST
     @Path("/findbyingredients")

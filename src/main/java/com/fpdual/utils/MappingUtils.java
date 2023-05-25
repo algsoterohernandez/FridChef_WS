@@ -5,7 +5,12 @@ import com.fpdual.persistence.aplication.dao.*;
 import com.fpdual.api.dto.IngredientRecipeDto;
 import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.nio.charset.StandardCharsets;
+import java.sql.Blob;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +29,19 @@ public class MappingUtils {
         recipeDto.setCreateTime(recipeDao.getCreateTime());
         recipeDto.setStatus(recipeDao.getStatus());
         recipeDto.setIngredients(mapToDto(recipeDao.getIngredients()));
+
+        Blob imageBlob = recipeDao.getImage();
+        if (imageBlob != null) {
+            try {
+                byte[] imageContent = imageBlob.getBytes(1, (int) imageBlob.length());
+                String imageBase64 = Base64.getEncoder().encodeToString(imageContent);
+
+                recipeDto.setImageBase64(imageBase64);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
 
 
         List<IngredientRecipeDto> ingredients = recipeDao.getIngredients().stream()
@@ -46,7 +64,16 @@ public class MappingUtils {
         recipeDao.setUnitTime(recipeDto.getUnitTime());
         recipeDao.setIdCategory(recipeDto.getIdCategory());
         recipeDao.setCreateTime(new Date(System.currentTimeMillis()));
-        recipeDao.setImage(recipeDto.getImage());
+
+        if (recipeDto.getImageBase64() != null) {
+            byte[] imageContent = Base64.getDecoder().decode(recipeDto.getImageBase64());
+            try {
+                recipeDao.setImage(new SerialBlob(imageContent));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         recipeDao.setStatus(recipeDto.getStatus());
         recipeDao.setIngredients(mapToDao(recipeDto.getIngredients()));
         return recipeDao;
@@ -85,6 +112,7 @@ public class MappingUtils {
         ingredientRecipeDao.setIdIngredient(ingredientRecipeDto.getIdIngredient());
         ingredientRecipeDao.setQuantity(ingredientRecipeDto.getQuantity());
         ingredientRecipeDao.setUnit(ingredientRecipeDto.getUnit());
+
 
         return ingredientRecipeDao;
     }
