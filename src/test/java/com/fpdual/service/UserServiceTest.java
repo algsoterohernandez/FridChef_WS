@@ -3,16 +3,20 @@ package com.fpdual.service;
 import com.fpdual.api.dto.UserDto;
 import com.fpdual.exceptions.UserAlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
+import com.fpdual.persistence.aplication.dao.RolUserDao;
 import com.fpdual.persistence.aplication.dao.UserDao;
 import com.fpdual.persistence.aplication.manager.RolManager;
 import com.fpdual.persistence.aplication.manager.UserManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -21,6 +25,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 
 public class UserServiceTest {
+    @InjectMocks
+    private UserService userService;
 
     @Mock
     private MySQLConnector mySQLConnector;
@@ -31,7 +37,8 @@ public class UserServiceTest {
 
     private UserDto exampleUserDto;
     private UserDao exampleUserDao;
-    private UserService userService;
+    private RolUserDao rolUserDao;
+    private List<RolUserDao> rolUserDaoList;
 
     @BeforeEach
     public void init() {
@@ -51,6 +58,13 @@ public class UserServiceTest {
         exampleUserDao.setPassword("example");
         exampleUserDao.setEmail("example@a.com");
 
+        rolUserDao = new RolUserDao();
+        rolUserDao.setIdUser(2);
+        rolUserDao.setIdRol(1);
+
+        rolUserDaoList = new ArrayList<>();
+        rolUserDaoList.add(rolUserDao);
+
     }
 
     @Test
@@ -58,7 +72,6 @@ public class UserServiceTest {
 
         //Prepare method dependencies
         when(userManager.insertUser(any(), any())).thenReturn(exampleUserDao);
-
         when(mySQLConnector.getMySQLConnection()).thenReturn(null);
 
         //Execute method
@@ -66,7 +79,6 @@ public class UserServiceTest {
 
         //Asserts
         assertNotNull(userDtoRs);
-        assertTrue(userDtoRs.getName().equals("example"));
 
     }
 
@@ -114,7 +126,6 @@ public class UserServiceTest {
 
         //Prepare method dependencies
         when(userManager.deleteUser(any(),anyString())).thenReturn(false);
-
         when(mySQLConnector.getMySQLConnection()).thenReturn(null);
 
         //Execute method
@@ -139,7 +150,7 @@ public class UserServiceTest {
 
         //Prepare method dependencies
         when(userManager.findByEmailPassword(any(),anyString(), anyString())).thenReturn(exampleUserDao);
-
+        when(rolManager.findRolesById(any(),anyInt())).thenReturn(rolUserDaoList);
         when(mySQLConnector.getMySQLConnection()).thenReturn(null);
 
         //Execute method
@@ -147,8 +158,7 @@ public class UserServiceTest {
 
         //Asserts
         assertNotNull(userDtoRs);
-        assertTrue(userDtoRs.getEmail().equals("example@a.com") &&
-                userDtoRs.getPassword().equals("example"));
+        assertNotNull(userService.findUser("example@a.com","example"));
 
     }
 

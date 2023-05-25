@@ -17,6 +17,7 @@ import lombok.Setter;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserService {
@@ -41,7 +42,7 @@ public class UserService {
             UserDao userDao = this.userManager.insertUser(con, MappingUtils.mapUserDao(userDto));
             userDto = MappingUtils.mapUserDto(userDao);
 
-            boolean insertRolOk =this.rolManager.insertRol(con,userDto);
+            boolean insertRolOk =this.rolManager.insertRol(con, userDao.getId());
 
 
         } catch (UserAlreadyExistsException uaee) {
@@ -79,7 +80,7 @@ public class UserService {
 
     public UserDto findUser(String email, String password) throws SQLException, ClassNotFoundException {
         UserDto userDto = null;
-        List<RolUserDto> rolUserDto;
+        List<RolUserDto> rolUserDto = new ArrayList<>();
 
         try (Connection con = connector.getMySQLConnection()) {
 

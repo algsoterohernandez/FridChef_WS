@@ -5,8 +5,8 @@ import com.fpdual.persistence.aplication.dao.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.*;
@@ -17,13 +17,15 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserManagerTest {
-
+    @InjectMocks
+    private UserManager userManager;
     @Mock
     private Connection con;
     @Mock
     private PreparedStatement stm;
+    @Mock
+    private ResultSet resultSetMock;
     private UserDao exampleUserDao;
-    private UserManager userManager;
 
     @BeforeEach
     public void init() {
@@ -43,12 +45,11 @@ public class UserManagerTest {
     public void testInsertUser_validConnectionAndUserDao_userDaoNotNull() throws UserAlreadyExistsException, SQLException {
 
         //Prepare method dependencies
-        ResultSet resultSetMock = Mockito.mock(ResultSet.class);
         when(resultSetMock.next()).thenReturn(true);
         when(resultSetMock.getInt(anyInt())).thenReturn(100);
 
-        when(stm.executeUpdate()).thenReturn(1);
         when(stm.getGeneratedKeys()).thenReturn(resultSetMock);
+        when(stm.executeUpdate()).thenReturn(1);
 
         when(con.prepareStatement(anyString(), anyInt())).thenReturn(stm);
 
@@ -128,8 +129,6 @@ public class UserManagerTest {
     public void testFindUser_validConnectionEmailAndPassword_userDaoNotNull() throws SQLException {
 
         //Prepare method dependencies
-        ResultSet resultSetMock = Mockito.mock(ResultSet.class);
-
         when(resultSetMock.next()).thenReturn(true).thenReturn(false);
         when(resultSetMock.getString(anyString())).thenReturn(exampleUserDao.getName()).
                 thenReturn(exampleUserDao.getSurname1()).thenReturn(exampleUserDao.getSurname2()).
