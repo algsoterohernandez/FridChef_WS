@@ -13,21 +13,18 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UserDaoTest {
-
+public class RolUserDaoTest {
     @Mock
     private static ResultSet result;
 
 
     @Test
-    public void testUserDaoConstructor_validResultDao_userSqlException() throws SQLException{
+    public void testRolUserDaoConstructor_validResultDao_userSqlException() throws SQLException{
         //Prepare method dependencies
         when(result.getInt(any())).thenThrow(SQLException.class);
 
         //Asserts
-        assertThrows(SQLException.class, () -> result.getInt("email"));
+        assertThrows(SQLException.class, () -> result.getInt("id_user"));
 
     }
-
-
 }
