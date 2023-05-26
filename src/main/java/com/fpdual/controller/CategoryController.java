@@ -61,7 +61,7 @@ public class CategoryController {
             List<RecipeDto> recipeList = categoryService.findRecipesByCategory(category);
 
             if(!recipeList.isEmpty()){
-                return Response.status(HttpStatus.OK.getStatusCode()).build();
+                return Response.ok(recipeList).build();
             } else{
                 return Response.status(Response.Status.NO_CONTENT).build();
             }
