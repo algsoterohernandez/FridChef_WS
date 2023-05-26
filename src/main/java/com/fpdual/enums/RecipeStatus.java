@@ -1,20 +1,25 @@
 package com.fpdual.enums;
+
+import lombok.Getter;
+
 public enum RecipeStatus {
     PENDING("PENDING"),
     ACCEPTED("ACCEPTED"),
     DECLINED("DECLINED");
-
-    private String status;
+    @Getter
+    private final String status;
 
     RecipeStatus(String status) {
         this.status = status;
     }
 
-    public String getStatus() {
-        return status;
-    }
+
     // Devuelve la instancia del enum RecipeStatus correspondiente al estado proporcionado
     public static RecipeStatus fromString(String status) {
+        if (status == null) {
+            return PENDING;
+        }
+
         for (RecipeStatus recipeStatus : RecipeStatus.values()) {
             if (recipeStatus.getStatus().equalsIgnoreCase(status)) {
                 return recipeStatus;

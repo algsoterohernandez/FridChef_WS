@@ -9,25 +9,25 @@ import java.sql.*;
 
 public class UserManager {
 
-    public UserDao insertUser(Connection con, UserDao user) throws UserAlreadyExistsException {
+    public UserDao insertUser(Connection con, UserDao userDao) throws UserAlreadyExistsException {
         try (PreparedStatement stm = con.prepareStatement("INSERT INTO user (name, surname1, " +
                 "surname2, email, password, create_time) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
 
-            stm.setString(1, user.getName());
-            stm.setString(2, user.getSurname1());
-            stm.setString(3, user.getSurname2());
-            stm.setString(4, user.getEmail());
-            stm.setString(5, user.getPassword());
-            stm.setDate(6, user.getCreateTime());
+            stm.setString(1, userDao.getName());
+            stm.setString(2, userDao.getSurname1());
+            stm.setString(3, userDao.getSurname2());
+            stm.setString(4, userDao.getEmail());
+            stm.setString(5, userDao.getPassword());
+            stm.setDate(6, userDao.getCreateTime());
 
 
             stm.executeUpdate();
             ResultSet result = stm.getGeneratedKeys();
             result.next();
             int pk = result.getInt(1);
-            user.setId(pk);
+            userDao.setId(pk);
 
-            return user;
+            return userDao;
 
         } catch (SQLIntegrityConstraintViolationException sqlicve) {
 
@@ -73,15 +73,15 @@ public class UserManager {
 
             ResultSet result = stm.executeQuery();
 
-            UserDao user = null;
+            UserDao userDao = null;
 
             while (result.next()) {
 
-                user = new UserDao(result);
+                userDao = new UserDao(result);
 
             }
 
-            return user;
+            return userDao;
 
         } catch (SQLException e) {
 

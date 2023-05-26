@@ -10,7 +10,7 @@ import java.util.List;
 
 public class RolManager {
     public boolean insertRol(Connection con, int idUser) throws FridChefException, SQLException {
-        boolean insertRolOk = false;
+        boolean insertRolOk;
 
         try (PreparedStatement stm = con.prepareStatement("INSERT INTO rol_user (id_user, id_rol) " +
                 "VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
@@ -46,15 +46,15 @@ public class RolManager {
 
             RolUserDao rolUserDao;
 
-            List<RolUserDao> rolUser= new ArrayList<>();
+            List<RolUserDao> rolUserDaoList = new ArrayList<>();
 
             while (result.next()) {
                 rolUserDao = new RolUserDao(result);
-                rolUser.add(rolUserDao);
+                rolUserDaoList.add(rolUserDao);
 
             }
 
-            return rolUser;
+            return rolUserDaoList;
 
         } catch (SQLException e) {
 

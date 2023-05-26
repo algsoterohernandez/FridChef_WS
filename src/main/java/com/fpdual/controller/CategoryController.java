@@ -3,6 +3,7 @@ package com.fpdual.controller;
 
 import com.fpdual.api.dto.CategoryDto;
 import com.fpdual.api.dto.RecipeDto;
+import com.fpdual.enums.HttpStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.service.CategoryService;
 import jakarta.ws.rs.*;
@@ -11,7 +12,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +35,8 @@ public class CategoryController {
     public Response findAllCategories(){
         List<CategoryDto> categoryList = categoryService.findAllCategories();
         return Optional.ofNullable(categoryList)
-                .map(list -> Response.ok().entity(list).build())
-                .orElse(Response.status(500).build());
+                .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
+                .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
     }
 
     @GET
@@ -45,8 +45,8 @@ public class CategoryController {
     public Response findCategoryById(@PathParam("id") int id){
         CategoryDto category = categoryService.findCategoryById(id);
         return Optional.ofNullable(category)
-                .map(dto -> Response.ok().entity(dto).build())
-                .orElse(Response.status(404).build());
+                .map(dto -> Response.status(HttpStatus.OK.getStatusCode()).entity(dto).build())
+                .orElse(Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build());
     }
 
     @GET
@@ -61,13 +61,13 @@ public class CategoryController {
             List<RecipeDto> recipeList = categoryService.findRecipesByCategory(category);
 
             if(!recipeList.isEmpty()){
-                return Response.ok(recipeList).build();
+                return Response.status(HttpStatus.OK.getStatusCode()).build();
             } else{
                 return Response.status(Response.Status.NO_CONTENT).build();
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return Response.serverError().build();
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
         }
 
 //        try {
@@ -89,17 +89,17 @@ public class CategoryController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createCategory(CategoryDto categoryDto){
-        Response rs = null;
+        Response rs;
 
         try{
             if(categoryDto == null){
-                rs = Response.status(400).build();
+                rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
             }else {
 
                 CategoryDto createdCategory = categoryService.createCategory(categoryDto);
                 rs = Optional.ofNullable(createdCategory)
-                        .map(dto -> Response.status(201).entity(dto).build())
-                        .orElse(Response.status(500).build());
+                        .map(dto -> Response.status(HttpStatus.CREATED.getStatusCode()).entity(dto).build())
+                        .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
             }
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -113,21 +113,21 @@ public class CategoryController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateCategory(@PathParam("id") int id, CategoryDto categoryDto){
-        Response rs = null;
+        Response rs;
 
         try{
             if(categoryDto == null){
-                rs = Response.status(400).build();
+                rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
             }else {
 
                 CategoryDto updatedCategory = categoryService.updateCategory(id, categoryDto);
                 rs = Optional.ofNullable(updatedCategory)
-                        .map(dto -> Response.ok().entity(dto).build())
-                        .orElse(Response.status(404).build());
+                        .map(dto -> Response.status(HttpStatus.OK.getStatusCode()).entity(dto).build())
+                        .orElse(Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build());
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
-            rs = Response.serverError().build();
+            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
         }
         return rs;
     }
@@ -142,13 +142,13 @@ public class CategoryController {
             boolean deleted = categoryService.deleteCategory(id);
 
             if(deleted){
-                rs = Response.ok().build();
+                rs = Response.status(HttpStatus.OK.getStatusCode()).build();
             }else{
-                rs = Response.status(404).build();
+                rs = Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build();
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
-            rs = Response.serverError().build();
+            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
         }
         return rs;
     }

@@ -18,13 +18,6 @@ public class UserController {
         userService = new UserService(new MySQLConnector(), new UserManager(), new RolManager());
     }
 
-    @GET
-    @Path("/ping")
-    public Response ping() {
-        return Response.ok().entity("Service online").build();
-    }
-
-
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
@@ -41,13 +34,13 @@ public class UserController {
                     rs = Response.status(HttpStatus.NOT_MODIFIED.getStatusCode()).build();
 
                 } else if (userRs != null && !userRs.isAlreadyExists()) {
-                    rs = Response.ok().entity(userRs).build();
+                    rs = Response.status(HttpStatus.OK.getStatusCode()).entity(userRs).build();
                 }
             }
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            rs = Response.serverError().build();
+            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
         }
 
         return rs;
@@ -61,11 +54,11 @@ public class UserController {
         try {
             boolean deleted = userService.deleteUser(email);
 
-            rs = Response.ok().entity(deleted).build();
+            rs = Response.status(HttpStatus.OK.getStatusCode()).entity(deleted).build();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            rs = Response.serverError().build();
+            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
         }
         return rs;
     }
@@ -84,12 +77,12 @@ public class UserController {
                 if (userRs == null) {
                     rs = Response.status(HttpStatus.NO_CONTENT.getStatusCode()).build();
                 } else {
-                    rs = Response.ok().entity(userRs).build();
+                    rs = Response.status(HttpStatus.OK.getStatusCode()).entity(userRs).build();
                 }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            rs = Response.serverError().build();
+            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
         }
 
         return rs;

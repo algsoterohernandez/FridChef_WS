@@ -1,8 +1,7 @@
 package com.fpdual.persistence.aplication.manager;
 
-import com.fpdual.exceptions.RecipeAlreadyExistsException;
+import com.fpdual.enums.RecipeStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
-import com.fpdual.persistence.aplication.dao.IngredientDao;
 import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 import com.fpdual.persistence.aplication.dao.RecipeDao;
 import lombok.Data;
@@ -251,6 +250,63 @@ public class RecipeManager {
         }
     }
 
+    public List<RecipeDao> findByStatusPending(Connection con) {
 
+        try (PreparedStatement stm = con.prepareStatement("SELECT * FROM recipe WHERE status LIKE ?")) {
 
+            stm.setString(1, RecipeStatus.PENDING.getStatus());
+
+            ResultSet result = stm.executeQuery();
+
+            RecipeDao recipeDao;
+
+            List<RecipeDao> recipeDaoList = new ArrayList<>();
+
+            while (result.next()) {
+
+                recipeDao = new RecipeDao(result);
+                recipeDaoList.add(recipeDao);
+
+            }
+
+            return recipeDaoList;
+
+        } catch (SQLException e) {
+
+            System.out.println(e.getMessage());
+
+            return null;
+        }
+    }
+
+    public RecipeDao updateRecipeStatus(Connection con, int id, String status) {
+        RecipeDao recipeDao = null;
+
+        try (PreparedStatement updateStm = con.prepareStatement("UPDATE recipe SET status = ? WHERE id = ?")) {
+            if (status.equals(RecipeStatus.ACCEPTED.name())) {
+                updateStm.setString(1, RecipeStatus.ACCEPTED.getStatus());
+            } else if (status.equals(RecipeStatus.DECLINED.name())) {
+                updateStm.setString(1, RecipeStatus.DECLINED.getStatus());
+            }
+            updateStm.setInt(2, id);
+            updateStm.executeUpdate();
+
+            // Consulta adicional para obtener los datos actualizados
+            try (PreparedStatement selectStm = con.prepareStatement("SELECT * FROM recipe WHERE id = ?")) {
+                selectStm.setInt(1, id);
+                try (ResultSet result = selectStm.executeQuery()) {
+                    while (result.next()) {
+                        recipeDao = new RecipeDao(result);
+                    }
+                }
+            }
+
+            return recipeDao;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+
+        }
+    }
 }

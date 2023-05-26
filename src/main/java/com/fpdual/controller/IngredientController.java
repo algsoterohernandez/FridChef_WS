@@ -36,7 +36,7 @@ public class IngredientController {
         // Verificar si la lista de ingredientes es nula o vacía usando lambda
         return Optional.ofNullable(ingredientsList)
                 // Si la lista no es nula, construir una respuesta exitosa con la lista de ingredientes como entidad
-                .map(list -> Response.ok().entity(list).build())
+                .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
                 // Si la lista es nula, devolver una respuesta de estado 500 (Error interno del servidor)
                 .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
     }
