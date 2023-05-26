@@ -1,9 +1,8 @@
 package com.fpdual.service;
 
-import com.fpdual.api.dto.IngredientRecipeDto;
 import com.fpdual.api.dto.RecipeDto;
+import com.fpdual.enums.RecipeStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
-import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 import com.fpdual.persistence.aplication.dao.RecipeDao;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
 import com.fpdual.persistence.aplication.manager.RecipeManager;
@@ -20,13 +19,11 @@ public class RecipeService {
     private final MySQLConnector connector;
     private final RecipeManager recipeManager;
     private final IngredientManager ingredientManager;
-    private final MappingUtils mapper;
 
     public RecipeService(MySQLConnector connector, RecipeManager recipeManager, IngredientManager ingredientManager) {
         this.recipeManager = recipeManager;
         this.ingredientManager = ingredientManager;
         this.connector = connector;
-        this.mapper = new MappingUtils();
     }
 
     public List<RecipeDto> findAll() {
@@ -36,7 +33,7 @@ public class RecipeService {
             List<RecipeDao> recipeDaos = recipeManager.findAll(con);
 
             if (recipeDaos != null) {
-                recipeDtos = MappingUtils.mapRecipeDto(recipeDaos);
+                recipeDtos = MappingUtils.mapRecipeListToDto(recipeDaos);
             }
 
 
@@ -65,7 +62,7 @@ public class RecipeService {
             List<RecipeDao> recipeDaos = recipeManager.findRecipesByIngredients(con, ingredientIds);
 
             if (recipeDaos != null) {
-                recipeDtos = MappingUtils.mapRecipeDto(recipeDaos);
+                recipeDtos = MappingUtils.mapRecipeListToDto(recipeDaos);
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -92,7 +89,7 @@ public class RecipeService {
             List<RecipeDao> recipeDaos = recipeManager.findRecipeSuggestions(con, ingredientIds);
 
             if (recipeDaos != null) {
-                recipeDtos = MappingUtils.mapRecipeDto(recipeDaos);
+                recipeDtos = MappingUtils.mapRecipeListToDto(recipeDaos);
             }
 
         } catch (SQLException | ClassNotFoundException e) {
@@ -105,8 +102,8 @@ public class RecipeService {
 
         try (Connection con = connector.getMySQLConnection()) {
 
-            RecipeDao recipeDao = this.recipeManager.createRecipe(con, mapper.mapToDao(recipeDto));
-            recipeDto = MappingUtils.mapRecipeDto(recipeDao);
+            RecipeDao recipeDao = this.recipeManager.createRecipe(con, MappingUtils.mapRecipeToDao(recipeDto));
+            recipeDto = MappingUtils.mapRecipeToDto(recipeDao);
 
         } catch (Exception e) {
             throw e;
@@ -120,7 +117,7 @@ public class RecipeService {
         try (Connection con = connector.getMySQLConnection()){
 
             RecipeDao recipeDao = recipeManager.getRecipeById(con, id);
-            recipeDto = MappingUtils.mapRecipeDto(recipeDao);
+            recipeDto = MappingUtils.mapRecipeToDto(recipeDao);
         }catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -134,10 +131,58 @@ public class RecipeService {
         List<RecipeDao> recipeDaos = recipeManager.findRecipesByIdCategory(idCategory);
 
         if (recipeDaos != null) {
-            recipeDtos = MappingUtils.mapRecipeDto(recipeDaos);
+            recipeDtos = MappingUtils.mapRecipeListToDto(recipeDaos);
         }
 
         return recipeDtos;
     }
 
+
+    public List<RecipeDto> findByStatusPending() throws SQLException, ClassNotFoundException {
+        List<RecipeDto> recipeDtoList = new ArrayList<>();
+
+        try (Connection con = connector.getMySQLConnection()) {
+            List<RecipeDao> recipeDaoList = recipeManager.findByStatusPending(con);
+
+            if (!recipeDaoList.isEmpty()) {
+
+                recipeDtoList = MappingUtils.mapRecipeListToDto(recipeDaoList);
+            }
+
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+            throw e;
+
+        }
+
+        return recipeDtoList;
+    }
+
+    public RecipeDto updateRecipeStatus(int id, String status) throws SQLException, ClassNotFoundException {
+        RecipeDto recipeDto = new RecipeDto();
+
+        try (Connection con = connector.getMySQLConnection()) {
+
+            RecipeDao recipeDao = recipeManager.updateRecipeStatus(con, id, status);
+
+            if (recipeDao != null) {
+                if (recipeDao.getStatus().equals(RecipeStatus.ACCEPTED)) {
+                    recipeDto = MappingUtils.mapRecipeToDto(recipeDao);
+
+                } else if (recipeDao.getStatus().equals(RecipeStatus.DECLINED)) {
+                    recipeDto = MappingUtils.mapRecipeToDto(recipeDao);
+
+                }
+            }
+
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+            throw e;
+
+        }
+
+        return recipeDto;
+    }
 }

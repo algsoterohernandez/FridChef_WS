@@ -4,7 +4,6 @@ import com.fpdual.api.dto.IngredientDto;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.IngredientDao;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
-import com.fpdual.persistence.aplication.manager.UserManager;
 import com.fpdual.utils.MappingUtils;
 
 import java.sql.Connection;
@@ -29,7 +28,7 @@ public class IngredientService {
 
 
             if (ingredientDaos != null) {
-                ingredientDtos = MappingUtils.mapIngredientDto(ingredientDaos);
+                ingredientDtos = MappingUtils.mapIngredientListToDto(ingredientDaos);
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();

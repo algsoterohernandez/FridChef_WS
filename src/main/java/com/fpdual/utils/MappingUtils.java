@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class MappingUtils {
 
-    public static RecipeDto mapRecipeDto(RecipeDao recipeDao) {
+    public static RecipeDto mapRecipeToDto(RecipeDao recipeDao) {
         RecipeDto recipeDto = new RecipeDto();
 
         recipeDto.setId(recipeDao.getId());
@@ -23,18 +23,18 @@ public class MappingUtils {
         recipeDto.setIdCategory(recipeDao.getIdCategory());
         recipeDto.setCreateTime(recipeDao.getCreateTime());
         recipeDto.setStatus(recipeDao.getStatus());
-        recipeDto.setIngredients(mapToDto(recipeDao.getIngredients()));
+        recipeDto.setIngredients(mapIngredientRecipeListToDto(recipeDao.getIngredients()));
 
 
         List<IngredientRecipeDto> ingredients = recipeDao.getIngredients().stream()
-                .map(MappingUtils::mapToDto)
+                .map(MappingUtils::mapIngredientRecipeToDto)
                 .collect(Collectors.toList());
 
         recipeDto.setIngredients(ingredients);
 
         return recipeDto;
     }
-    public RecipeDao mapToDao(RecipeDto recipeDto) {
+    public static RecipeDao mapRecipeToDao(RecipeDto recipeDto) {
 
         RecipeDao recipeDao = new RecipeDao();
 
@@ -48,18 +48,19 @@ public class MappingUtils {
         recipeDao.setCreateTime(new Date(System.currentTimeMillis()));
         recipeDao.setImage(recipeDto.getImage());
         recipeDao.setStatus(recipeDto.getStatus());
-        recipeDao.setIngredients(mapToDao(recipeDto.getIngredients()));
+        recipeDao.setIngredients(mapIngredientRecipeListToDao(recipeDto.getIngredients()));
+
         return recipeDao;
 
     }
 
-    public static List<RecipeDto> mapRecipeDto(List<RecipeDao> recipeDaos) {
-        return recipeDaos.stream()
-                .map(MappingUtils::mapRecipeDto)
+    public static List<RecipeDto> mapRecipeListToDto(List<RecipeDao> recipeDao) {
+        return recipeDao.stream()
+                .map(MappingUtils::mapRecipeToDto)
                 .collect(Collectors.toList());
     }
 
-    public static IngredientRecipeDto mapToDto(IngredientRecipeDao ingredientRecipeDao) {
+    public static IngredientRecipeDto mapIngredientRecipeToDto(IngredientRecipeDao ingredientRecipeDao) {
         IngredientRecipeDto ingredientRecipeDto = new IngredientRecipeDto();
 
         ingredientRecipeDto.setId(ingredientRecipeDao.getId());
@@ -70,14 +71,14 @@ public class MappingUtils {
         ingredientRecipeDto.setUnit(ingredientRecipeDao.getUnit());
         if (ingredientRecipeDto.getAllergens() != null) {
             List<AllergenDto> allergens = ingredientRecipeDao.getAllergens().stream()
-                    .map(MappingUtils::mapAllergenDto)
+                    .map(MappingUtils::mapAllergenToDto)
                     .collect(Collectors.toList());
             ingredientRecipeDto.setAllergens(allergens);
         }
         return ingredientRecipeDto;
     }
 
-    public static IngredientRecipeDao mapToDao(IngredientRecipeDto ingredientRecipeDto) {
+    public static IngredientRecipeDao mapIngredientRecipeToDao(IngredientRecipeDto ingredientRecipeDto) {
         IngredientRecipeDao ingredientRecipeDao = new IngredientRecipeDao();
 
         ingredientRecipeDao.setId(ingredientRecipeDto.getId());
@@ -89,20 +90,20 @@ public class MappingUtils {
         return ingredientRecipeDao;
     }
 
-    public static List<IngredientRecipeDto>mapToDto(List<IngredientRecipeDao> ingredientRecipeDaos){
+    public static List<IngredientRecipeDto> mapIngredientRecipeListToDto(List<IngredientRecipeDao> ingredientRecipeDaos){
         return ingredientRecipeDaos.stream()
-                .map(MappingUtils::mapToDto)
+                .map(MappingUtils::mapIngredientRecipeToDto)
                 .collect(Collectors.toList());
     }
 
-    public static List<IngredientRecipeDao>mapToDao(List<IngredientRecipeDto> ingredientRecipeDtos){
+    public static List<IngredientRecipeDao> mapIngredientRecipeListToDao(List<IngredientRecipeDto> ingredientRecipeDtos){
         return ingredientRecipeDtos.stream()
-                .map(MappingUtils::mapToDao)
+                .map(MappingUtils::mapIngredientRecipeToDao)
                 .collect(Collectors.toList());
     }
 
 
-    public static IngredientDto mapIngredientDto(IngredientDao ingredientDao) {
+    public static IngredientDto mapIngredientToDto(IngredientDao ingredientDao) {
         IngredientDto ingredientDto = new IngredientDto();
 
         ingredientDto.setId(ingredientDao.getId());
@@ -110,7 +111,7 @@ public class MappingUtils {
 
         if (ingredientDao.getAllergens() != null) {
             List<AllergenDto> allergens = ingredientDao.getAllergens().stream()
-                    .map(MappingUtils::mapAllergenDto)
+                    .map(MappingUtils::mapAllergenToDto)
                     .collect(Collectors.toList());
             ingredientDto.setAllergens(allergens);
         }
@@ -118,14 +119,14 @@ public class MappingUtils {
         return ingredientDto;
     }
 
-    public static List<IngredientDto> mapIngredientDto(List<IngredientDao> ingredientDaos) {
+    public static List<IngredientDto> mapIngredientListToDto(List<IngredientDao> ingredientDaos) {
         return ingredientDaos.stream()
-                .map(MappingUtils::mapIngredientDto)
+                .map(MappingUtils::mapIngredientToDto)
                 .collect(Collectors.toList());
     }
 
 
-    public static AllergenDto mapAllergenDto(AllergenDao allergenDao) {
+    public static AllergenDto mapAllergenToDto(AllergenDao allergenDao) {
 
         AllergenDto allergenDto = new AllergenDto();
 
@@ -135,13 +136,13 @@ public class MappingUtils {
         return allergenDto;
     }
 
-    public static List<AllergenDto> mapAllergenDto(List<AllergenDao> allergenDaos) {
-        return allergenDaos.stream()
-                .map(MappingUtils::mapAllergenDto)
+    public static List<AllergenDto> mapAllergenListDto(List<AllergenDao> allergenDao) {
+        return allergenDao.stream()
+                .map(MappingUtils::mapAllergenToDto)
                 .collect(Collectors.toList());
     }
 
-    public static UserDto mapUserDto(UserDao userDao) {
+    public static UserDto mapUserToDto(UserDao userDao) {
 
         UserDto userDto = new UserDto();
 
@@ -156,7 +157,7 @@ public class MappingUtils {
 
     }
 
-    public static UserDao mapUserDao(UserDto userDto) {
+    public static UserDao mapUserToDao(UserDto userDto) {
 
         UserDao userDao = new UserDao();
 
@@ -172,7 +173,7 @@ public class MappingUtils {
 
     }
 
-    public static RolUserDto mapRolUserDto(RolUserDao rolUserDao) {
+    public static RolUserDto mapRolUserToDto(RolUserDao rolUserDao) {
 
         RolUserDto rolUserDto = new RolUserDto();
 
@@ -181,10 +182,9 @@ public class MappingUtils {
 
         return rolUserDto;
     }
-    public static List<RolUserDto> mapRolUserDto(List<RolUserDao> rolUserDao) {
+    public static List<RolUserDto> mapRolUserListDto(List<RolUserDao> rolUserDao) {
         return rolUserDao.stream()
-                .map(MappingUtils::mapRolUserDto)
+                .map(MappingUtils::mapRolUserToDto)
                 .collect(Collectors.toList());
     }
-
 }

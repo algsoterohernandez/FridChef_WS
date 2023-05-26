@@ -74,12 +74,11 @@ public class CategoryService {
 
     public List<RecipeDto> findRecipesByCategory(CategoryDto categoryDto) {
         List<RecipeDto> filteredRecipes = new ArrayList<>();
-        MappingUtils mappingUtils = new MappingUtils();
 
         int idCategory = categoryDto.getId();
         List<RecipeDao> recipes = recipeManager.findAllRecipesByCategoryId(connector, categoryDto.getId());
         for(RecipeDao recipeDao : recipes){
-            RecipeDto recipeDto = mappingUtils.mapRecipeDto(recipeDao);
+            RecipeDto recipeDto = MappingUtils.mapRecipeToDto(recipeDao);
             filteredRecipes.add(recipeDto);
         }
 

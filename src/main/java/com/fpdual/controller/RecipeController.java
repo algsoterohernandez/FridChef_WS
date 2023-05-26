@@ -11,19 +11,17 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.sql.Blob;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Path("/recipes")
 public class RecipeController {
 
-    private final RecipeService recipesService;
+    private final RecipeService recipeService;
 
     public RecipeController() {
-        recipesService = new RecipeService(new MySQLConnector(), new RecipeManager(), new IngredientManager());
+        recipeService = new RecipeService(new MySQLConnector(), new RecipeManager(), new IngredientManager());
     }
 
 
@@ -31,9 +29,9 @@ public class RecipeController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
-        List<RecipeDto> recipeList = recipesService.findAll();
+        List<RecipeDto> recipeList = recipeService.findAll();
         return Optional.ofNullable(recipeList)
-                .map(list -> Response.ok().entity(list).build())
+                .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
                 .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
     }
 
@@ -43,11 +41,11 @@ public class RecipeController {
     public Response recipeDetails(@PathParam("id") int id){
 
 
-            RecipeDto recipe = recipesService.findRecipebyId(id);
+            RecipeDto recipe = recipeService.findRecipebyId(id);
 
             return Optional.ofNullable(recipe)
-                .map(dto -> Response.ok().entity(dto).build())
-                .orElse(Response.status(404).build());
+                .map(dto -> Response.status(HttpStatus.OK.getStatusCode()).entity(dto).build())
+                .orElse(Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build());
     }
 
 
@@ -55,21 +53,21 @@ public class RecipeController {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(RecipeDto recipeDto) {
-        Response rs = null;
+        Response rs;
 
         try {
             if (recipeDto == null) {
-                rs = Response.status(400).build();
+                rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
             } else {
-                RecipeDto recipeRs = recipesService.createRecipe(recipeDto);
+                RecipeDto recipeRs = recipeService.createRecipe(recipeDto);
                 if(recipeRs != null){
-                    rs = Response.status(200).entity(recipeRs).build();
+                    rs = Response.status(HttpStatus.OK.getStatusCode()).entity(recipeRs).build();
                 }else{
-                    rs = Response.status(500).build();
+                    rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
                 }
             }
         } catch (Exception e) {
-            rs = Response.serverError().build();
+            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
         }
         return rs;
     }
@@ -83,13 +81,13 @@ public class RecipeController {
             if (recipeFilterDto == null) {
                 return Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
             }
-            List<RecipeDto> recipeList = recipesService.findRecipesByIngredients(recipeFilterDto.getIngredients());
+            List<RecipeDto> recipeList = recipeService.findRecipesByIngredients(recipeFilterDto.getIngredients());
             return Optional.ofNullable(recipeList)
-                    .map(list -> Response.ok().entity(list).build())
-                    .orElse(Response.status(HttpStatus.NO_CONTENT.getStatusCode()).build()); // No content
+                    .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
+                    .orElse(Response.status(HttpStatus.NO_CONTENT.getStatusCode()).build());
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return Response.serverError().build();
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
         }
     }
 
@@ -104,18 +102,86 @@ public class RecipeController {
             if (recipeFilterDto == null) {
                 rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
             } else {
-                List<RecipeDto> recipeRs = recipesService.findRecipeSuggestions(recipeFilterDto.getIngredients());
+                List<RecipeDto> recipeRs = recipeService.findRecipeSuggestions(recipeFilterDto.getIngredients());
                 if (recipeRs == null) {
-                    rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();//status No content
+                    rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
                 } else {
-                    rs = Response.ok().entity(recipeRs).build();
+                    rs = Response.status(HttpStatus.OK.getStatusCode()).entity(recipeRs).build();
                 }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            rs = Response.serverError().build();
+            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
         }
         return rs;
     }
 
+    @GET
+    @Path("/find-pending")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findByStatusPending(String status) {
+        Response rs;
+        try {
+            if (status == null) {
+                rs = Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build();
+
+            } else {
+                List<RecipeDto> recipeRs = recipeService.findByStatusPending();
+
+                List<RecipeDto> filteredRecipes = new ArrayList<>();
+                for (RecipeDto recipeDto : recipeRs) {
+                    if (!recipeDto.getStatus().equals(RecipeStatus.PENDING.getStatus())) {
+                        filteredRecipes.add(recipeDto);
+                    }
+                }
+
+                if (filteredRecipes.isEmpty()) {
+                    rs = Response.status(HttpStatus.NO_CONTENT.getStatusCode()).build();
+                } else {
+                    rs = Response.status(HttpStatus.OK.getStatusCode()).entity(filteredRecipes).build();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            rs = Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build();
+        }
+
+        return rs;
+    }
+
+    @GET
+    @Path("/update-status/{id}/{status}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response recipeStatusAcceptedOrDeclined(@PathParam("id")int id, @PathParam("status")String status){
+        Response rs = null;
+
+        try {
+
+            if (status == null) {
+
+                rs = Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build();
+
+            } else {
+                RecipeDto recipeRs = recipeService.updateRecipeStatus(id, status);
+
+                if (recipeRs != null && recipeRs.getStatus().equals(RecipeStatus.PENDING)) {
+
+                    rs = Response.status(HttpStatus.NOT_MODIFIED.getStatusCode()).build();
+
+                } else if (recipeRs != null && (recipeRs.getStatus().equals(RecipeStatus.ACCEPTED))
+                        || recipeRs.getStatus().equals(RecipeStatus.DECLINED)) {
+
+                    rs = Response.status(HttpStatus.OK.getStatusCode()).entity(recipeRs).build();
+                }
+            }
+
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.ordinal()).build();
+
+        }
+
+        return rs;
+    }
 }
