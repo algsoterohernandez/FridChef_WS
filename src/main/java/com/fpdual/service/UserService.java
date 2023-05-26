@@ -39,8 +39,8 @@ public class UserService {
 
         try (Connection con = connector.getMySQLConnection()) {
 
-            UserDao userDao = this.userManager.insertUser(con, MappingUtils.mapUserDao(userDto));
-            userDto = MappingUtils.mapUserDto(userDao);
+            UserDao userDao = this.userManager.insertUser(con, MappingUtils.mapUserToDao(userDto));
+            userDto = MappingUtils.mapUserToDto(userDao);
 
             boolean insertRolOk =this.rolManager.insertRol(con, userDao.getId());
 
@@ -56,6 +56,7 @@ public class UserService {
 
             System.out.println(e.getMessage());
             throw e;
+
         }
 
         return userDto;
@@ -80,7 +81,7 @@ public class UserService {
 
     public UserDto findUser(String email, String password) throws SQLException, ClassNotFoundException {
         UserDto userDto = null;
-        List<RolUserDto> rolUserDto = new ArrayList<>();
+        List<RolUserDto> rolUserDto;
 
         try (Connection con = connector.getMySQLConnection()) {
 
@@ -90,8 +91,8 @@ public class UserService {
 
             if (userDao != null) {
 
-                userDto = MappingUtils.mapUserDto(userDao);
-                rolUserDto = MappingUtils.mapRolUserDto(rolUserDao);
+                userDto = MappingUtils.mapUserToDto(userDao);
+                rolUserDto = MappingUtils.mapRolUserListDto(rolUserDao);
 
                 userDto.setRolUserDto(rolUserDto);
             }

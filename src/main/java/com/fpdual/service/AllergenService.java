@@ -8,9 +8,7 @@ import com.fpdual.utils.MappingUtils;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AllergenService {
     private final MySQLConnector connector;
@@ -29,7 +27,7 @@ public class AllergenService {
             List<AllergenDao> allergenDaos = allergenManager.findAllAllergens(con);
 
             if (allergenDaos != null) {
-                allergenDtoList = MappingUtils.mapAllergenDto(allergenDaos);
+                allergenDtoList = MappingUtils.mapAllergenListDto(allergenDaos);
             }
 
 

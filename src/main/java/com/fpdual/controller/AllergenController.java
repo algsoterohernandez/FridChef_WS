@@ -29,7 +29,7 @@ public class AllergenController {
         List<AllergenDto> allergenDtoList = allergenService.findAllAllergens();
 
         if (allergenDtoList != null) {
-            rs = Response.ok().entity(allergenDtoList).build();
+            rs = Response.status(HttpStatus.OK.getStatusCode()).entity(allergenDtoList).build();
         }
         else {
             rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();//Server Error
