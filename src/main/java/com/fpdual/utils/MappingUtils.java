@@ -96,7 +96,7 @@ public class MappingUtils {
         ingredientRecipeDto.setIdIngredient(ingredientRecipeDao.getIdIngredient());
         ingredientRecipeDto.setQuantity(ingredientRecipeDao.getQuantity());
         ingredientRecipeDto.setUnit(ingredientRecipeDao.getUnit());
-        if (ingredientRecipeDto.getAllergens() != null) {
+        if (ingredientRecipeDao.getAllergens() != null) {
             List<AllergenDto> allergens = ingredientRecipeDao.getAllergens().stream()
                     .map(MappingUtils::mapAllergenToDto)
                     .collect(Collectors.toList());
