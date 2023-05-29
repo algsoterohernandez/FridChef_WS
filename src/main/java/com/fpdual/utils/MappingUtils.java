@@ -215,4 +215,27 @@ public class MappingUtils {
                 .map(MappingUtils::mapRolUserToDto)
                 .collect(Collectors.toList());
     }
+    public static ValorationDto mapValorationToDto(ValorationDao valorationDao){
+        ValorationDto valorationDto = new ValorationDto();
+
+        valorationDto.setId(valorationDao.getId());
+        valorationDto.setIdRecipe(valorationDao.getIdRecipe());
+        valorationDto.setIdUser(valorationDao.getIdUser());
+        valorationDto.setComment(valorationDao.getComment());
+        valorationDto.setValoration(valorationDao.getValoration());
+
+        return valorationDto;
+
+    }
+    public static ValorationDao mapValorationToDao(ValorationDto valorationDto){
+        ValorationDao valorationDao = new ValorationDao();
+
+        valorationDao.setId(valorationDto.getId());
+        valorationDao.setIdRecipe(valorationDto.getIdRecipe());
+        valorationDao.setIdUser(valorationDto.getIdUser());
+        valorationDao.setComment(valorationDto.getComment());
+        valorationDao.setValoration(valorationDto.getValoration());
+
+        return valorationDao;
+    }
 }
