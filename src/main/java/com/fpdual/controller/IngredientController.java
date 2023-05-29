@@ -5,9 +5,7 @@ import com.fpdual.enums.HttpStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
 import com.fpdual.service.IngredientService;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -40,5 +38,46 @@ public class IngredientController {
                 // Si la lista es nula, devolver una respuesta de estado 500 (Error interno del servidor)
                 .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
     }
+
+    @DELETE
+    @Path("/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteIngredient(@PathParam("id") int id) {
+        Response rs;
+        try {
+            boolean deleted = ingredientService.deleteIngredient(id);
+
+            rs = Response.status(HttpStatus.OK.getStatusCode()).entity(deleted).build();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
+        }
+        return rs;
+    }
+
+
+    @POST
+    @Path("/create/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createIngredient(@PathParam("name") String name) {
+        Response rs = null;
+
+        try {
+            IngredientDto ingredientDto = ingredientService.createIngredient(name);
+
+            if (ingredientDto != null){
+                rs = Response.status(HttpStatus.OK.getStatusCode()).entity(ingredientDto).build();
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            rs = Response.status(HttpStatus.NO_CONTENT.getStatusCode()).build();
+        }
+
+        return rs;
+    }
+
+
 
 }
