@@ -1,12 +1,9 @@
 package com.fpdual.service;
 
 import com.fpdual.api.dto.IngredientDto;
-import com.fpdual.api.dto.UserDto;
 import com.fpdual.exceptions.FridChefException;
-import com.fpdual.exceptions.UserAlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.IngredientDao;
-import com.fpdual.persistence.aplication.dao.UserDao;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
 import com.fpdual.utils.MappingUtils;
 
@@ -56,12 +53,12 @@ public class IngredientService {
         return deleted;
     }
 
-    public IngredientDto createIngredient(String name) throws SQLException, ClassNotFoundException, FridChefException {
+    public IngredientDto createIngredient(String name) throws SQLException, ClassNotFoundException {
         IngredientDto ingredientDto = null;
 
         List<IngredientDto> ingredients = findAll();
 
-        //Si no hay u ingrediente con el mismo nombre, lo creamos
+        //Si no hay un ingrediente con el mismo nombre, lo creamos
         if(!ingredients.stream().anyMatch(o -> o.getName().equals(name))){
 
             try (Connection con = connector.getMySQLConnection()) {

@@ -58,9 +58,9 @@ public class IngredientController {
 
 
     @POST
-    @Path("/create")
+    @Path("/create/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createIngredient(String name) {
+    public Response createIngredient(@PathParam("name") String name) {
         Response rs = null;
 
         try {
@@ -72,7 +72,7 @@ public class IngredientController {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            rs = Response.status(HttpStatus.NOT_MODIFIED.getStatusCode()).build();
+            rs = Response.status(HttpStatus.NO_CONTENT.getStatusCode()).build();
         }
 
         return rs;
