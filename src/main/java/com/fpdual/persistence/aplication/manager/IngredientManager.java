@@ -1,12 +1,11 @@
 package com.fpdual.persistence.aplication.manager;
 
+import com.fpdual.api.dto.IngredientDto;
+import com.fpdual.exceptions.UserAlreadyExistsException;
 import com.fpdual.persistence.aplication.dao.IngredientDao;
 import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +18,53 @@ public class IngredientManager {
     }
 
     //buscar todo
+
+
+    public IngredientDao insertIngredient(Connection con, String name){
+        IngredientDao ingredient = new IngredientDao();
+        ingredient.setName(name);
+        try (PreparedStatement stm = con.prepareStatement("INSERT INTO ingredient (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
+
+            stm.setString(1, name);
+
+            stm.executeUpdate();
+            ResultSet result = stm.getGeneratedKeys();
+            result.next();
+            int pk = result.getInt(1);
+            ingredient.setId(pk);
+
+            return ingredient;
+
+        }
+        catch (SQLException e) {
+
+            System.out.println(e.getMessage());
+
+            return null;
+        }
+
+    }
+
+    public boolean deleteIngredient(Connection con, int id) throws SQLException {
+        boolean deleted;
+
+        try (PreparedStatement stm = con.prepareStatement("DELETE FROM ingredient WHERE id = ?")) {
+
+            stm.setInt(1, id);
+
+            int rowsDeleted = stm.executeUpdate();
+
+            deleted = rowsDeleted > 0;
+
+        } catch (SQLException e) {
+
+            System.out.println(e.getMessage());
+            throw e;
+
+        }
+
+        return deleted;
+    }
 
     public List<IngredientDao> findAll(Connection con) {
         try (Statement stm = con.createStatement()) {

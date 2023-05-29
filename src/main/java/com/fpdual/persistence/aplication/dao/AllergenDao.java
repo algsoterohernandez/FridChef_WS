@@ -18,7 +18,7 @@ import java.util.List;
 public class AllergenDao {
     private int id;
     private String name;
-    private List<IngredientDao> ingredients;
+    private List<IngredientDao> ingredients; // Se usa en algún momento?
 
     public AllergenDao(ResultSet result) {
         try {

@@ -46,7 +46,7 @@ public class CategoryController {
         CategoryDto category = categoryService.findCategoryById(id);
         return Optional.ofNullable(category)
                 .map(dto -> Response.status(HttpStatus.OK.getStatusCode()).entity(dto).build())
-                .orElse(Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build());
+                .orElse(Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build());
     }
 
     @GET
@@ -123,7 +123,7 @@ public class CategoryController {
                 CategoryDto updatedCategory = categoryService.updateCategory(id, categoryDto);
                 rs = Optional.ofNullable(updatedCategory)
                         .map(dto -> Response.status(HttpStatus.OK.getStatusCode()).entity(dto).build())
-                        .orElse(Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build());
+                        .orElse(Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build());
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -144,7 +144,7 @@ public class CategoryController {
             if(deleted){
                 rs = Response.status(HttpStatus.OK.getStatusCode()).build();
             }else{
-                rs = Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build();
+                rs = Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build();
             }
         }catch (Exception e){
             System.out.println(e.getMessage());

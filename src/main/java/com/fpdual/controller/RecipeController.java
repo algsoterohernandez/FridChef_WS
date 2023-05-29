@@ -11,7 +11,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,11 +40,11 @@ public class RecipeController {
     public Response recipeDetails(@PathParam("id") int id) {
 
 
-            RecipeDto recipe = recipeService.findRecipebyId(id);
+        RecipeDto recipe = recipeService.findRecipebyId(id);
 
-            return Optional.ofNullable(recipe)
+        return Optional.ofNullable(recipe)
                 .map(dto -> Response.status(HttpStatus.OK.getStatusCode()).entity(dto).build())
-                .orElse(Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build());
+                .orElse(Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build());
     }
 
 
@@ -60,9 +59,9 @@ public class RecipeController {
                 rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
             } else {
                 RecipeDto recipeRs = recipeService.createRecipe(recipeDto);
-                if(recipeRs != null){
+                if (recipeRs != null) {
                     rs = Response.status(HttpStatus.OK.getStatusCode()).entity(recipeRs).build();
-                }else{
+                } else {
                     rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
                 }
             }
@@ -129,31 +128,21 @@ public class RecipeController {
     @GET
     @Path("/find-pending")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findByStatusPending(String status) {
+    public Response findByStatusPending() {
         Response rs;
         try {
-            if (status == null) {
-                rs = Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build();
 
+            List<RecipeDto> recipeRs = recipeService.findByStatusPending();
+
+            if (recipeRs == null || recipeRs.isEmpty()) {
+                rs = Response.status(HttpStatus.NO_CONTENT.getStatusCode()).build();
             } else {
-                List<RecipeDto> recipeRs = recipeService.findByStatusPending();
-
-                List<RecipeDto> filteredRecipes = new ArrayList<>();
-                for (RecipeDto recipeDto : recipeRs) {
-                    if (!recipeDto.getStatus().equals(RecipeStatus.PENDING.getStatus())) {
-                        filteredRecipes.add(recipeDto);
-                    }
-                }
-
-                if (filteredRecipes.isEmpty()) {
-                    rs = Response.status(HttpStatus.NO_CONTENT.getStatusCode()).build();
-                } else {
-                    rs = Response.status(HttpStatus.OK.getStatusCode()).entity(filteredRecipes).build();
-                }
+                rs = Response.status(HttpStatus.OK.getStatusCode()).entity(recipeRs).build();
             }
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            rs = Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build();
+            rs = Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build();
         }
 
         return rs;
@@ -162,14 +151,14 @@ public class RecipeController {
     @GET
     @Path("/update-status/{id}/{status}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response recipeStatusAcceptedOrDeclined(@PathParam("id")int id, @PathParam("status")String status){
+    public Response updateRecipeStatus(@PathParam("id") int id, @PathParam("status") String status) {
         Response rs = null;
 
         try {
 
             if (status == null) {
 
-                rs = Response.status(HttpStatus.NOT_FOUNT.getStatusCode()).build();
+                rs = Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build();
 
             } else {
                 RecipeDto recipeRs = recipeService.updateRecipeStatus(id, status);
