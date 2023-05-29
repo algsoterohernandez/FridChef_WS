@@ -1,7 +1,5 @@
 package com.fpdual.persistence.aplication.manager;
 
-import com.fpdual.api.dto.IngredientDto;
-import com.fpdual.exceptions.UserAlreadyExistsException;
 import com.fpdual.persistence.aplication.dao.IngredientDao;
 import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 

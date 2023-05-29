@@ -1,7 +1,7 @@
 package com.fpdual.persistence.aplication.manager;
 
 
-import com.fpdual.exceptions.UserAlreadyExistsException;
+import com.fpdual.exceptions.AlreadyExistsException;
 import com.fpdual.persistence.aplication.dao.UserDao;
 
 import java.sql.*;
@@ -9,7 +9,7 @@ import java.sql.*;
 
 public class UserManager {
 
-    public UserDao insertUser(Connection con, UserDao userDao) throws UserAlreadyExistsException {
+    public UserDao insertUser(Connection con, UserDao userDao) throws AlreadyExistsException {
         try (PreparedStatement stm = con.prepareStatement("INSERT INTO user (name, surname1, " +
                 "surname2, email, password, create_time) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
 
@@ -31,7 +31,7 @@ public class UserManager {
 
         } catch (SQLIntegrityConstraintViolationException sqlicve) {
 
-            throw new UserAlreadyExistsException("El ususario se ha registrado con anterioridad.");
+            throw new AlreadyExistsException("El ususario se ha registrado con anterioridad.");
 
         } catch (SQLException e) {
 

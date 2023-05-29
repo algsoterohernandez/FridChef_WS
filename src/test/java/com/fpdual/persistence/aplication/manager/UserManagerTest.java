@@ -1,6 +1,6 @@
 package com.fpdual.persistence.aplication.manager;
 
-import com.fpdual.exceptions.UserAlreadyExistsException;
+import com.fpdual.exceptions.AlreadyExistsException;
 import com.fpdual.persistence.aplication.dao.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ public class UserManagerTest {
     }
 
     @Test
-    public void testInsertUser_validConnectionAndUserDao_userDaoNotNull() throws UserAlreadyExistsException, SQLException {
+    public void testInsertUser_validConnectionAndUserDao_userDaoNotNull() throws AlreadyExistsException, SQLException {
 
         //Prepare method dependencies
         when(resultSetMock.next()).thenReturn(true);
@@ -68,11 +68,11 @@ public class UserManagerTest {
         when(con.prepareStatement(anyString(), anyInt())).thenThrow(SQLIntegrityConstraintViolationException.class);
 
         //Asserts
-        assertThrows(UserAlreadyExistsException.class, () -> userManager.insertUser(con, exampleUserDao));
+        assertThrows(AlreadyExistsException.class, () -> userManager.insertUser(con, exampleUserDao));
     }
 
     @Test
-    public void testInsertUser_validConnectionAndUserDao_userSQLException() throws UserAlreadyExistsException, SQLException {
+    public void testInsertUser_validConnectionAndUserDao_userSQLException() throws AlreadyExistsException, SQLException {
 
         //Prepare method dependencies
         when(con.prepareStatement(anyString(), anyInt())).thenThrow(SQLException.class);

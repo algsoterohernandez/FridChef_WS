@@ -58,7 +58,7 @@ public class IngredientController {
 
 
     @POST
-    @Path("/create/{name}")
+    @Path("/create/{name}/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createIngredient(@PathParam("name") String name) {
         Response rs = null;

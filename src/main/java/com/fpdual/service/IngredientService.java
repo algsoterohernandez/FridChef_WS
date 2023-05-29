@@ -1,6 +1,7 @@
 package com.fpdual.service;
 
 import com.fpdual.api.dto.IngredientDto;
+import com.fpdual.exceptions.AlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.IngredientDao;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
@@ -52,25 +53,35 @@ public class IngredientService {
         return deleted;
     }
 
-    public IngredientDto createIngredient(String name) throws SQLException, ClassNotFoundException {
+    public IngredientDto createIngredient(String name) throws SQLException, ClassNotFoundException, AlreadyExistsException {
         IngredientDto ingredientDto = null;
 
         List<IngredientDto> ingredients = findAll();
 
-        //Si no hay un ingrediente con el mismo nombre, lo creamos
-        if(!ingredients.stream().anyMatch(o -> o.getName().equals(name))){
+        try {
+            //Si no hay un ingrediente con el mismo nombre, lo creamos
+            if (!ingredients.stream().anyMatch(o -> o.getName().equals(name))) {
 
-            try (Connection con = connector.getMySQLConnection()) {
+                try (Connection con = connector.getMySQLConnection()) {
 
-                IngredientDao ingredientDao = this.ingredientManager.insertIngredient(con, name);
-                if (ingredientDao != null) {
-                    ingredientDto = MappingUtils.mapIngredientToDto(ingredientDao);
+                    IngredientDao ingredientDao = this.ingredientManager.insertIngredient(con, name);
+                    if (ingredientDao != null) {
+                        ingredientDto = MappingUtils.mapIngredientToDto(ingredientDao);
+                    }
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    throw e;
                 }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                throw e;
+            }else {
+                throw new AlreadyExistsException("El ingrediente ya existe.");
+
             }
+
+        }catch (NullPointerException npe){
+            throw npe;
+
         }
+
         return ingredientDto;
 
     }
