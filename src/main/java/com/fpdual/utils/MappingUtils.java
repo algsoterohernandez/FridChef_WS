@@ -29,6 +29,8 @@ public class MappingUtils {
         recipeDto.setCreateTime(recipeDao.getCreateTime());
         recipeDto.setStatus(recipeDao.getStatus());
         recipeDto.setIngredients(mapIngredientRecipeListToDto(recipeDao.getIngredients()));
+        recipeDto.setValoration(recipeDao.getValoration());
+
 
         Blob imageBlob = recipeDao.getImage();
         if (imageBlob != null) {
@@ -64,6 +66,7 @@ public class MappingUtils {
         recipeDao.setUnitTime(recipeDto.getUnitTime());
         recipeDao.setIdCategory(recipeDto.getIdCategory());
         recipeDao.setCreateTime(new Date(System.currentTimeMillis()));
+        recipeDao.setValoration(recipeDto.getValoration());
 
         if (recipeDto.getImageBase64() != null) {
             byte[] imageContent = Base64.getDecoder().decode(recipeDto.getImageBase64());

@@ -21,6 +21,7 @@ public class RecipeController {
 
     public RecipeController() {
         recipeService = new RecipeService(new MySQLConnector(), new RecipeManager(), new IngredientManager());
+
     }
 
 
