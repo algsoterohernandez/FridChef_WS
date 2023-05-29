@@ -3,7 +3,7 @@ package com.fpdual.service;
 import com.fpdual.api.dto.RolUserDto;
 import com.fpdual.api.dto.UserDto;
 import com.fpdual.exceptions.FridChefException;
-import com.fpdual.exceptions.UserAlreadyExistsException;
+import com.fpdual.exceptions.AlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.RolUserDao;
 import com.fpdual.persistence.aplication.dao.UserDao;
@@ -17,7 +17,6 @@ import lombok.Setter;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserService {
@@ -45,7 +44,7 @@ public class UserService {
             boolean insertRolOk =this.rolManager.insertRol(con, userDao.getId());
 
 
-        } catch (UserAlreadyExistsException uaee) {
+        } catch (AlreadyExistsException uaee) {
 
             if (userDto != null) {
 

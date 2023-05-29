@@ -1,7 +1,7 @@
 package com.fpdual.service;
 
 import com.fpdual.api.dto.UserDto;
-import com.fpdual.exceptions.UserAlreadyExistsException;
+import com.fpdual.exceptions.AlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.RolUserDao;
 import com.fpdual.persistence.aplication.dao.UserDao;
@@ -85,7 +85,7 @@ public class UserServiceTest {
     public void testCreateUser_validUserDto_userAlreadyExistsException() throws Exception {
 
         //Prepare method dependencies
-        when(userManager.insertUser(any(), any())).thenThrow(UserAlreadyExistsException.class);
+        when(userManager.insertUser(any(), any())).thenThrow(AlreadyExistsException.class);
 
         //Execute method
         UserDto userDtoRs = userService.createUser(exampleUserDto);
