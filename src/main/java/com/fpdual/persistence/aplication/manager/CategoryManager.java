@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CategoryManager {
     public CategoryDto findCategoryById(Connection con, int id) {
-        try(PreparedStatement stm = con.prepareStatement("SELECT * FROM category WHERE id= ?")){
+        try(PreparedStatement stm = con.prepareStatement("SELECT * FROM category WHERE id= ? ORDER BY name ASC")){
             stm.setInt(1, id);
             ResultSet result = stm.executeQuery();
 

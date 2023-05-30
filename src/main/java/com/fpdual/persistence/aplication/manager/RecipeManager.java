@@ -67,7 +67,7 @@ public class RecipeManager {
 
     // obtiene receta por id de la base de datos
     public RecipeDao getRecipeById(Connection con, int id) {
-        try (PreparedStatement stm = con.prepareStatement("SELECT recipe.*, (SELECT AVG(valoration) FROM valoration WHERE id_recipe = ?) AS valoration FROM recipe WHERE id = ?;")) {
+        try (PreparedStatement stm = con.prepareStatement("SELECT recipe.*, (SELECT ROUND(AVG(valoration),2) FROM valoration WHERE id_recipe = ?) AS valoration FROM recipe WHERE id = ?;")) {
             stm.setInt(1, id);
             stm.setInt(2, id);
             ResultSet result = stm.executeQuery();

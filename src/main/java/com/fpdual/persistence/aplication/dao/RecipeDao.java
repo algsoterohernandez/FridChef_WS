@@ -44,9 +44,9 @@ public class RecipeDao {
             this.createTime = result.getDate("create_time");
             this.image = result.getBlob("image");
             this.ingredients = new ArrayList<>();
-            this.valoration = result.getDouble("valoration");
             // Asignar el estado de la receta utilizando el método fromString() del enum RecipeStatus
             this.status = RecipeStatus.fromString(result.getString("status"));
+            this.valoration = result.getDouble("valoration");
         } catch (SQLException e) {
             e.printStackTrace();
         }
