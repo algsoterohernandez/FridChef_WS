@@ -2,9 +2,12 @@ package com.fpdual.persistence.aplication.manager;
 
 
 import com.fpdual.exceptions.AlreadyExistsException;
+import com.fpdual.persistence.aplication.dao.RecipeDao;
 import com.fpdual.persistence.aplication.dao.UserDao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class UserManager {
@@ -89,6 +92,35 @@ public class UserManager {
 
             return null;
         }
+    }
+
+    public List<RecipeDao> findFavorite(Connection con, int idUser){
+        try (PreparedStatement stm = con.prepareStatement("SELECT recipe.* FROM recipe WHERE recipe.id IN(SELECT id_recipe FROM favorite WHERE id_user=?)")) {
+
+            stm.setInt(1, idUser);
+
+            ResultSet result = stm.executeQuery();
+
+            RecipeDao recipeDao;
+
+            List<RecipeDao> recipeDaoList = new ArrayList<>();
+
+            while (result.next()) {
+
+                recipeDao = new RecipeDao(result);
+                recipeDaoList.add(recipeDao);
+
+            }
+
+            return recipeDaoList;
+
+        } catch (SQLException e) {
+
+            System.out.println(e.getMessage());
+
+            return null;
+        }
+
     }
 
 }

@@ -6,7 +6,9 @@ import com.fpdual.enums.RecipeStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
 import com.fpdual.persistence.aplication.manager.RecipeManager;
+import com.fpdual.persistence.aplication.manager.ValorationManager;
 import com.fpdual.service.RecipeService;
+import com.fpdual.service.ValorationService;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -19,9 +21,11 @@ public class RecipeController {
 
     private final RecipeService recipeService;
 
+    private final ValorationService valorationService;
+
     public RecipeController() {
         recipeService = new RecipeService(new MySQLConnector(), new RecipeManager(), new IngredientManager());
-
+        valorationService = new ValorationService(new MySQLConnector(), new ValorationManager());
     }
 
 
@@ -71,6 +75,32 @@ public class RecipeController {
         }
         return rs;
     }
+
+
+
+    @POST
+    @Path("/{id}/rating")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response create(ValorationDto valorationDto) {
+        Response rs;
+
+        try{
+            if (valorationDto == null) {
+                rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
+            } else {
+                ValorationDto valorationRs = valorationService.createValoration(valorationDto);
+                if (valorationRs != null) {
+                    rs = Response.status(HttpStatus.OK.getStatusCode()).entity(valorationRs).build();
+                } else {
+                    rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
+                }
+            }
+        } catch (Exception e) {
+            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
+        }
+        return rs;
+        }
+
 
     // Probar que llega la imagen correctamente al backend, generando el fihcero.
 //        File outputFile = new File("C:\\Users\\a.carmona.garrido\\Desktop\\test.png");

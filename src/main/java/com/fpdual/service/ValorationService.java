@@ -1,5 +1,6 @@
 package com.fpdual.service;
 
+import com.fpdual.api.dto.RecipeDto;
 import com.fpdual.api.dto.ValorationDto;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.RecipeDao;
@@ -21,5 +22,17 @@ public class ValorationService{
         this.valorationManager = valorationManager;
     }
 
-    //TODO: añadir CRUD de valoración
+    public ValorationDto createValoration(ValorationDto valorationDto) throws SQLException, ClassNotFoundException {
+
+        try (Connection con = connector.getMySQLConnection()) {
+
+            ValorationDao valorationDao = this.valorationManager.createValoration(con, MappingUtils.mapValorationToDao(valorationDto));
+            valorationDto = MappingUtils.mapValorationToDto(valorationDao);
+
+        } catch (Exception e) {
+            throw e;
+        }
+
+        return valorationDto;
+    }
     }
