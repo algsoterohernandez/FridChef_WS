@@ -81,7 +81,7 @@ public class RecipeController {
     @POST
     @Path("/{id}/rating")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create(ValorationDto valorationDto) {
+    public Response createValoration(ValorationDto valorationDto) {
         Response rs;
 
         try{
