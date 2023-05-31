@@ -88,4 +88,33 @@ public class UserController {
         return rs;
     }
 
+//    @POST
+//    @Path("/{idUser}/favorite/{idRecipe}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response createFavorite() {
+//        Response rs;
+//        try {
+//
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
+//        }
+//
+//        return rs;
+//    }
+//    @DELETE
+//    @Path("/{idUser}/favorite/{idRecipe}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response removeFavorite() {
+//        Response rs;
+//        try {
+//
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
+//        }
+//
+//        return rs;
+//    }
+
 }

@@ -17,17 +17,15 @@ public class ValorationDao {
     private int id;
     private int idRecipe;
     private int idUser;
-    private String title;
-    private String description;
+    private String comment;
     private double valoration;
 
     public ValorationDao(ResultSet result) {
         try {
             this.id = result.getInt("id");
             this.idRecipe = result.getInt("id_recipe");
-            this.idUser = result.getInt("id_User");
-            this.title = result.getString("title");
-            this.description = result.getString("description");
+            this.idUser = result.getInt("id_user");
+            this.comment = result.getString("comment");
             this.valoration = result.getDouble("valoration");
         } catch (SQLException e) {
             e.printStackTrace();
