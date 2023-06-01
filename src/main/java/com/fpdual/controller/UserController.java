@@ -2,8 +2,10 @@ package com.fpdual.controller;
 
 import com.fpdual.enums.HttpStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
+import com.fpdual.persistence.aplication.manager.FavoriteManager;
 import com.fpdual.persistence.aplication.manager.RolManager;
 import com.fpdual.persistence.aplication.manager.UserManager;
+import com.fpdual.service.FavoriteService;
 import com.fpdual.service.UserService;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -13,9 +15,11 @@ import com.fpdual.api.dto.UserDto;
 
 public class UserController {
     private final UserService userService;
+    private final FavoriteService favoriteService;
 
     public UserController() {
         userService = new UserService(new MySQLConnector(), new UserManager(), new RolManager());
+        favoriteService = new FavoriteService(new MySQLConnector(), new FavoriteManager());
     }
 
     @POST
@@ -88,33 +92,34 @@ public class UserController {
         return rs;
     }
 
-//    @POST
-//    @Path("/{idUser}/favorite/{idRecipe}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response createFavorite() {
-//        Response rs;
-//        try {
-//
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
-//        }
-//
-//        return rs;
-//    }
-//    @DELETE
-//    @Path("/{idUser}/favorite/{idRecipe}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response removeFavorite() {
-//        Response rs;
-//        try {
-//
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
-//        }
-//
-//        return rs;
-//    }
+    @POST
+    @Path("/{idUser}/favorite/{idRecipe}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createFavorite(@PathParam("idUser") int idUser, @PathParam("idRecipe") int idRecipe) {
+        Response rs;
+        try {
+            boolean favoriteCreated = favoriteService.favoriteAdd(idRecipe, idUser);
+            rs = Response.status(HttpStatus.OK.getStatusCode()).entity(favoriteCreated).build();
 
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
+        }
+        return rs;
+    }
+    @DELETE
+    @Path("/{idUser}/favorite/{idRecipe}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response removeFavorite(@PathParam("idUser") int idUser, @PathParam("idRecipe") int idRecipe) {
+        Response rs;
+        try {
+            boolean favoriteDeleted = favoriteService.favoriteRemove(idRecipe, idUser);
+            rs = Response.status(HttpStatus.OK.getStatusCode()).entity(favoriteDeleted).build();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
+        }
+        return rs;
+    }
 }
