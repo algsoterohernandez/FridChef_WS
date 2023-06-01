@@ -2,13 +2,14 @@ package com.fpdual.api.dto;
 
 import lombok.*;
 
-@Setter
-@Getter
+
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
+@Data
 @Builder
+/**
+ * Clase que representa un alérgeno.
+ */
 public class AllergenDto {
     private int id;
     private String name;

@@ -10,15 +10,29 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Servicio para gestionar los alérgenos.
+ */
 public class AllergenService {
     private final MySQLConnector connector;
     private final AllergenManager allergenManager;
 
+    /**
+     * Constructor de AllergenService.
+     *
+     * @param connector       Conector MySQL utilizado para la conexión a la base de datos.
+     * @param allergenManager Manager de alérgenos utilizado para realizar las operaciones de base de datos.
+     */
     public AllergenService(MySQLConnector connector, AllergenManager allergenManager) {
         this.allergenManager = allergenManager;
         this.connector = connector;
     }
 
+    /**
+     * Recupera todos los alérgenos existentes.
+     *
+     * @return Lista de objetos AllergenDto que representan los alérgenos.
+     */
     public List<AllergenDto> findAllAllergens() {
         List<AllergenDto> allergenDtoList = null;
 

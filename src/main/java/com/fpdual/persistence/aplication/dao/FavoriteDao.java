@@ -14,12 +14,20 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 
+/**
+ * Objeto de acceso a datos para la tabla de Favoritos.
+ */
 public class FavoriteDao {
     private int id;
     private int idRecipe;
     private int idUser;
     private Date createTime;
 
+    /**
+     * Crea un objeto FavoriteDao a partir de los datos de un ResultSet.
+     *
+     * @param result El ResultSet que contiene los datos de la fila.
+     */
     public FavoriteDao(ResultSet result) {
         try {
             this.id = result.getInt("id");

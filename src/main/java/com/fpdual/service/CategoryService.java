@@ -15,18 +15,32 @@ import java.util.List;
 
 @Getter
 @Setter
+/**
+ * Servicio para gestionar las categorías de recetas.
+ */
 public class CategoryService {
 
     private final Connection connector;
     private final CategoryManager categoryManager;
     private final RecipeManager recipeManager;
 
+    /**
+     * Constructor de la clase.
+     *
+     * @param connector     Conector de base de datos.
+     */
     public CategoryService(Connection connector) {
         this.connector = connector;
         this.categoryManager = new CategoryManager();
         this.recipeManager = new RecipeManager();
     }
 
+    /**
+     * Busca una categoría por su ID.
+     *
+     * @param id ID de la categoría.
+     * @return Objeto CategoryDto que representa la categoría encontrada.
+     */
     public CategoryDto findCategoryById(int id) {
         try{
             return categoryManager.findCategoryById(connector, id);
@@ -36,6 +50,12 @@ public class CategoryService {
         }
     }
 
+    /**
+     * Crea una nueva categoría.
+     *
+     * @param categoryDto Objeto CategoryDto que contiene los datos de la categoría a crear.
+     * @return Objeto CategoryDto que representa la categoría creada.
+     */
     public CategoryDto createCategory(CategoryDto categoryDto) {
         try{
             return categoryManager.createCategory(connector, categoryDto);
@@ -45,6 +65,13 @@ public class CategoryService {
         return categoryDto;
     }
 
+    /**
+     * Actualiza una categoría existente.
+     *
+     * @param id          ID de la categoría a actualizar.
+     * @param categoryDto Objeto CategoryDto que contiene los nuevos datos de la categoría.
+     * @return Objeto CategoryDto que representa la categoría actualizada.
+     */
     public CategoryDto updateCategory(int id, CategoryDto categoryDto) {
         try{
             return categoryManager.updateCategory(connector, id, categoryDto);
@@ -54,6 +81,12 @@ public class CategoryService {
         }
     }
 
+    /**
+     * Elimina una categoría existente.
+     *
+     * @param id ID de la categoría a eliminar.
+     * @return true si la categoría se eliminó correctamente, false en caso contrario.
+     */
     public boolean deleteCategory(int id) {
         try{
             return categoryManager.deleteCategory(connector, id);
@@ -63,6 +96,11 @@ public class CategoryService {
         }
     }
 
+    /**
+     * Obtiene todas las categorías existentes.
+     *
+     * @return Lista de objetos CategoryDto que representan todas las categorías encontradas.
+     */
     public List<CategoryDto> findAllCategories() {
         try{
             return categoryManager.findAllCategories(connector);
@@ -72,6 +110,12 @@ public class CategoryService {
         }
     }
 
+    /**
+     * Busca las recetas asociadas a una categoría.
+     *
+     * @param categoryDto Objeto CategoryDto que representa la categoría.
+     * @return Lista de objetos RecipeDto que representan las recetas asociadas a la categoría.
+     */
     public List<RecipeDto> findRecipesByCategory(CategoryDto categoryDto) {
         List<RecipeDto> filteredRecipes = new ArrayList<>();
 
@@ -122,7 +166,3 @@ public class CategoryService {
 
 
 }
-
-
-
-

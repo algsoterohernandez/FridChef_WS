@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,6 +14,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 
+/**
+ * Clase que representa la relación entre un ingrediente y una receta en la base de datos.
+ */
 public class IngredientRecipeDao {
     private int id;
     private int idRecipe;
@@ -24,6 +26,11 @@ public class IngredientRecipeDao {
     private String unit;
     private List<AllergenDao> allergens;
 
+    /**
+     * Constructor de la clase IngredientRecipeDao.
+     *
+     * @param result Objeto ResultSet que contiene los datos de la consulta de la base de datos.
+     */
     public IngredientRecipeDao(ResultSet result) {
         try {
             this.id = result.getInt("id");
@@ -38,3 +45,4 @@ public class IngredientRecipeDao {
         }
     }
 }
+

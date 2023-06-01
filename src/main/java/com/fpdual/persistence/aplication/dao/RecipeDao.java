@@ -18,6 +18,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 
+/**
+ * Clase que representa un objeto RecipeDao que mapea los datos de una receta desde una consulta a la base de datos.
+ */
 public class RecipeDao {
     private int id;
     private String name;
@@ -32,6 +35,11 @@ public class RecipeDao {
     private List<IngredientRecipeDao> ingredients;
     private double valoration;
 
+    /**
+     * Constructor de la clase RecipeDao que crea un objeto RecipeDao a partir de un ResultSet.
+     *
+     * @param result El ResultSet que contiene los datos de la receta.
+     */
     public RecipeDao(ResultSet result) {
         try {
             this.id = result.getInt("id");
@@ -52,15 +60,29 @@ public class RecipeDao {
         }
     }
 
+    /**
+     * Establece la lista de ingredientes de la receta.
+     *
+     * @param ingredientList La lista de IngredientRecipeDao que representa los ingredientes de la receta.
+     */
     public void setIngredients(List<IngredientRecipeDao> ingredientList) {
         this.ingredients = ingredientList;
     }
 
-
+    /**
+     * Obtiene la lista de ingredientes de la receta.
+     *
+     * @return La lista de IngredientRecipeDao que representa los ingredientes de la receta.
+     */
     public List<IngredientRecipeDao> getIngredients() {
         return ingredients;
     }
 
+    /**
+     * Obtiene la fecha de creación de la receta.
+     *
+     * @return La fecha de creación de la receta.
+     */
     public Date getCreateTime() {
         return createTime;
     }

@@ -7,18 +7,29 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase que gestiona las operaciones relacionadas con los ingredientes.
+ */
 public class IngredientManager {
 
     private final AllergenManager allergenManager;
 
+    /**
+     * Constructor de IngredientManager.
+     * Inicializa el AllergenManager.
+     */
     public IngredientManager() {
         allergenManager = new AllergenManager();
     }
 
-    //buscar todo
-
-
-    public IngredientDao insertIngredient(Connection con, String name){
+    /**
+     * Inserta un nuevo ingrediente en la base de datos.
+     *
+     * @param con  Conexión a la base de datos.
+     * @param name Nombre del ingrediente.
+     * @return Objeto IngredientDao creado.
+     */
+    public IngredientDao insertIngredient(Connection con, String name) {
         IngredientDao ingredient = new IngredientDao();
         ingredient.setName(name);
         try (PreparedStatement stm = con.prepareStatement("INSERT INTO ingredient (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
@@ -33,8 +44,7 @@ public class IngredientManager {
 
             return ingredient;
 
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
 
             System.out.println(e.getMessage());
 
@@ -43,6 +53,14 @@ public class IngredientManager {
 
     }
 
+    /**
+     * Elimina un ingrediente de la base de datos.
+     *
+     * @param con Conexión a la base de datos.
+     * @param id  ID del ingrediente a eliminar.
+     * @return true si se eliminó correctamente, false en caso contrario.
+     * @throws SQLException Si ocurre un error de SQL.
+     */
     public boolean deleteIngredient(Connection con, int id) throws SQLException {
         boolean deleted;
 
@@ -64,6 +82,12 @@ public class IngredientManager {
         return deleted;
     }
 
+    /**
+     * Obtiene todos los ingredientes de la base de datos.
+     *
+     * @param con Conexión a la base de datos.
+     * @return Lista de IngredientDao que representa todos los ingredientes.
+     */
     public List<IngredientDao> findAll(Connection con) {
         try (Statement stm = con.createStatement()) {
             ResultSet result = stm.executeQuery("select * from ingredient order by name ASC");
@@ -82,10 +106,17 @@ public class IngredientManager {
         }
     }
 
+    /**
+     * Obtiene el ID de un ingrediente por su nombre.
+     *
+     * @param con            Conexión a la base de datos.
+     * @param ingredientName Nombre del ingrediente.
+     * @return ID del ingrediente si existe, null si no se encuentra.
+     */
     public Integer getIngredientIdByName(Connection con, String ingredientName) {
         try (Statement stm = con.createStatement()) {
 
-            ResultSet result = stm.executeQuery("select id from ingredient where name = '" + ingredientName  + "'");
+            ResultSet result = stm.executeQuery("select id from ingredient where name = '" + ingredientName + "'");
 
             if (result.next()) {
                 return result.getInt("id");
@@ -97,8 +128,14 @@ public class IngredientManager {
         return null;
     }
 
-    public List<IngredientDao> findRecipeIngredients(Connection con, int recipeId)
-    {
+    /**
+     * Obtiene los ingredientes de una receta.
+     *
+     * @param con      Conexión a la base de datos.
+     * @param recipeId ID de la receta.
+     * @return Lista de IngredientDao que representa los ingredientes de la receta.
+     */
+    public List<IngredientDao> findRecipeIngredients(Connection con, int recipeId) {
         try (Statement stm = con.createStatement()) {
 
             ResultSet result = stm.executeQuery("select i.* from ingredient i inner join ingredient_recipe ir on ir.id_ingredient = i.id where ir.id_recipe = " + recipeId);
@@ -120,8 +157,14 @@ public class IngredientManager {
         }
     }
 
-    public List<IngredientRecipeDao> findIngredientsByRecipeId(Connection con, int recipeId)
-    {
+    /**
+     * Obtiene los ingredientes de una receta junto con su cantidad y unidad de medida.
+     *
+     * @param con      Conexión a la base de datos.
+     * @param recipeId ID de la receta.
+     * @return Lista de IngredientRecipeDao que representa los ingredientes de la receta con su cantidad y unidad de medida.
+     */
+    public List<IngredientRecipeDao> findIngredientsByRecipeId(Connection con, int recipeId) {
         try (Statement stm = con.createStatement()) {
 
             ResultSet result = stm.executeQuery("" +
@@ -143,13 +186,24 @@ public class IngredientManager {
         }
     }
 
-    private void FillIngredientAllergens(Connection con, IngredientDao ingredientDao)
-    {
+
+    /**
+     * Rellena los alérgenos de un ingrediente.
+     *
+     * @param con           Conexión a la base de datos.
+     * @param ingredientDao Objeto IngredientDao al que se le asignarán los alérgenos.
+     */
+    private void FillIngredientAllergens(Connection con, IngredientDao ingredientDao) {
         ingredientDao.setAllergens(allergenManager.findIngredientAllergens(con, ingredientDao.getId()));
     }
-    private void FillIngredientAllergens(Connection con, IngredientRecipeDao ingredientRecipeDao)
-    {
+
+    /**
+     * Rellena los alérgenos de un ingrediente de una receta.
+     *
+     * @param con                 Conexión a la base de datos.
+     * @param ingredientRecipeDao Objeto IngredientRecipeDao al que se le asignarán los alérgenos.
+     */
+    private void FillIngredientAllergens(Connection con, IngredientRecipeDao ingredientRecipeDao) {
         ingredientRecipeDao.setAllergens(allergenManager.findIngredientAllergens(con, ingredientRecipeDao.getIdIngredient()));
     }
 }
-

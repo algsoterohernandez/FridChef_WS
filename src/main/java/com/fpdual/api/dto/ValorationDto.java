@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+/**
+ * Clase que representa una valoración.
+ */
 public class ValorationDto {
     private int id;
     private int idRecipe;

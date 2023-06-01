@@ -7,14 +7,15 @@ import java.sql.Blob;
 import java.util.Date;
 import java.util.List;
 
-@Setter
-@Getter
+
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
+@Data
 @Builder
 
+/**
+ * Clase que representa una receta.
+ */
 public class RecipeDto {
     private int id;
     private String name;
@@ -27,7 +28,6 @@ public class RecipeDto {
     private String imageBase64;
     private RecipeStatus status;
     private List<IngredientRecipeDto> ingredients;
-
     private double valoration;
 
 }

@@ -12,7 +12,9 @@ import java.sql.SQLException;
 @Getter
 @Setter
 @NoArgsConstructor
-
+/**
+ * Clase que representa un objeto ValorationDao.
+ */
 public class ValorationDao {
     private int id;
     private int idRecipe;
@@ -20,6 +22,11 @@ public class ValorationDao {
     private String comment;
     private double valoration;
 
+    /**
+     * Constructor que crea un objeto ValorationDao a partir de un objeto ResultSet.
+     *
+     * @param result El objeto ResultSet que contiene los datos de la valoración.
+     */
     public ValorationDao(ResultSet result) {
         try {
             this.id = result.getInt("id");

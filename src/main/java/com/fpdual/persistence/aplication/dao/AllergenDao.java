@@ -15,16 +15,25 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 
+/**
+ * Clase que representa un objeto DAO (Data Access Object) para los alérgenos.
+ */
 public class AllergenDao {
     private int id;
     private String name;
-    private List<IngredientDao> ingredients; // Se usa en algún momento?
+    private List<IngredientDao> ingredients; // ¿Se utiliza en algún momento?
 
+    /**
+     * Constructor que crea un objeto AllergenDao a partir de un ResultSet.
+     *
+     * @param result El ResultSet que contiene los datos del alérgeno.
+     */
     public AllergenDao(ResultSet result) {
         try {
             this.id = result.getInt("id");
             this.name = result.getString("name");
             this.ingredients = new ArrayList<>();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

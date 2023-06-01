@@ -6,7 +6,7 @@ import com.fpdual.api.dto.IngredientRecipeDto;
 import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 
 import javax.sql.rowset.serial.SerialBlob;
-import java.nio.charset.StandardCharsets;
+
 import java.sql.Blob;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -14,8 +14,17 @@ import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Clase que proporciona métodos para mapear entre objetos DTO y DAO en la aplicación.
+ */
 public class MappingUtils {
 
+    /**
+     * Mapea un objeto RecipeDao a un objeto RecipeDto.
+     *
+     * @param recipeDao El objeto RecipeDao a mapear.
+     * @return El objeto RecipeDto mapeado.
+     */
     public static RecipeDto mapRecipeToDto(RecipeDao recipeDao) {
         RecipeDto recipeDto = new RecipeDto();
 
@@ -44,8 +53,6 @@ public class MappingUtils {
             }
         }
 
-
-
         List<IngredientRecipeDto> ingredients = recipeDao.getIngredients().stream()
                 .map(MappingUtils::mapIngredientRecipeToDto)
                 .collect(Collectors.toList());
@@ -54,6 +61,13 @@ public class MappingUtils {
 
         return recipeDto;
     }
+
+    /**
+     * Mapea un objeto RecipeDto a un objeto RecipeDao.
+     *
+     * @param recipeDto El objeto RecipeDto a mapear.
+     * @return El objeto RecipeDao mapeado.
+     */
     public static RecipeDao mapRecipeToDao(RecipeDto recipeDto) {
 
         RecipeDao recipeDao = new RecipeDao();
@@ -84,12 +98,25 @@ public class MappingUtils {
 
     }
 
+
+    /**
+     * Mapea una lista de objetos RecipeDao a una lista de objetos RecipeDto.
+     *
+     * @param recipeDao La lista de objetos RecipeDao a mapear.
+     * @return La lista de objetos RecipeDto mapeada.
+     */
     public static List<RecipeDto> mapRecipeListToDto(List<RecipeDao> recipeDao) {
         return recipeDao.stream()
                 .map(MappingUtils::mapRecipeToDto)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Mapea un objeto IngredientRecipeDao a un objeto IngredientRecipeDto.
+     *
+     * @param ingredientRecipeDao El objeto IngredientRecipeDao a mapear.
+     * @return El objeto IngredientRecipeDto mapeado.
+     */
     public static IngredientRecipeDto mapIngredientRecipeToDto(IngredientRecipeDao ingredientRecipeDao) {
         IngredientRecipeDto ingredientRecipeDto = new IngredientRecipeDto();
 
@@ -108,6 +135,12 @@ public class MappingUtils {
         return ingredientRecipeDto;
     }
 
+    /**
+     * Mapea un objeto IngredientRecipeDto a un objeto IngredientRecipeDao.
+     *
+     * @param ingredientRecipeDto El objeto IngredientRecipeDto a mapear.
+     * @return El objeto IngredientRecipeDao mapeado.
+     */
     public static IngredientRecipeDao mapIngredientRecipeToDao(IngredientRecipeDto ingredientRecipeDto) {
         IngredientRecipeDao ingredientRecipeDao = new IngredientRecipeDao();
 
@@ -117,23 +150,39 @@ public class MappingUtils {
         ingredientRecipeDao.setQuantity(ingredientRecipeDto.getQuantity());
         ingredientRecipeDao.setUnit(ingredientRecipeDto.getUnit());
 
-
         return ingredientRecipeDao;
     }
 
-    public static List<IngredientRecipeDto> mapIngredientRecipeListToDto(List<IngredientRecipeDao> ingredientRecipeDaos){
+    /**
+     * Mapea una lista de objetos IngredientRecipeDao a una lista de objetos IngredientRecipeDto.
+     *
+     * @param ingredientRecipeDaos La lista de objetos IngredientRecipeDao a mapear.
+     * @return La lista de objetos IngredientRecipeDto mapeada.
+     */
+    public static List<IngredientRecipeDto> mapIngredientRecipeListToDto(List<IngredientRecipeDao> ingredientRecipeDaos) {
         return ingredientRecipeDaos.stream()
                 .map(MappingUtils::mapIngredientRecipeToDto)
                 .collect(Collectors.toList());
     }
 
-    public static List<IngredientRecipeDao> mapIngredientRecipeListToDao(List<IngredientRecipeDto> ingredientRecipeDtos){
+    /**
+     * Mapea una lista de objetos IngredientRecipeDto a una lista de objetos IngredientRecipeDao.
+     *
+     * @param ingredientRecipeDtos La lista de objetos IngredientRecipeDto a mapear.
+     * @return La lista de objetos IngredientRecipeDao mapeada.
+     */
+    public static List<IngredientRecipeDao> mapIngredientRecipeListToDao(List<IngredientRecipeDto> ingredientRecipeDtos) {
         return ingredientRecipeDtos.stream()
                 .map(MappingUtils::mapIngredientRecipeToDao)
                 .collect(Collectors.toList());
     }
 
-
+    /**
+     * Mapea un objeto IngredientDao a un objeto IngredientDto.
+     *
+     * @param ingredientDao El objeto IngredientDao a mapear.
+     * @return El objeto IngredientDto mapeado.
+     */
     public static IngredientDto mapIngredientToDto(IngredientDao ingredientDao) {
         IngredientDto ingredientDto = new IngredientDto();
 
@@ -150,13 +199,24 @@ public class MappingUtils {
         return ingredientDto;
     }
 
+    /**
+     * Mapea una lista de objetos IngredientDao a una lista de objetos IngredientDto.
+     *
+     * @param ingredientDaos La lista de objetos IngredientDao a mapear.
+     * @return La lista de objetos IngredientDto mapeada.
+     */
     public static List<IngredientDto> mapIngredientListToDto(List<IngredientDao> ingredientDaos) {
         return ingredientDaos.stream()
                 .map(MappingUtils::mapIngredientToDto)
                 .collect(Collectors.toList());
     }
 
-
+    /**
+     * Mapea un objeto AllergenDao a un objeto AllergenDto.
+     *
+     * @param allergenDao El objeto AllergenDao a mapear.
+     * @return El objeto AllergenDto mapeado.
+     */
     public static AllergenDto mapAllergenToDto(AllergenDao allergenDao) {
 
         AllergenDto allergenDto = new AllergenDto();
@@ -167,12 +227,24 @@ public class MappingUtils {
         return allergenDto;
     }
 
+    /**
+     * Mapea una lista de objetos AllergenDao a una lista de objetos AllergenDto.
+     *
+     * @param allergenDao La lista de objetos AllergenDao a mapear.
+     * @return La lista de objetos AllergenDto mapeada.
+     */
     public static List<AllergenDto> mapAllergenListDto(List<AllergenDao> allergenDao) {
         return allergenDao.stream()
                 .map(MappingUtils::mapAllergenToDto)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Mapea un objeto UserDao a un objeto UserDto.
+     *
+     * @param userDao El objeto UserDao a mapear.
+     * @return El objeto UserDto mapeado.
+     */
     public static UserDto mapUserToDto(UserDao userDao) {
 
         UserDto userDto = new UserDto();
@@ -188,6 +260,13 @@ public class MappingUtils {
 
     }
 
+
+    /**
+     * Mapea un objeto UserDto a un objeto UserDao.
+     *
+     * @param userDto El objeto UserDto a mapear.
+     * @return El objeto UserDao mapeado.
+     */
     public static UserDao mapUserToDao(UserDto userDto) {
 
         UserDao userDao = new UserDao();
@@ -204,6 +283,12 @@ public class MappingUtils {
 
     }
 
+    /**
+     * Mapea un objeto RolUserDao a un objeto RolUserDto.
+     *
+     * @param rolUserDao El objeto RolUserDao a mapear.
+     * @return El objeto RolUserDto mapeado.
+     */
     public static RolUserDto mapRolUserToDto(RolUserDao rolUserDao) {
 
         RolUserDto rolUserDto = new RolUserDto();
@@ -213,12 +298,26 @@ public class MappingUtils {
 
         return rolUserDto;
     }
+
+    /**
+     * Mapea una lista de objetos RolUserDao a una lista de objetos RolUserDto.
+     *
+     * @param rolUserDao La lista de objetos RolUserDao a mapear.
+     * @return La lista de objetos RolUserDto mapeada.
+     */
     public static List<RolUserDto> mapRolUserListDto(List<RolUserDao> rolUserDao) {
         return rolUserDao.stream()
                 .map(MappingUtils::mapRolUserToDto)
                 .collect(Collectors.toList());
     }
-    public static ValorationDto mapValorationToDto(ValorationDao valorationDao){
+
+    /**
+     * Mapea un objeto ValorationDao a un objeto ValorationDto.
+     *
+     * @param valorationDao El objeto ValorationDao a mapear.
+     * @return El objeto ValorationDto mapeado.
+     */
+    public static ValorationDto mapValorationToDto(ValorationDao valorationDao) {
         ValorationDto valorationDto = new ValorationDto();
 
         valorationDto.setId(valorationDao.getId());
@@ -230,7 +329,14 @@ public class MappingUtils {
         return valorationDto;
 
     }
-    public static ValorationDao mapValorationToDao(ValorationDto valorationDto){
+
+    /**
+     * Mapea un objeto ValorationDto a un objeto ValorationDao.
+     *
+     * @param valorationDto El objeto ValorationDto a mapear.
+     * @return El objeto ValorationDao mapeado.
+     */
+    public static ValorationDao mapValorationToDao(ValorationDto valorationDto) {
         ValorationDao valorationDao = new ValorationDao();
 
         valorationDao.setId(valorationDto.getId());
