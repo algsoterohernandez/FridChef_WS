@@ -15,8 +15,6 @@ public class IngredientManager {
         allergenManager = new AllergenManager();
     }
 
-    //buscar todo
-
 
     public IngredientDao insertIngredient(Connection con, String name){
         IngredientDao ingredient = new IngredientDao();
@@ -97,28 +95,30 @@ public class IngredientManager {
         return null;
     }
 
-    public List<IngredientDao> findRecipeIngredients(Connection con, int recipeId)
-    {
-        try (Statement stm = con.createStatement()) {
 
-            ResultSet result = stm.executeQuery("select i.* from ingredient i inner join ingredient_recipe ir on ir.id_ingredient = i.id where ir.id_recipe = " + recipeId);
-
-            List<IngredientDao> ingredients = new ArrayList<>();
-
-            while (result.next()) {
-                IngredientDao ingredientDao = new IngredientDao(result);
-                FillIngredientAllergens(con, ingredientDao);
-
-                ingredients.add(ingredientDao);
-            }
-
-            return ingredients;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+    // No se usa, probar si es necesario para funcionalidad y si no borrar
+//    public List<IngredientDao> findRecipeIngredients(Connection con, int recipeId)
+//    {
+//        try (Statement stm = con.createStatement()) {
+//
+//            ResultSet result = stm.executeQuery("select i.* from ingredient i inner join ingredient_recipe ir on ir.id_ingredient = i.id where ir.id_recipe = " + recipeId);
+//
+//            List<IngredientDao> ingredients = new ArrayList<>();
+//
+//            while (result.next()) {
+//                IngredientDao ingredientDao = new IngredientDao(result);
+//                FillIngredientAllergens(con, ingredientDao);
+//
+//                ingredients.add(ingredientDao);
+//            }
+//
+//            return ingredients;
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
     public List<IngredientRecipeDao> findIngredientsByRecipeId(Connection con, int recipeId)
     {

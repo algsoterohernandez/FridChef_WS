@@ -1,9 +1,6 @@
 package com.fpdual.persistence.aplication.dao;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,12 +10,14 @@ import java.util.List;
 @Data
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 
 public class IngredientDao {
     private int id;
     private String name;
     private List<AllergenDao> allergens;
+
 
     public IngredientDao(ResultSet result) {
         try {
