@@ -1,17 +1,14 @@
 package com.fpdual.service;
 
-import com.fpdual.api.dto.RecipeDto;
 import com.fpdual.api.dto.ValorationDto;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
-import com.fpdual.persistence.aplication.dao.RecipeDao;
 import com.fpdual.persistence.aplication.dao.ValorationDao;
-import com.fpdual.persistence.aplication.manager.IngredientManager;
-import com.fpdual.persistence.aplication.manager.RecipeManager;
 import com.fpdual.persistence.aplication.manager.ValorationManager;
 import com.fpdual.utils.MappingUtils;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 public class ValorationService{
     private final MySQLConnector connector;
@@ -35,4 +32,15 @@ public class ValorationService{
 
         return valorationDto;
     }
+
+    public List<ValorationDto> findValorations(int id, int limit) throws SQLException, ClassNotFoundException {
+        List<ValorationDto> valorationDtoList;
+        try(Connection con = connector.getMySQLConnection()){
+            List<ValorationDao> valorationDaoList = this.valorationManager.findValorationById(con, id, limit);
+            valorationDtoList = MappingUtils.mapValorationListToDto(valorationDaoList);
+        }catch (Exception e){
+            throw e;
+        }
+        return valorationDtoList;
     }
+}

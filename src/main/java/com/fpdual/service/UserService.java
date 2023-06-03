@@ -5,8 +5,10 @@ import com.fpdual.api.dto.UserDto;
 import com.fpdual.exceptions.FridChefException;
 import com.fpdual.exceptions.AlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
+import com.fpdual.persistence.aplication.dao.FavoriteDao;
 import com.fpdual.persistence.aplication.dao.RolUserDao;
 import com.fpdual.persistence.aplication.dao.UserDao;
+import com.fpdual.persistence.aplication.manager.FavoriteManager;
 import com.fpdual.persistence.aplication.manager.RolManager;
 import com.fpdual.persistence.aplication.manager.UserManager;
 import com.fpdual.utils.MappingUtils;
@@ -24,14 +26,16 @@ public class UserService {
     private final MySQLConnector connector;
     private final UserManager userManager;
     private final RolManager rolManager;
+    private final FavoriteManager favoriteManager;
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private MessageDigest md5;
 
-    public UserService(MySQLConnector connector, UserManager userManager, RolManager rolManager) {
+    public UserService(MySQLConnector connector, UserManager userManager, RolManager rolManager, FavoriteManager favoriteManager) {
         this.connector = connector;
         this.userManager = userManager;
         this.rolManager = rolManager;
+        this.favoriteManager = favoriteManager;
     }
 
     public UserDto createUser(UserDto userDto) throws SQLException, ClassNotFoundException, FridChefException {
@@ -78,7 +82,7 @@ public class UserService {
 
     }
 
-    public UserDto findUser(String email, String password) throws SQLException, ClassNotFoundException {
+    public UserDto findUser(String email, String password) throws Exception {
         UserDto userDto = null;
         List<RolUserDto> rolUserDto;
 
@@ -88,12 +92,15 @@ public class UserService {
 
             List<RolUserDao> rolUserDao=this.rolManager.findRolesById(con, userDao.getId());
 
+            List<Integer> favoritesUserDao = this.favoriteManager.findFavoriteList(con, userDao.getId());
+
             if (userDao != null) {
 
                 userDto = MappingUtils.mapUserToDto(userDao);
                 rolUserDto = MappingUtils.mapRolUserListDto(rolUserDao);
 
                 userDto.setRolUserDto(rolUserDto);
+                userDto.setFavoriteList(favoritesUserDao);
             }
 
         } catch (Exception e) {

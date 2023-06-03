@@ -9,6 +9,7 @@ import lombok.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class RecipeManager {
@@ -100,6 +101,39 @@ public class RecipeManager {
 
         try (Statement stm = con.createStatement()) {
             ResultSet result = stm.executeQuery("select * from recipe");
+
+            List<RecipeDao> recipes = new ArrayList<>();
+
+            while (result.next()) {
+                RecipeDao recipe = new RecipeDao(result);
+                fillRecipeIngredients(con, recipe);
+
+                recipes.add(recipe);
+            }
+
+            return recipes;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public List<RecipeDao> findBy(Connection con, List<String> idsRecipe, boolean orderByPopular, int limit) {
+
+        try (Statement stm = con.createStatement()) {
+            String sql = "select *, (SELECT AVG(valoration) FROM valoration v where v.id_recipe = r.id) as valoration, (SELECT COUNT(valoration) FROM valoration v where v.id_recipe = r.id) as total_valoration from recipe r WHERE status='ACCEPTED' ";
+            if (idsRecipe != null && !idsRecipe.isEmpty()) {
+                sql += " AND id in (" + String.join(",", idsRecipe) + ")";
+            }
+
+            if (orderByPopular) {
+                sql += " ORDER BY valoration DESC, total_valoration DESC";
+            }
+            if (limit > 0) {
+                sql += " LIMIT " + limit;
+            }
+
+            ResultSet result = stm.executeQuery(sql);
 
             List<RecipeDao> recipes = new ArrayList<>();
 
