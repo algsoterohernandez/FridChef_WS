@@ -44,6 +44,23 @@ public class RecipeService {
         return recipeDtos;
     }
 
+    public List<RecipeDto> findBy(List<String> idsRecipe, boolean orderByPopular, int limit) {
+        List<RecipeDto> recipeDtos = null;
+        try (Connection con = connector.getMySQLConnection()) {
+
+            List<RecipeDao> recipeDaos = recipeManager.findBy(con, idsRecipe, orderByPopular, limit);
+
+            if (recipeDaos != null) {
+                recipeDtos = MappingUtils.mapRecipeListToDto(recipeDaos);
+            }
+
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return recipeDtos;
+    }
+
     public List<RecipeDto> findRecipesByIngredients(List<String> recipeIngredients) {
         List<RecipeDto> recipeDtos = new ArrayList<>();
 
@@ -123,17 +140,6 @@ public class RecipeService {
             e.printStackTrace();
         }
         return recipeDto;
-    }
-
-    public List<RecipeDto> findRecipesByIdCategory(Integer idCategory) {
-        List<RecipeDto> recipeDtos = null;
-        List<RecipeDao> recipeDaos = recipeManager.findRecipesByIdCategory(idCategory);
-
-        if (recipeDaos != null) {
-            recipeDtos = MappingUtils.mapRecipeListToDto(recipeDaos);
-        }
-
-        return recipeDtos;
     }
 
     public List<RecipeDto> findByStatusPending() throws SQLException, ClassNotFoundException {
