@@ -16,7 +16,6 @@ import java.util.List;
 @Data
 @Getter
 @Setter
-@NoArgsConstructor
 
 public class RecipeDao {
     private int id;
@@ -31,6 +30,10 @@ public class RecipeDao {
     private RecipeStatus status;
     private List<IngredientRecipeDao> ingredients;
     private double valoration;
+
+    public RecipeDao() {
+        ingredients = new ArrayList<>();
+    }
 
     public RecipeDao(ResultSet result) {
         try {
