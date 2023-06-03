@@ -224,8 +224,10 @@ public class MappingUtils {
         valorationDto.setId(valorationDao.getId());
         valorationDto.setIdRecipe(valorationDao.getIdRecipe());
         valorationDto.setIdUser(valorationDao.getIdUser());
+        valorationDto.setNameUser(valorationDao.getNameUser());
         valorationDto.setComment(valorationDao.getComment());
         valorationDto.setValoration(valorationDao.getValoration());
+        valorationDto.setCreateTime(valorationDao.getCreateTime());
 
         return valorationDto;
 
@@ -236,9 +238,20 @@ public class MappingUtils {
         valorationDao.setId(valorationDto.getId());
         valorationDao.setIdRecipe(valorationDto.getIdRecipe());
         valorationDao.setIdUser(valorationDto.getIdUser());
+        valorationDao.setNameUser(valorationDto.getNameUser());
         valorationDao.setComment(valorationDto.getComment());
         valorationDao.setValoration(valorationDto.getValoration());
-
+        valorationDao.setCreateTime(new Date(System.currentTimeMillis()));
         return valorationDao;
+    }
+    public static List<ValorationDto> mapValorationListToDto(List<ValorationDao> valorationDaoList) {
+        return valorationDaoList.stream()
+                .map(MappingUtils::mapValorationToDto)
+                .collect(Collectors.toList());
+    }
+    public static List<ValorationDao> mapValorationDtoListToDao(List<ValorationDto> valorationDtoList) {
+        return valorationDtoList.stream()
+                .map(MappingUtils::mapValorationToDao)
+                .collect(Collectors.toList());
     }
 }

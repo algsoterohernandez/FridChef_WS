@@ -13,6 +13,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,6 +102,26 @@ public class RecipeController {
         return rs;
         }
 
+    @GET
+    @Path("/{id}/rating")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findValorations(
+            @PathParam("id") int id,
+            @DefaultValue("10") @QueryParam("limit") int limit
+            ){
+        Response response;
+
+        try{
+            List<ValorationDto> valorationList = valorationService.findValorations(id, limit);
+            if (valorationList == null) {
+                valorationList = new ArrayList<>();
+            }
+            response = Response.status(HttpStatus.OK.getStatusCode()).entity(valorationList).build();
+        }catch (Exception e){
+            response = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
+        }
+        return response;
+    }
 
     // Probar que llega la imagen correctamente al backend, generando el fihcero.
 //        File outputFile = new File("C:\\Users\\a.carmona.garrido\\Desktop\\test.png");

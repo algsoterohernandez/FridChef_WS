@@ -1,5 +1,6 @@
 package com.fpdual.controller;
 
+import com.fpdual.api.dto.UserDto;
 import com.fpdual.enums.HttpStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.manager.FavoriteManager;
@@ -10,7 +11,7 @@ import com.fpdual.service.UserService;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import com.fpdual.api.dto.UserDto;
+
 @Path("/user")
 
 public class UserController {
@@ -18,7 +19,7 @@ public class UserController {
     private final FavoriteService favoriteService;
 
     public UserController() {
-        userService = new UserService(new MySQLConnector(), new UserManager(), new RolManager());
+        userService = new UserService(new MySQLConnector(), new UserManager(), new RolManager(), new FavoriteManager());
         favoriteService = new FavoriteService(new MySQLConnector(), new FavoriteManager());
     }
 
@@ -54,7 +55,7 @@ public class UserController {
     @Path("/delete/{email}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteUser(@PathParam("email") String email) {
-        Response rs;
+        Response rs = null;
         try {
             boolean deleted = userService.deleteUser(email);
 
@@ -71,7 +72,7 @@ public class UserController {
     @Path("/find")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findUser(UserDto userDto) {
-        Response rs;
+        Response rs = null;
         try {
             if (userDto.getEmail() == null || userDto.getPassword() == null) {
                 rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
@@ -96,7 +97,7 @@ public class UserController {
     @Path("/{idUser}/favorite/{idRecipe}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createFavorite(@PathParam("idUser") int idUser, @PathParam("idRecipe") int idRecipe) {
-        Response rs;
+        Response rs = null;
         try {
             boolean favoriteCreated = favoriteService.favoriteAdd(idRecipe, idUser);
             rs = Response.status(HttpStatus.OK.getStatusCode()).entity(favoriteCreated).build();
@@ -107,11 +108,12 @@ public class UserController {
         }
         return rs;
     }
+
     @DELETE
     @Path("/{idUser}/favorite/{idRecipe}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeFavorite(@PathParam("idUser") int idUser, @PathParam("idRecipe") int idRecipe) {
-        Response rs;
+        Response rs = null;
         try {
             boolean favoriteDeleted = favoriteService.favoriteRemove(idRecipe, idUser);
             rs = Response.status(HttpStatus.OK.getStatusCode()).entity(favoriteDeleted).build();

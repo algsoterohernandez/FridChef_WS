@@ -27,9 +27,6 @@ public class FavoriteService {
         try (Connection con = connector.getMySQLConnection()) {
 
             favoriteAdd = this.favoriteManager.favoriteAdded(con, idRecipe, idUser);
-
-            favoriteAdd = true;
-
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
@@ -42,8 +39,6 @@ public class FavoriteService {
         try (Connection con = connector.getMySQLConnection()) {
 
             favoriteRemoved = this.favoriteManager.favoriteRemoved(con, idRecipe, idUser);
-
-            favoriteRemoved = true;
 
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
