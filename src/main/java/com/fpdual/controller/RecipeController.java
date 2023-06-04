@@ -1,6 +1,8 @@
 package com.fpdual.controller;
 
-import com.fpdual.api.dto.*;
+import com.fpdual.api.dto.RecipeDto;
+import com.fpdual.api.dto.RecipeFilterDto;
+import com.fpdual.api.dto.ValorationDto;
 import com.fpdual.enums.HttpStatus;
 import com.fpdual.enums.RecipeStatus;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
@@ -13,8 +15,11 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Path("/recipes")
 public class RecipeController {
@@ -44,12 +49,16 @@ public class RecipeController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response recipeDetails(@PathParam("id") int id) {
 
-
-        RecipeDto recipe = recipeService.findRecipebyId(id);
-
-        return Optional.ofNullable(recipe)
-                .map(dto -> Response.status(HttpStatus.OK.getStatusCode()).entity(dto).build())
-                .orElse(Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build());
+        List<String> ids = new ArrayList<>();
+        ids.add(String.valueOf(id));
+        List<RecipeDto> recipe = recipeService.findBy(ids, 0, false, 1);
+        if (recipe.isEmpty()) {
+            return Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build();
+        } else {
+            return Optional.ofNullable(recipe.get(0))
+                    .map(dto -> Response.status(HttpStatus.OK.getStatusCode()).entity(dto).build())
+                    .orElse(Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build());
+        }
     }
 
 
@@ -77,14 +86,13 @@ public class RecipeController {
     }
 
 
-
     @POST
     @Path("/{id}/rating")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createValoration(ValorationDto valorationDto) {
         Response rs;
 
-        try{
+        try {
             if (valorationDto == null) {
                 rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
             } else {
@@ -99,8 +107,27 @@ public class RecipeController {
             rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
         }
         return rs;
-        }
+    }
 
+    @GET
+    @Path("/{id}/rating")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findValorations(
+            @PathParam("id") int id,
+            @DefaultValue("10") @QueryParam("limit") int limit) {
+        Response response;
+
+        try {
+            List<ValorationDto> valorationList = valorationService.findValorations(id, limit);
+            if (valorationList == null) {
+                valorationList = new ArrayList<>();
+            }
+            response = Response.status(HttpStatus.OK.getStatusCode()).entity(valorationList).build();
+        } catch (Exception e) {
+            response = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
+        }
+        return response;
+    }
 
     // Probar que llega la imagen correctamente al backend, generando el fihcero.
 //        File outputFile = new File("C:\\Users\\a.carmona.garrido\\Desktop\\test.png");
@@ -170,6 +197,47 @@ public class RecipeController {
             } else {
                 rs = Response.status(HttpStatus.OK.getStatusCode()).entity(recipeRs).build();
             }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            rs = Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build();
+        }
+
+        return rs;
+    }
+
+    @GET
+    @Path("/most-rated")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findByMostPopular(
+            @DefaultValue("10") @QueryParam("limit") Integer limit) {
+        Response rs;
+        try {
+
+            List<RecipeDto> recipeList = recipeService.findBy(new ArrayList<>(), 0, true, limit);
+            return Optional.ofNullable(recipeList)
+                    .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
+                    .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            rs = Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build();
+        }
+
+        return rs;
+    }
+
+    @GET
+    @Path("/favorites")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findFavorites(@QueryParam("ids") String ids) {
+        Response rs;
+        try {
+            List<String> stringId = Arrays.asList(ids.split(","));
+            List<RecipeDto> recipeList = recipeService.findBy(stringId, 0, false, 0);
+            return Optional.ofNullable(recipeList)
+                    .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
+                    .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

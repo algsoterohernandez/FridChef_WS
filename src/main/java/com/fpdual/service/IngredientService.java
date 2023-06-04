@@ -27,7 +27,6 @@ public class IngredientService {
         try (Connection con = connector.getMySQLConnection()) {
             List<IngredientDao> ingredientDaos = ingredientManager.findAll(con);
 
-
             if (ingredientDaos != null) {
                 ingredientDtos = MappingUtils.mapIngredientListToDto(ingredientDaos);
             }
@@ -85,6 +84,4 @@ public class IngredientService {
         return ingredientDto;
 
     }
-
-
 }

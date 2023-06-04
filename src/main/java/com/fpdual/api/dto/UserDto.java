@@ -14,5 +14,6 @@ public class UserDto {
 
     private boolean alreadyExists;
     private List<RolUserDto> rolUserDto;
+    private List<Integer> favoriteList;
 
 }

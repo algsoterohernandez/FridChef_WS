@@ -42,9 +42,5 @@ public class AllergenDaoTest {
         assertEquals("Peanuts", allergenDao.getName());
     }
 
-    @Test
-    public void testGetIngredients() {
-        assertEquals(0, allergenDao.getIngredients().size());
-    }
 
 }

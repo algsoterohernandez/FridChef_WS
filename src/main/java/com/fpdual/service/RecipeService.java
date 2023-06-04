@@ -12,7 +12,6 @@ import com.fpdual.utils.MappingUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 public class RecipeService {
@@ -32,6 +31,23 @@ public class RecipeService {
         try (Connection con = connector.getMySQLConnection()) {
 
             List<RecipeDao> recipeDaos = recipeManager.findAll(con);
+
+            if (recipeDaos != null) {
+                recipeDtos = MappingUtils.mapRecipeListToDto(recipeDaos);
+            }
+
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return recipeDtos;
+    }
+
+    public List<RecipeDto> findBy(List<String> idsRecipe, int idCategory, boolean orderByPopular, int limit) {
+        List<RecipeDto> recipeDtos = null;
+        try (Connection con = connector.getMySQLConnection()) {
+
+            List<RecipeDao> recipeDaos = recipeManager.findBy(con, idsRecipe, idCategory, orderByPopular, limit);
 
             if (recipeDaos != null) {
                 recipeDtos = MappingUtils.mapRecipeListToDto(recipeDaos);
@@ -111,29 +127,6 @@ public class RecipeService {
         }
 
         return recipeDto;
-    }
-
-    public RecipeDto findRecipebyId(int id) {
-        RecipeDto recipeDto = null;
-        try (Connection con = connector.getMySQLConnection()) {
-
-            RecipeDao recipeDao = recipeManager.getRecipeById(con, id);
-            recipeDto = MappingUtils.mapRecipeToDto(recipeDao);
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return recipeDto;
-    }
-
-    public List<RecipeDto> findRecipesByIdCategory(Integer idCategory) {
-        List<RecipeDto> recipeDtos = null;
-        List<RecipeDao> recipeDaos = recipeManager.findRecipesByIdCategory(idCategory);
-
-        if (recipeDaos != null) {
-            recipeDtos = MappingUtils.mapRecipeListToDto(recipeDaos);
-        }
-
-        return recipeDtos;
     }
 
     public List<RecipeDto> findByStatusPending() throws SQLException, ClassNotFoundException {
