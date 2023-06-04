@@ -19,7 +19,6 @@ public class RecipeManager {
     public RecipeManager() {
         ingredientManager = new IngredientManager();
     }
-
     public RecipeDao createRecipe(Connection con, RecipeDao recipe) throws SQLException {
 
         try (PreparedStatement stm = con.prepareStatement("INSERT INTO recipe (name, description, difficulty, time, unit_time, id_category, create_time, image) VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
@@ -65,38 +64,6 @@ public class RecipeManager {
         }
 
     }
-
-    // obtiene receta por id de la base de datos
-    public RecipeDao getRecipeById(Connection con, int id) {
-        try (PreparedStatement stm = con.prepareStatement("SELECT recipe.*, (SELECT ROUND(AVG(valoration),2) FROM valoration WHERE id_recipe = ?) AS valoration FROM recipe WHERE id = ?;")) {
-            stm.setInt(1, id);
-            stm.setInt(2, id);
-            ResultSet result = stm.executeQuery();
-            if (result.next()) {
-                RecipeDao recipeDao = new RecipeDao(result);
-                fillRecipeIngredients(con, recipeDao);
-                return recipeDao;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public boolean deleteRecipe(Connection con, int recipeId) {
-        boolean success = false;
-        try (PreparedStatement stm = con.prepareStatement("DELETE FROM recipe WHERE id=?")) {
-            stm.setInt(1, recipeId);
-            int affectedRows = stm.executeUpdate();
-            if (affectedRows > 0) {
-                success = true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return success;
-    }
-
     public List<RecipeDao> findAll(Connection con) {
 
         try (Statement stm = con.createStatement()) {
@@ -118,12 +85,16 @@ public class RecipeManager {
             return null;
         }
     }
-    public List<RecipeDao> findBy(Connection con, List<String> idsRecipe, boolean orderByPopular, int limit) {
+    public List<RecipeDao> findBy(Connection con, List<String> idsRecipe, int idCategory, boolean orderByPopular, int limit) {
 
         try (Statement stm = con.createStatement()) {
             String sql = "select *, (SELECT AVG(valoration) FROM valoration v where v.id_recipe = r.id) as valoration, (SELECT COUNT(valoration) FROM valoration v where v.id_recipe = r.id) as total_valoration from recipe r WHERE status='ACCEPTED' ";
             if (idsRecipe != null && !idsRecipe.isEmpty()) {
                 sql += " AND id in (" + String.join(",", idsRecipe) + ")";
+            }
+
+            if (idCategory != 0) {
+                sql += " AND id_category = " + idCategory;
             }
 
             if (orderByPopular) {
@@ -151,30 +122,6 @@ public class RecipeManager {
             return null;
         }
     }
-
-    public List<RecipeDao> findAllRecipesByCategoryId(Connection con, Integer idCategory) {
-
-        try (PreparedStatement stm = con.prepareStatement("SELECT * FROM recipe WHERE id_category = ?")) {
-            stm.setInt(1, idCategory);
-            ResultSet result = stm.executeQuery();
-
-            List<RecipeDao> recipes = new ArrayList<>();
-
-            while (result.next()) {
-                RecipeDao recipe = new RecipeDao(result);
-                fillRecipeIngredients(con, recipe);
-
-                recipes.add(recipe);
-            }
-
-            return recipes;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public List<RecipeDao> findRecipesByIngredients(Connection con, List<Integer> ingredientIds) {
         List<RecipeDao> recipes = new ArrayList<>();
         try {
@@ -234,8 +181,6 @@ public class RecipeManager {
             return recipes;
         }
     }
-
-
     public List<RecipeDao> findRecipeSuggestions(Connection con, List<Integer> ingredientIds) {
         List<RecipeDao> recipesSuggestions = new ArrayList<>();
         try {
@@ -271,35 +216,9 @@ public class RecipeManager {
             return recipesSuggestions;
         }
     }
-
     private void fillRecipeIngredients(Connection con, RecipeDao recipeDao) {
         recipeDao.setIngredients(ingredientManager.findIngredientsByRecipeId(con, recipeDao.getId()));
     }
-
-    public List<RecipeDao> findRecipesByIdCategory(Integer idCategory) {
-        try (Connection con = new MySQLConnector().getMySQLConnection()) {
-            String query = "SELECT * FROM recipe WHERE id_category = ?";
-            PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, idCategory);
-            ResultSet result = ps.executeQuery();
-
-            List<RecipeDao> recipes = new ArrayList<>();
-
-            while (result.next()) {
-                RecipeDao recipe = new RecipeDao(result);
-                fillRecipeIngredients(con, recipe);
-
-                recipes.add(recipe);
-            }
-
-            return recipes;
-
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public List<RecipeDao> findByStatusPending(Connection con) {
 
         try (PreparedStatement stm = con.prepareStatement("SELECT * FROM recipe WHERE status LIKE ?")) {
@@ -328,7 +247,6 @@ public class RecipeManager {
             return null;
         }
     }
-
     public RecipeDao updateRecipeStatus(Connection con, int id, String status) {
         RecipeDao recipeDao = null;
 
@@ -359,6 +277,5 @@ public class RecipeManager {
 
         }
     }
-
 
 }

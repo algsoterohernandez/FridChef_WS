@@ -1,7 +1,5 @@
 package com.fpdual.persistence.aplication.manager;
 
-import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
-import com.fpdual.persistence.aplication.dao.RecipeDao;
 import com.fpdual.persistence.aplication.dao.ValorationDao;
 
 import java.sql.*;
