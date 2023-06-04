@@ -53,12 +53,15 @@ public class CategoryController {
     @Path("/{idCategory}/recipes/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findRecipesByCategory(@PathParam("idCategory") int idCategory) {
+    public Response findRecipesByCategory(
+            @PathParam("idCategory") int idCategory,
+            @DefaultValue("0") @QueryParam("limit") int limit
+    ) {
         try{
 
             CategoryDto category = new CategoryDto();
             category.setId(idCategory);
-            List<RecipeDto> recipeList = categoryService.findRecipesByCategory(category);
+            List<RecipeDto> recipeList = categoryService.findRecipesByCategory(category, limit);
 
             if(!recipeList.isEmpty()){
                 return Response.ok(recipeList).build();

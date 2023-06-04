@@ -72,11 +72,11 @@ public class CategoryService {
         }
     }
 
-    public List<RecipeDto> findRecipesByCategory(CategoryDto categoryDto) {
+    public List<RecipeDto> findRecipesByCategory(CategoryDto categoryDto, int limit) {
         List<RecipeDto> filteredRecipes = new ArrayList<>();
 
         int idCategory = categoryDto.getId();
-        List<RecipeDao> recipes = recipeManager.findAllRecipesByCategoryId(connector, categoryDto.getId());
+        List<RecipeDao> recipes = recipeManager.findBy(connector, new ArrayList<>(), categoryDto.getId(), false, limit);
         for(RecipeDao recipeDao : recipes){
             RecipeDto recipeDto = MappingUtils.mapRecipeToDto(recipeDao);
             filteredRecipes.add(recipeDto);
@@ -84,43 +84,6 @@ public class CategoryService {
 
         return filteredRecipes;
     }
-
-    private RecipeDto mapRecipeDaoToDto(RecipeDao recipeDao){
-        RecipeDto recipeDto = new RecipeDto();
-
-        recipeDto.setId(recipeDao.getId());
-        recipeDto.setName(recipeDao.getName());
-        recipeDto.setDescription(recipeDao.getDescription());
-        recipeDto.setTime(recipeDao.getTime());
-        recipeDto.setUnitTime(recipeDao.getUnitTime());
-        //recipeDto.setImage(recipeDao.getImage());
-        recipeDto.setStatus(recipeDao.getStatus());
-        // TODO: cuando se verifique el ingredientRecipeDao, se podrá continuar insertando los ingredientes en la receta
-        // recipeDto.setIngredients(mapIngredientRecipeDaoListToDtoList(recipeDao.getIngredients(), recipeDao));
-
-        return recipeDto;
-    }
-
-    private List<IngredientRecipeDto> mapIngredientRecipeDaoListToDtoList(List<IngredientDao> ingredients, RecipeDao recipes) {
-        List<IngredientRecipeDto> ingredientRecipeDtoList = new ArrayList<>();
-        IngredientRecipeDao ingredientRecipeDao = null;
-
-        for (IngredientDao ingredientDao : ingredients) {
-            IngredientRecipeDto ingredientRecipeDto = new IngredientRecipeDto();
-            ingredientRecipeDto.setId(ingredientDao.getId());
-            ingredientRecipeDto.setIdRecipe(recipes.getId());
-            ingredientRecipeDto.setIdIngredient(ingredientDao.getId());
-            ingredientRecipeDto.setQuantity(ingredientRecipeDao.getQuantity());
-            ingredientRecipeDto.setUnit(ingredientRecipeDao.getUnit());
-
-            
-            ingredientRecipeDtoList.add(ingredientRecipeDto);
-        }
-
-        return ingredientRecipeDtoList;
-    }
-
-
 }
 
 

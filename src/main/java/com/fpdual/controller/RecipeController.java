@@ -49,12 +49,16 @@ public class RecipeController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response recipeDetails(@PathParam("id") int id) {
 
-
-        RecipeDto recipe = recipeService.findRecipebyId(id);
-
-        return Optional.ofNullable(recipe)
-                .map(dto -> Response.status(HttpStatus.OK.getStatusCode()).entity(dto).build())
-                .orElse(Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build());
+        List<String> ids = new ArrayList<>();
+        ids.add(String.valueOf(id));
+        List<RecipeDto> recipe = recipeService.findBy(ids, 0, false, 1);
+        if (recipe.isEmpty()) {
+            return Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build();
+        } else {
+            return Optional.ofNullable(recipe.get(0))
+                    .map(dto -> Response.status(HttpStatus.OK.getStatusCode()).entity(dto).build())
+                    .orElse(Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build());
+        }
     }
 
 
@@ -110,8 +114,7 @@ public class RecipeController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response findValorations(
             @PathParam("id") int id,
-            @DefaultValue("10") @QueryParam("limit") int limit
-    ) {
+            @DefaultValue("10") @QueryParam("limit") int limit) {
         Response response;
 
         try {
@@ -207,12 +210,11 @@ public class RecipeController {
     @Path("/most-rated")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findByMostPopular(
-            @DefaultValue("10") @QueryParam("limit") Integer limit
-    ) {
+            @DefaultValue("10") @QueryParam("limit") Integer limit) {
         Response rs;
         try {
 
-            List<RecipeDto> recipeList = recipeService.findBy(new ArrayList<>(), true, limit);
+            List<RecipeDto> recipeList = recipeService.findBy(new ArrayList<>(), 0, true, limit);
             return Optional.ofNullable(recipeList)
                     .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
                     .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
@@ -228,11 +230,11 @@ public class RecipeController {
     @GET
     @Path("/favorites")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findByMostPopular(@QueryParam("ids") String ids) {
+    public Response findFavorites(@QueryParam("ids") String ids) {
         Response rs;
         try {
             List<String> stringId = Arrays.asList(ids.split(","));
-            List<RecipeDto> recipeList = recipeService.findBy(stringId, false, 0);
+            List<RecipeDto> recipeList = recipeService.findBy(stringId, 0, false, 0);
             return Optional.ofNullable(recipeList)
                     .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
                     .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
