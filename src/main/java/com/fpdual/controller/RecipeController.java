@@ -29,7 +29,9 @@ public class RecipeController {
     private final ValorationService valorationService;
 
     public RecipeController() {
-        recipeService = new RecipeService(new MySQLConnector(), new RecipeManager(), new IngredientManager());
+        IngredientManager ingredientManager = new IngredientManager();
+
+        recipeService = new RecipeService(new MySQLConnector(), new RecipeManager(ingredientManager), ingredientManager);
         valorationService = new ValorationService(new MySQLConnector(), new ValorationManager());
     }
 

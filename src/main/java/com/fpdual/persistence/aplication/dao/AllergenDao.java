@@ -16,13 +16,13 @@ import java.util.List;
 public class AllergenDao {
     private int id;
     private String name;
-//    private List<IngredientDao> ingredients; // Se usa en algún momento?
+
 
     public AllergenDao(ResultSet result) {
         try {
             this.id = result.getInt("id");
             this.name = result.getString("name");
-//            this.ingredients = new ArrayList<>();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

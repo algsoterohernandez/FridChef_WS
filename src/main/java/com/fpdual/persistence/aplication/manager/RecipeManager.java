@@ -16,8 +16,9 @@ public class RecipeManager {
 
     private final IngredientManager ingredientManager;
 
-    public RecipeManager() {
-        ingredientManager = new IngredientManager();
+    public RecipeManager(IngredientManager ingredientManager)
+    {
+        this.ingredientManager = ingredientManager;
     }
     public RecipeDao createRecipe(Connection con, RecipeDao recipe) throws SQLException {
 

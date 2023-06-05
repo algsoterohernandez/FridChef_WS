@@ -1,7 +1,6 @@
 package com.fpdual.persistence.aplication.dao;
 
-import com.fpdual.persistence.aplication.dao.IngredientDao;
-import com.fpdual.persistence.aplication.dao.RecipeDao;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

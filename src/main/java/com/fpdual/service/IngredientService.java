@@ -45,7 +45,6 @@ public class IngredientService {
             deleted = this.ingredientManager.deleteIngredient(con, id);
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             throw e;
         }
 
@@ -68,7 +67,6 @@ public class IngredientService {
                         ingredientDto = MappingUtils.mapIngredientToDto(ingredientDao);
                     }
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
                     throw e;
                 }
             }else {
