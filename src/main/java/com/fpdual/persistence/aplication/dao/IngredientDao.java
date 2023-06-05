@@ -11,18 +11,22 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
+@Builder
 
 public class IngredientDao {
     private int id;
     private String name;
     private List<AllergenDao> allergens;
 
+    public IngredientDao() {
+        allergens = new ArrayList<>();
+    }
 
     public IngredientDao(ResultSet result) {
         try {
             this.id = result.getInt("id");
             this.name = result.getString("name");
+            allergens = new ArrayList<>();
         } catch (SQLException e) {
             e.printStackTrace();
         }

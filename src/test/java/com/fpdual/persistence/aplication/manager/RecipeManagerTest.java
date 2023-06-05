@@ -1,7 +1,9 @@
 package com.fpdual.persistence.aplication.manager;
 
 import com.fpdual.enums.RecipeStatus;
+import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 import com.fpdual.persistence.aplication.dao.RecipeDao;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.*;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,20 +27,22 @@ import static org.mockito.Mockito.when;
 public class RecipeManagerTest {
     @InjectMocks
     private RecipeManager recipeManager;
+
     @Mock
-    private Connection con;
+    private Connection mockConnection;
     @Mock
-    private PreparedStatement stm;
+    private PreparedStatement mockStatement;
     @Mock
-    private ResultSet resultSet;
+    private ResultSet mockResultSet;
+    @Mock
+    private IngredientManager mockIngredientManager;
 
     private RecipeDao exampleRecipeDao;
     private List<RecipeDao> recipeDaoList;
 
     @BeforeEach
     public void init() {
-        recipeManager = new RecipeManager();
-
+        recipeManager = new RecipeManager(mockIngredientManager);
 
         exampleRecipeDao = new RecipeDao();
         exampleRecipeDao.setId(1);
@@ -50,16 +56,16 @@ public class RecipeManagerTest {
     public void testFindByStatusPending_validConnection_recipeDaoListNotNull() throws SQLException {
 
         //Prepare method dependencies
-        when(resultSet.next()).thenReturn(true,false);
+        when(mockResultSet.next()).thenReturn(true,false);
 
-        when(resultSet.getString(anyString())).thenReturn(RecipeStatus.PENDING.name());
+        when(mockResultSet.getString(anyString())).thenReturn(RecipeStatus.PENDING.name());
 
-        when(stm.executeQuery()).thenReturn(resultSet);
+        when(mockStatement.executeQuery()).thenReturn(mockResultSet);
 
-        when(con.prepareStatement(anyString())).thenReturn(stm);
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockStatement);
 
         //Execute method
-        recipeDaoList = recipeManager.findByStatusPending(con);
+        recipeDaoList = recipeManager.findByStatusPending(mockConnection);
 
         //Asserts
         assertNotNull(recipeDaoList);
@@ -70,48 +76,189 @@ public class RecipeManagerTest {
     public void testFindByStatusPending_validConnection_recipeDaoListSQLException() throws SQLException {
 
         //Prepare method dependencies
-        when(con.prepareStatement(anyString())).thenThrow(SQLException.class);
+        when(mockConnection.prepareStatement(anyString())).thenThrow(SQLException.class);
 
         //Asserts
-        assertNull(recipeManager.findByStatusPending(con));
+        assertNull(recipeManager.findByStatusPending(mockConnection));
     }
 
-//    @Test
-//    void testFindAll() throws SQLException {
-//        // Crear una instancia mock de Connection, Statement y ResultSet
-//        Connection mockConnection = mock(Connection.class);
-//        Statement mockStatement = mock(Statement.class);
-//        ResultSet mockResultSet = mock(ResultSet.class);
-//
-//        // Configurar el comportamiento simulado del mock Statement y ResultSet
-//        when(mockConnection.createStatement()).thenReturn(mockStatement);
-//        when(mockStatement.executeQuery(ArgumentMatchers.anyString())).thenReturn(mockResultSet);
-//        when(mockResultSet.next()).thenReturn(true, true, false); // Simular dos filas en el ResultSet
-//
-//        // Configurar el comportamiento simulado del mock ResultSet para devolver los valores de las columnas
-//        when(mockResultSet.getInt("id")).thenReturn(1, 2);
-//        when(mockResultSet.getString("name")).thenReturn("Recipe 1", "Recipe 2");
-//
-//        // Instanciar el objeto RecipeManager a probar
-//        RecipeManager recipeManager = new RecipeManager();
-//
-//        // Llamar al método bajo prueba
-//        List<RecipeDao> recipes = recipeManager.findAll(mockConnection);
-//
-//        // Verificar el resultado
-//        assertNotNull(recipes);
-//        assertEquals(2, recipes.size());
-//
-//        // Verificar la primera receta
-//        RecipeDao recipe1 = recipes.get(0);
-//        assertEquals(1, recipe1.getId());
-//        assertEquals("Recipe 1", recipe1.getName());
-//
-//        // Verificar la segunda receta
-//        RecipeDao recipe2 = recipes.get(1);
-//        assertEquals(2, recipe2.getId());
-//        assertEquals("Recipe 2", recipe2.getName());
-//    }
+    @Test
+    void testFindAll() throws SQLException {
+        // Crear una instancia mock de Connection, Statement y ResultSet
+        Connection mockConnection = mock(Connection.class);
+        Statement mockStatement = mock(Statement.class);
+        ResultSet mockResultSet = mock(ResultSet.class);
 
+
+        // Configurar el comportamiento simulado del mock Statement y ResultSet
+        when(mockConnection.createStatement()).thenReturn(mockStatement);
+        when(mockStatement.executeQuery(ArgumentMatchers.anyString())).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(true, true, false); // Simular dos filas en el ResultSet
+
+        // Configurar el comportamiento simulado del mock ResultSet para devolver los valores de las columnas
+        when(mockResultSet.getInt("id")).thenReturn(1, 2);
+        when(mockResultSet.getString("name")).thenReturn("Recipe 1", "Recipe 2");
+
+        when(mockIngredientManager.findIngredientsByRecipeId(any(), anyInt())).thenReturn(new ArrayList<>());
+
+        // Llamar al método bajo prueba
+        List<RecipeDao> recipes = recipeManager.findAll(mockConnection);
+
+        // Verificar el resultado
+        assertNotNull(recipes);
+        assertEquals(2, recipes.size());
+
+    }
+
+    @Test
+    void testFindAllWithSQLException() throws SQLException {
+        // Crear una instancia mock de Connection y Statement
+        Connection mockConnection = mock(Connection.class);
+        Statement mockStatement = mock(Statement.class);
+
+        // Configurar el comportamiento simulado del mock Statement para lanzar una SQLException
+        when(mockConnection.createStatement()).thenReturn(mockStatement);
+        when(mockStatement.executeQuery(ArgumentMatchers.anyString())).thenThrow(new SQLException());
+
+        // Llamar al método bajo prueba
+        List<RecipeDao> recipes = recipeManager.findAll(mockConnection);
+
+        // Verificar el resultado
+        assertNull(recipes);
+    }
+
+    @Test
+    public void testFindRecipesByIngredients() throws SQLException {
+        // Mock de datos
+        List<Integer> ingredientIds = new ArrayList<>();
+        ingredientIds.add(1);
+        ingredientIds.add(2);
+        ingredientIds.add(3);
+
+        LocalDate specificDate = LocalDate.of(2022, 5, 10);
+        Date specificSqlDate = Date.valueOf(specificDate);
+
+        RecipeDao recipe1 = new RecipeDao();
+        recipe1.setId(1);
+        recipe1.setName("ensalada");
+        recipe1.setDescription("ensalada");
+        recipe1.setDifficulty(1);
+        recipe1.setTime(1);
+        recipe1.setUnitTime("h");
+        recipe1.setIdCategory(1);
+        recipe1.setCreateTime(specificSqlDate);
+        recipe1.setImage(null);
+        recipe1.setStatus(RecipeStatus.valueOf("PENDING"));
+        recipe1.setValoration(5.0);
+
+
+        List<RecipeDao> expectedRecipes = new ArrayList<>();
+        expectedRecipes.add(recipe1);
+
+        // Mock del comportamiento del objeto Connection, PreparedStatement y ResultSet
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockStatement);
+        when(mockStatement.executeQuery()).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(true,  false);
+        when(mockResultSet.getInt("id")).thenReturn(1 );
+        when(mockResultSet.getString("name")).thenReturn("ensalada");
+        when(mockResultSet.getString("description")).thenReturn("ensalada");
+        when(mockResultSet.getInt("difficulty")).thenReturn(1);
+        when(mockResultSet.getInt("time")).thenReturn(1);
+        when(mockResultSet.getString("unit_time")).thenReturn("h");
+        when(mockResultSet.getInt("id_category")).thenReturn(1);
+        when(mockResultSet.getDate("create_time")).thenReturn(specificSqlDate);
+        when(mockResultSet.getBlob("image")).thenReturn(null);
+        when(mockResultSet.getString("status")).thenReturn("PENDING");
+        when(mockResultSet.getDouble("valoration")).thenReturn(5.0);
+
+        // Llamada al método que queremos probar
+        List<RecipeDao> actualRecipes = recipeManager.findRecipesByIngredients(mockConnection, ingredientIds);
+
+        // Verificar el resultado
+        assertEquals(expectedRecipes, actualRecipes);
+    }
+
+    @Test
+    void testFindRecipesByIngredientsWithSQLException() throws SQLException {
+        // Mock de datos
+        List<Integer> ingredientIds = new ArrayList<>();
+        ingredientIds.add(1);
+        ingredientIds.add(2);
+        ingredientIds.add(3);
+
+        // Mock del comportamiento del objeto Connection y PreparedStatement
+        when(mockConnection.prepareStatement(anyString())).thenThrow(new SQLException());
+
+        // Llamada al método que queremos probar
+        List<RecipeDao> actualRecipes = recipeManager.findRecipesByIngredients(mockConnection, ingredientIds);
+
+        // Verificar el resultado
+        assertEquals(Collections.emptyList(), actualRecipes);
+    }
+
+
+    @Test
+    public void testFindRecipeSuggestions() throws SQLException {
+        // Mock de datos
+        List<Integer> ingredientIds = new ArrayList<>();
+        ingredientIds.add(1);
+        ingredientIds.add(2);
+        ingredientIds.add(3);
+
+        RecipeDao recipe1 = new RecipeDao();
+        recipe1.setId(1);
+        recipe1.setName("ensalada");
+        recipe1.setDescription("ensalada");
+        recipe1.setDifficulty(1);
+        recipe1.setTime(1);
+        recipe1.setUnitTime("h");
+        recipe1.setIdCategory(1);
+        recipe1.setCreateTime(null);
+        recipe1.setImage(null);
+        recipe1.setStatus(RecipeStatus.ACCEPTED);
+        recipe1.setValoration(0.0);
+
+        List<RecipeDao> expectedRecipes = new ArrayList<>();
+        expectedRecipes.add(recipe1);
+
+        // Mock del comportamiento del objeto Connection, PreparedStatement y ResultSet
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockStatement);
+        when(mockStatement.executeQuery()).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(true, false);
+        when(mockResultSet.getInt("id")).thenReturn(1);
+        when(mockResultSet.getString("name")).thenReturn("ensalada");
+        when(mockResultSet.getString("description")).thenReturn("ensalada");
+        when(mockResultSet.getInt("difficulty")).thenReturn(1);
+        when(mockResultSet.getInt("time")).thenReturn(1);
+        when(mockResultSet.getString("unit_time")).thenReturn("h");
+        when(mockResultSet.getInt("id_category")).thenReturn(1);
+        when(mockResultSet.getDate("create_time")).thenReturn(null);
+        when(mockResultSet.getBlob("image")).thenReturn(null);
+        when(mockResultSet.getString("status")).thenReturn("ACCEPTED");
+        when(mockResultSet.getDouble("valoration")).thenReturn(0.0);
+
+        // Llamada al método que queremos probar
+        List<RecipeDao> actualRecipes = recipeManager.findRecipeSuggestions(mockConnection, ingredientIds);
+
+        // Verificar el resultado
+        assertEquals(expectedRecipes, actualRecipes);
+    }
+    @Test
+    void testFindRecipeSuggestionsWithSQLException() throws SQLException {
+        // Mock de datos
+        List<Integer> ingredientIds = new ArrayList<>();
+        ingredientIds.add(1);
+        ingredientIds.add(2);
+        ingredientIds.add(3);
+
+        // Mock del comportamiento del objeto Connection y PreparedStatement
+        when(mockConnection.prepareStatement(anyString())).thenThrow(new SQLException());
+
+        // Llamada al método que queremos probar
+        List<RecipeDao> actualRecipes = recipeManager.findRecipeSuggestions(mockConnection, ingredientIds);
+
+        // Verificar el resultado
+        assertEquals(Collections.emptyList(), actualRecipes);
+    }
 
 }

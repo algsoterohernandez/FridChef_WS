@@ -50,7 +50,6 @@ public class IngredientController {
             rs = Response.status(HttpStatus.OK.getStatusCode()).entity(deleted).build();
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             rs = Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build();
         }
         return rs;

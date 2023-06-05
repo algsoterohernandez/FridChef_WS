@@ -29,11 +29,10 @@ public class AllergenService {
             if (allergenDaos != null) {
                 allergenDtoList = MappingUtils.mapAllergenListDto(allergenDaos);
             }
-
-
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            return allergenDtoList;
         }
+
         return allergenDtoList;
     }
 }

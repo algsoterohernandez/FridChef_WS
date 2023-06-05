@@ -142,7 +142,6 @@ public class RecipeService {
 
         } catch (Exception e) {
 
-            System.out.println(e.getMessage());
             throw e;
 
         }
@@ -168,8 +167,6 @@ public class RecipeService {
             }
 
         } catch (Exception e) {
-
-            System.out.println(e.getMessage());
             throw e;
 
         }

@@ -1,10 +1,7 @@
 package com.fpdual.persistence.aplication.dao;
 
 import com.fpdual.enums.RecipeStatus;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Blob;
 import java.sql.ResultSet;
@@ -16,6 +13,8 @@ import java.util.List;
 @Data
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 
 public class RecipeDao {
     private int id;
@@ -54,6 +53,8 @@ public class RecipeDao {
             e.printStackTrace();
         }
     }
+
+
 
     public void setIngredients(List<IngredientRecipeDao> ingredientList) {
         this.ingredients = ingredientList;

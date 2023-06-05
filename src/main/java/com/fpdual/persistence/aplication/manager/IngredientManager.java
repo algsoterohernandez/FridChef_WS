@@ -33,9 +33,6 @@ public class IngredientManager {
 
         }
         catch (SQLException e) {
-
-            System.out.println(e.getMessage());
-
             return null;
         }
 
@@ -53,8 +50,6 @@ public class IngredientManager {
             deleted = rowsDeleted > 0;
 
         } catch (SQLException e) {
-
-            System.out.println(e.getMessage());
             throw e;
 
         }
@@ -95,31 +90,6 @@ public class IngredientManager {
         return null;
     }
 
-
-    // No se usa, probar si es necesario para funcionalidad y si no borrar
-//    public List<IngredientDao> findRecipeIngredients(Connection con, int recipeId)
-//    {
-//        try (Statement stm = con.createStatement()) {
-//
-//            ResultSet result = stm.executeQuery("select i.* from ingredient i inner join ingredient_recipe ir on ir.id_ingredient = i.id where ir.id_recipe = " + recipeId);
-//
-//            List<IngredientDao> ingredients = new ArrayList<>();
-//
-//            while (result.next()) {
-//                IngredientDao ingredientDao = new IngredientDao(result);
-//                FillIngredientAllergens(con, ingredientDao);
-//
-//                ingredients.add(ingredientDao);
-//            }
-//
-//            return ingredients;
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-
     public List<IngredientRecipeDao> findIngredientsByRecipeId(Connection con, int recipeId)
     {
         try (Statement stm = con.createStatement()) {
@@ -143,10 +113,6 @@ public class IngredientManager {
         }
     }
 
-    private void FillIngredientAllergens(Connection con, IngredientDao ingredientDao)
-    {
-        ingredientDao.setAllergens(allergenManager.findIngredientAllergens(con, ingredientDao.getId()));
-    }
     private void FillIngredientAllergens(Connection con, IngredientRecipeDao ingredientRecipeDao)
     {
         ingredientRecipeDao.setAllergens(allergenManager.findIngredientAllergens(con, ingredientRecipeDao.getIdIngredient()));

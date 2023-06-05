@@ -3,7 +3,6 @@ package com.fpdual.api.dto;
 import com.fpdual.enums.RecipeStatus;
 import lombok.*;
 
-import java.sql.Blob;
 import java.util.Date;
 import java.util.List;
 

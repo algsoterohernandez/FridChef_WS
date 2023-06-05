@@ -5,6 +5,7 @@ import com.fpdual.persistence.aplication.dao.IngredientDao;
 import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 import com.fpdual.persistence.aplication.dao.RecipeDao;
 import com.fpdual.persistence.aplication.manager.CategoryManager;
+import com.fpdual.persistence.aplication.manager.IngredientManager;
 import com.fpdual.persistence.aplication.manager.RecipeManager;
 import com.fpdual.utils.MappingUtils;
 import lombok.*;
@@ -24,7 +25,7 @@ public class CategoryService {
     public CategoryService(Connection connector) {
         this.connector = connector;
         this.categoryManager = new CategoryManager();
-        this.recipeManager = new RecipeManager();
+        this.recipeManager = new RecipeManager(new IngredientManager());
     }
 
     public CategoryDto findCategoryById(int id) {
