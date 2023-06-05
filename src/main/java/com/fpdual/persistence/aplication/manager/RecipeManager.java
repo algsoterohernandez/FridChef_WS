@@ -86,10 +86,15 @@ public class RecipeManager {
             return null;
         }
     }
-    public List<RecipeDao> findBy(Connection con, List<String> idsRecipe, int idCategory, boolean orderByPopular, int limit) {
+
+    public List<RecipeDao> findBy(Connection con, List<String> idsRecipe, int idCategory, boolean orderByPopular, int limit, boolean onlyAccepted) {
 
         try (Statement stm = con.createStatement()) {
-            String sql = "select *, (SELECT AVG(valoration) FROM valoration v where v.id_recipe = r.id) as valoration, (SELECT COUNT(valoration) FROM valoration v where v.id_recipe = r.id) as total_valoration from recipe r WHERE status='ACCEPTED' ";
+            String sql = "select *, (SELECT AVG(valoration) FROM valoration v where v.id_recipe = r.id) as valoration, (SELECT COUNT(valoration) FROM valoration v where v.id_recipe = r.id) as total_valoration from recipe r WHERE TRUE ";
+            if( onlyAccepted ){
+                sql += "AND status = 'ACCEPTED'";
+            }
+
             if (idsRecipe != null && !idsRecipe.isEmpty()) {
                 sql += " AND id in (" + String.join(",", idsRecipe) + ")";
             }

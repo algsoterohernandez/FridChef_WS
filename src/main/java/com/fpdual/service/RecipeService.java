@@ -43,11 +43,11 @@ public class RecipeService {
         return recipeDtos;
     }
 
-    public List<RecipeDto> findBy(List<String> idsRecipe, int idCategory, boolean orderByPopular, int limit) {
+    public List<RecipeDto> findBy(List<String> idsRecipe, int idCategory, boolean orderByPopular, int limit, boolean onlyAccepted) {
         List<RecipeDto> recipeDtos = null;
         try (Connection con = connector.getMySQLConnection()) {
 
-            List<RecipeDao> recipeDaos = recipeManager.findBy(con, idsRecipe, idCategory, orderByPopular, limit);
+            List<RecipeDao> recipeDaos = recipeManager.findBy(con, idsRecipe, idCategory, orderByPopular, limit, onlyAccepted);
 
             if (recipeDaos != null) {
                 recipeDtos = MappingUtils.mapRecipeListToDto(recipeDaos);

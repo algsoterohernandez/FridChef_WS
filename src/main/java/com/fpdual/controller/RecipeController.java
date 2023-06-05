@@ -49,11 +49,12 @@ public class RecipeController {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response recipeDetails(@PathParam("id") int id) {
+    public Response recipeDetails(@PathParam("id") int id,
+                                  @DefaultValue("1") @QueryParam("only_accepted") String onlyAccepted) {
 
         List<String> ids = new ArrayList<>();
         ids.add(String.valueOf(id));
-        List<RecipeDto> recipe = recipeService.findBy(ids, 0, false, 1);
+        List<RecipeDto> recipe = recipeService.findBy(ids, 0, false, 1, onlyAccepted.equals("1"));
         if (recipe.isEmpty()) {
             return Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build();
         } else {
@@ -216,7 +217,7 @@ public class RecipeController {
         Response rs;
         try {
 
-            List<RecipeDto> recipeList = recipeService.findBy(new ArrayList<>(), 0, true, limit);
+            List<RecipeDto> recipeList = recipeService.findBy(new ArrayList<>(), 0, true, limit, true);
             return Optional.ofNullable(recipeList)
                     .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
                     .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
@@ -236,7 +237,7 @@ public class RecipeController {
         Response rs;
         try {
             List<String> stringId = Arrays.asList(ids.split(","));
-            List<RecipeDto> recipeList = recipeService.findBy(stringId, 0, false, 0);
+            List<RecipeDto> recipeList = recipeService.findBy(stringId, 0, false, 0, true);
             return Optional.ofNullable(recipeList)
                     .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
                     .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
