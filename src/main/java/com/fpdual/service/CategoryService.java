@@ -77,7 +77,7 @@ public class CategoryService {
         List<RecipeDto> filteredRecipes = new ArrayList<>();
 
         int idCategory = categoryDto.getId();
-        List<RecipeDao> recipes = recipeManager.findBy(connector, new ArrayList<>(), categoryDto.getId(), false, limit);
+        List<RecipeDao> recipes = recipeManager.findBy(connector, new ArrayList<>(), categoryDto.getId(), false, limit, true);
         for(RecipeDao recipeDao : recipes){
             RecipeDto recipeDto = MappingUtils.mapRecipeToDto(recipeDao);
             filteredRecipes.add(recipeDto);

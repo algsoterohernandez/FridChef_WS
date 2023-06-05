@@ -67,10 +67,10 @@ class RecipeServiceTest {
         List<RecipeDto> expectedRecipeDtos = MappingUtils.mapRecipeListToDto(recipeDaos);
 
         // Mock del comportamiento del objeto RecipeManager
-        when(mockRecipeManager.findBy(any(), anyList(), anyInt(), anyBoolean(), anyInt())).thenReturn(recipeDaos);
+        when(mockRecipeManager.findBy(any(), anyList(), anyInt(), anyBoolean(), anyInt(), true)).thenReturn(recipeDaos);
 
         // Llamada al método que queremos probar
-        List<RecipeDto> actualRecipeDtos = recipeService.findBy(new ArrayList<>(), 1, false, 10);
+        List<RecipeDto> actualRecipeDtos = recipeService.findBy(new ArrayList<>(), 1, false, 10, true);
 
         // Verificar el resultado
         assertEquals(expectedRecipeDtos, actualRecipeDtos);
