@@ -1,10 +1,12 @@
 package com.fpdual.persistence.aplication.manager;
 
-import com.fpdual.persistence.aplication.dao.AllergenDao;
+
+
 import com.fpdual.persistence.aplication.dao.IngredientDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -17,21 +19,27 @@ import static org.mockito.Mockito.*;
 
 class IngredientManagerTest {
 
-    @Mock
-    private Connection mockConnection;
-
-    @Mock
-    private PreparedStatement mockStatement;
-
-    @Mock
-    private ResultSet mockResultSet;
-
+    @InjectMocks
     private IngredientManager ingredientManager;
+    @Mock
+    private Connection con;
+
+    @Mock
+    private PreparedStatement stm;
+
+    @Mock
+    private ResultSet resultSetMock;
+    private IngredientDao exampleIngredientDao;
+
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         ingredientManager = new IngredientManager();
+
+        exampleIngredientDao = new IngredientDao();
+        exampleIngredientDao.setId(6);
+        exampleIngredientDao.setName("Lechuga");
     }
 
     @Test
@@ -52,24 +60,24 @@ class IngredientManagerTest {
         expectedIngredients.add(ingredient1);
         expectedIngredients.add(ingredient2);
 
-        when(mockConnection.createStatement()).thenReturn(mockStatement);
-        when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
-        when(mockResultSet.next()).thenReturn(true, true, false);
-        when(mockResultSet.getInt("id")).thenReturn(1, 2);
-        when(mockResultSet.getString("name")).thenReturn("aguacate", "tomate");
+        when(con.createStatement()).thenReturn(stm);
+        when(stm.executeQuery(anyString())).thenReturn(resultSetMock);
+        when(resultSetMock.next()).thenReturn(true, true, false);
+        when(resultSetMock.getInt("id")).thenReturn(1, 2);
+        when(resultSetMock.getString("name")).thenReturn("aguacate", "tomate");
 
-        List<IngredientDao> ingredients = ingredientManager.findAll(mockConnection);
+        List<IngredientDao> ingredients = ingredientManager.findAll(con);
 
         assertNotNull(ingredients);
         assertEquals(expectedIngredients.size(), ingredients.size());
         assertEquals(expectedIngredients.get(0), ingredients.get(0));
         assertEquals(expectedIngredients.get(1), ingredients.get(1));
 
-        verify(mockConnection).createStatement();
-        verify(mockStatement).executeQuery(anyString());
-        verify(mockResultSet, times(3)).next();
-        verify(mockResultSet, times(2)).getInt("id");
-        verify(mockResultSet, times(2)).getString("name");
+        verify(con).createStatement();
+        verify(stm).executeQuery(anyString());
+        verify(resultSetMock, times(3)).next();
+        verify(resultSetMock, times(2)).getInt("id");
+        verify(resultSetMock, times(2)).getString("name");
     }
 
     @Test
@@ -121,5 +129,77 @@ class IngredientManagerTest {
 
         // Verificar el resultado
         assertNull(actualId);
+    }
+
+    @Test
+    public void testInsertIngredient_validConnectionName_ingredientDaoNotNull() throws SQLException {
+
+        //Prepare method dependencies
+        when(resultSetMock.next()).thenReturn(true);
+        when(resultSetMock.getInt(anyInt())).thenReturn(100);
+
+        when(stm.getGeneratedKeys()).thenReturn(resultSetMock);
+        when(stm.executeUpdate()).thenReturn(1);
+
+        when(con.prepareStatement(anyString(), anyInt())).thenReturn(stm);
+
+        //Execute method
+        IngredientDao ingredientDaoRs = ingredientManager.insertIngredient(con, exampleIngredientDao.getName());
+
+        //Asserts
+        assertNotNull(ingredientDaoRs);
+    }
+
+    @Test
+    public void testInsertIngredient_validConnectionName_ingredientDaoSQLException() throws SQLException {
+
+        //Prepare method dependencies
+        when(con.prepareStatement(anyString(), anyInt())).thenThrow(SQLException.class);
+
+        //Execute method
+        IngredientDao ingredientDaoRs = ingredientManager.insertIngredient(con, exampleIngredientDao.getName());
+
+        //Asserts
+        assertNull(ingredientDaoRs);
+    }
+
+    @Test
+    public void testDeleteUser_validConnectionAndEmail_true() throws SQLException {
+
+        //Prepare method dependencies
+        when(stm.executeUpdate()).thenReturn(1);
+
+        when(con.prepareStatement(anyString())).thenReturn(stm);
+
+        //Execute method
+        boolean deleted = ingredientManager.deleteIngredient(con, exampleIngredientDao.getId());
+
+        //Asserts
+        assertTrue(deleted);
+    }
+
+    @Test
+    public void testDeleteUser_validConnectionAndEmail_false() throws SQLException {
+
+        //Prepare method dependencies
+        when(stm.executeUpdate()).thenReturn(0);
+
+        when(con.prepareStatement(anyString())).thenReturn(stm);
+
+        //Execute method
+        boolean deleted = ingredientManager.deleteIngredient(con, exampleIngredientDao.getId());
+
+        //Asserts
+        assertFalse(deleted);
+    }
+
+    @Test
+    public void testDeleteUser_validConnectionAndEmail_userSQLException() throws SQLException {
+
+        //Prepare method dependencies
+        when(con.prepareStatement(anyString())).thenThrow(SQLException.class);
+
+        //Asserts
+        assertThrows(SQLException.class, () -> ingredientManager.deleteIngredient(con, exampleIngredientDao.getId()));
     }
 }

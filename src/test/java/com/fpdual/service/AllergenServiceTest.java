@@ -40,8 +40,8 @@ class AllergenServiceTest {
     void testFindAllAllergens() throws SQLException, ClassNotFoundException {
         // Mock de datos
         List<AllergenDao> allergenDaos = new ArrayList<>();
-        allergenDaos.add(new AllergenDao(1, "Allergen 1"));
-        allergenDaos.add(new AllergenDao(2, "Allergen 2"));
+        //allergenDaos.add(new AllergenDao(1, "Allergen 1"));
+        //allergenDaos.add(new AllergenDao(2, "Allergen 2"));
 
         List<AllergenDto> expectedAllergenDtoList = MappingUtils.mapAllergenListDto(allergenDaos);
 

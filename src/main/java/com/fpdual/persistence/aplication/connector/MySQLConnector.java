@@ -8,13 +8,21 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class MySQLConnector{
+/**
+ * Clase para establecer una conexión con una base de datos MySQL.
+ */
+public class MySQLConnector {
 
+    /**
+     * Propiedades de configuración para la conexión.
+     */
     @Getter
-
     private Properties prop = new Properties();
 
-    public MySQLConnector(){
+    /**
+     * Constructor de la clase. Carga las propiedades de configuración desde el archivo "config.properties".
+     */
+    public MySQLConnector() {
         try {
             prop.load(getClass().getClassLoader().getResourceAsStream("config.properties"));
         } catch (IOException e) {
@@ -22,22 +30,31 @@ public class MySQLConnector{
         }
     }
 
+    /**
+     * Obtiene una conexión a la base de datos MySQL.
+     *
+     * @return Objeto Connection que representa la conexión establecida.
+     * @throws ClassNotFoundException Si no se encuentra el controlador de la base de datos.
+     * @throws SQLException           Si ocurre un error al establecer la conexión.
+     */
     public Connection getMySQLConnection() throws ClassNotFoundException, SQLException {
         try {
-
             Class.forName(prop.getProperty(MySQLConstants.DRIVER));
-
-            return  DriverManager.getConnection(getURL());
-
+            return DriverManager.getConnection(getURL());
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             throw e;
         }
     }
 
+    /**
+     * Construye la URL de conexión a la base de datos MySQL a partir de las propiedades de configuración.
+     *
+     * @return URL de conexión a la base de datos MySQL.
+     */
     private String getURL() {
-
-        return new StringBuilder().append(prop.getProperty(MySQLConstants.URL_PREFIX))
+        return new StringBuilder()
+                .append(prop.getProperty(MySQLConstants.URL_PREFIX))
                 .append(prop.getProperty(MySQLConstants.URL_HOST)).append(":")
                 .append(prop.getProperty(MySQLConstants.URL_PORT)).append("/")
                 .append(prop.getProperty(MySQLConstants.URL_SCHEMA)).append("?user=")
@@ -48,9 +65,15 @@ public class MySQLConnector{
                 .append(prop.getProperty(MySQLConstants.USE_JDBC_COMPLIANT_TIMEZONE_SHIFT)).append(("&useLegacyDatetimeCode="))
                 .append(prop.getProperty(MySQLConstants.USE_LEGACY_DATE_TIME_CODE)).append(("&serverTimezone="))
                 .append(prop.getProperty(MySQLConstants.SERVER_TIMEZONE)).toString();
-
     }
 
+    /**
+     * Método principal de la clase para probar la conexión a la base de datos.
+     *
+     * @param args Argumentos de línea de comandos.
+     * @throws SQLException           Si ocurre un error al establecer la conexión.
+     * @throws ClassNotFoundException Si no se encuentra el controlador de la base de datos.
+     */
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         MySQLConnector connector = new MySQLConnector();
         Connection connection = connector.getMySQLConnection();

@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Controlador para las operaciones relacionadas con las recetas.
+ */
 @Path("/recipes")
 public class RecipeController {
 
@@ -28,6 +31,10 @@ public class RecipeController {
 
     private final ValorationService valorationService;
 
+    /**
+     * Constructor de la clase RecipeController.
+     * Inicializa los servicios necesarios para manejar las recetas y valoraciones.
+     */
     public RecipeController() {
         IngredientManager ingredientManager = new IngredientManager();
 
@@ -35,7 +42,11 @@ public class RecipeController {
         valorationService = new ValorationService(new MySQLConnector(), new ValorationManager());
     }
 
-
+    /**
+     * Obtiene todas las recetas.
+     *
+     * @return Respuesta HTTP con la lista de recetas si se encuentra, o un error si ocurre un problema.
+     */
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
@@ -46,6 +57,12 @@ public class RecipeController {
                 .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
     }
 
+    /**
+     * Obtiene los detalles de una receta específica.
+     *
+     * @param id El ID de la receta.
+     * @return Respuesta HTTP con los detalles de la receta si se encuentra, o un error si no se encuentra.
+     */
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -64,7 +81,12 @@ public class RecipeController {
         }
     }
 
-
+    /**
+     * Crea una nueva receta.
+     *
+     * @param recipeDto Objeto RecipeDto que contiene los datos de la receta a crear.
+     * @return Respuesta HTTP con la receta creada si se realiza correctamente, o un error si ocurre algún problema.
+     */
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
@@ -88,7 +110,12 @@ public class RecipeController {
         return rs;
     }
 
-
+    /**
+     * Crea una nueva valoración para una receta.
+     *
+     * @param valorationDto Objeto ValorationDto que contiene los datos de la valoración.
+     * @return Respuesta HTTP con la valoración creada si se realiza correctamente, o un error si ocurre algún problema.
+     */
     @POST
     @Path("/{id}/rating")
     @Produces(MediaType.APPLICATION_JSON)
@@ -143,6 +170,12 @@ public class RecipeController {
 //            throw new RuntimeException(e);
 //        }
 
+    /**
+     * Busca recetas por ingredientes.
+     *
+     * @param recipeFilterDto Objeto RecipeFilterDto que contiene los ingredientes de búsqueda.
+     * @return Respuesta HTTP con la lista de recetas encontradas si hay resultados, o un error si ocurre algún problema.
+     */
     @POST
     @Path("/findbyingredients")
     @Produces(MediaType.APPLICATION_JSON)
@@ -161,7 +194,12 @@ public class RecipeController {
         }
     }
 
-
+    /**
+     * Obtiene sugerencias de recetas basadas en los ingredientes proporcionados.
+     *
+     * @param recipeFilterDto Objeto RecipeFilterDto que contiene los ingredientes para sugerir recetas.
+     * @return Respuesta HTTP con la lista de recetas sugeridas si hay resultados, o un error si ocurre algún problema.
+     */
     @POST
     @Path("/findSuggestions")
     @Produces(MediaType.APPLICATION_JSON)
@@ -186,6 +224,11 @@ public class RecipeController {
         return rs;
     }
 
+    /**
+     * Obtiene las recetas con estado pendiente.
+     *
+     * @return Respuesta HTTP con la lista de recetas pendientes si hay resultados, o un error si ocurre algún problema.
+     */
     @GET
     @Path("/find-pending")
     @Produces(MediaType.APPLICATION_JSON)
@@ -235,21 +278,34 @@ public class RecipeController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response findFavorites(@QueryParam("ids") String ids) {
         Response rs;
+
         try {
             List<String> stringId = Arrays.asList(ids.split(","));
-            List<RecipeDto> recipeList = recipeService.findBy(stringId, 0, false, 0, true);
-            return Optional.ofNullable(recipeList)
-                    .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
-                    .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
 
+            List<RecipeDto> recipeList = recipeService.findBy(stringId, 0, false, 0, true);
+
+            if (recipeList == null) {
+                rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
+
+            } else {
+                rs = Optional.ofNullable(recipeList)
+                        .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
+                        .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
+            }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             rs = Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build();
         }
 
         return rs;
     }
 
+    /**
+     * Actualiza el estado de una receta.
+     *
+     * @param id     El ID de la receta a actualizar.
+     * @param status El nuevo estado de la receta.
+     * @return Respuesta HTTP con la receta actualizada si se realiza correctamente, o un error si ocurre algún problema.
+     */
     @GET
     @Path("/update-status/{id}/{status}")
     @Produces(MediaType.APPLICATION_JSON)

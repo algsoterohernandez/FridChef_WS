@@ -7,15 +7,28 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase que gestiona las operaciones relacionadas con los ingredientes.
+ */
 public class IngredientManager {
 
     private final AllergenManager allergenManager;
 
+    /**
+     * Constructor de IngredientManager.
+     * Inicializa el AllergenManager.
+     */
     public IngredientManager() {
         allergenManager = new AllergenManager();
     }
 
-
+    /**
+     * Inserta un nuevo ingrediente en la base de datos.
+     *
+     * @param con  Conexión a la base de datos.
+     * @param name Nombre del ingrediente.
+     * @return Objeto IngredientDao creado.
+     */
     public IngredientDao insertIngredient(Connection con, String name){
         IngredientDao ingredient = new IngredientDao();
         ingredient.setName(name);
@@ -38,6 +51,14 @@ public class IngredientManager {
 
     }
 
+    /**
+     * Elimina un ingrediente de la base de datos.
+     *
+     * @param con Conexión a la base de datos.
+     * @param id  ID del ingrediente a eliminar.
+     * @return true si se eliminó correctamente, false en caso contrario.
+     * @throws SQLException Si ocurre un error de SQL.
+     */
     public boolean deleteIngredient(Connection con, int id) throws SQLException {
         boolean deleted;
 
@@ -57,6 +78,12 @@ public class IngredientManager {
         return deleted;
     }
 
+    /**
+     * Obtiene todos los ingredientes de la base de datos.
+     *
+     * @param con Conexión a la base de datos.
+     * @return Lista de IngredientDao que representa todos los ingredientes.
+     */
     public List<IngredientDao> findAll(Connection con) {
         try (Statement stm = con.createStatement()) {
             ResultSet result = stm.executeQuery("select * from ingredient order by name ASC");
@@ -75,6 +102,13 @@ public class IngredientManager {
         }
     }
 
+    /**
+     * Obtiene el ID de un ingrediente por su nombre.
+     *
+     * @param con            Conexión a la base de datos.
+     * @param ingredientName Nombre del ingrediente.
+     * @return ID del ingrediente si existe, null si no se encuentra.
+     */
     public Integer getIngredientIdByName(Connection con, String ingredientName) {
         try (Statement stm = con.createStatement()) {
 
@@ -90,6 +124,13 @@ public class IngredientManager {
         return null;
     }
 
+    /**
+     * Obtiene los ingredientes de una receta.
+     *
+     * @param con      Conexión a la base de datos.
+     * @param recipeId ID de la receta.
+     * @return Lista de IngredientRecipeDao que representa los ingredientes de la receta.
+     */
     public List<IngredientRecipeDao> findIngredientsByRecipeId(Connection con, int recipeId)
     {
         try (Statement stm = con.createStatement()) {
@@ -113,9 +154,14 @@ public class IngredientManager {
         }
     }
 
+    /**
+     * Rellena los alérgenos de un ingrediente de una receta.
+     *
+     * @param con                 Conexión a la base de datos.
+     * @param ingredientRecipeDao Objeto IngredientRecipeDao al que se le asignarán los alérgenos.
+     */
     private void FillIngredientAllergens(Connection con, IngredientRecipeDao ingredientRecipeDao)
     {
         ingredientRecipeDao.setAllergens(allergenManager.findIngredientAllergens(con, ingredientRecipeDao.getIdIngredient()));
     }
 }
-

@@ -12,17 +12,32 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+/**
+ * Controlador para las operaciones relacionadas con los usuarios.
+ * <p>
+ * Esta clase gestiona las operaciones CRUD para los usuarios.
+ */
 @Path("/user")
-
 public class UserController {
     private final UserService userService;
     private final FavoriteService favoriteService;
 
+    /**
+     * Constructor de la clase UserController.
+     * <p>
+     * Inicializa el servicio UserService con las dependencias necesarias.
+     */
     public UserController() {
         userService = new UserService(new MySQLConnector(), new UserManager(), new RolManager(), new FavoriteManager());
         favoriteService = new FavoriteService(new MySQLConnector(), new FavoriteManager());
     }
 
+    /**
+     * Crea un nuevo usuario.
+     *
+     * @param userDto Objeto UserDto que contiene los datos del usuario a crear.
+     * @return Response con el resultado de la operación.
+     */
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
@@ -51,11 +66,18 @@ public class UserController {
         return rs;
     }
 
+
+    /**
+     * Elimina un usuario.
+     *
+     * @param email Email del usuario a eliminar.
+     * @return Response con el resultado de la operación.
+     */
     @DELETE
     @Path("/delete/{email}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteUser(@PathParam("email") String email) {
-        Response rs = null;
+        Response rs;
         try {
             boolean deleted = userService.deleteUser(email);
 
@@ -68,11 +90,17 @@ public class UserController {
         return rs;
     }
 
+    /**
+     * Busca un usuario.
+     *
+     * @param userDto Objeto UserDto que contiene los datos del usuario a buscar.
+     * @return Response con el resultado de la operación.
+     */
     @POST
     @Path("/find")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findUser(UserDto userDto) {
-        Response rs = null;
+        Response rs;
         try {
             if (userDto.getEmail() == null || userDto.getPassword() == null) {
                 rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
