@@ -12,8 +12,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import com.fpdual.api.dto.UserDto;
-
 /**
  * Controlador para las operaciones relacionadas con los usuarios.
  * <p>
@@ -22,6 +20,7 @@ import com.fpdual.api.dto.UserDto;
 @Path("/user")
 public class UserController {
     private final UserService userService;
+    private final FavoriteService favoriteService;
 
     /**
      * Constructor de la clase UserController.

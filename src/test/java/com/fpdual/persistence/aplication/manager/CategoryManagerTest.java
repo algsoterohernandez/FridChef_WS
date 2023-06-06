@@ -1,18 +1,15 @@
 package com.fpdual.persistence.aplication.manager;
 
 import com.fpdual.api.dto.CategoryDto;
-import com.fpdual.exceptions.CategoryAlreadyExistsException;
-import com.fpdual.persistence.aplication.manager.CategoryManager;
+import com.fpdual.exceptions.AlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -75,7 +72,7 @@ public class CategoryManagerTest {
     }
 
     @Test
-    public void testCreateCategory_validConnectionAndCategoryDto_categoryDtoNotNull() throws CategoryAlreadyExistsException, SQLException {
+    public void testCreateCategory_validConnectionAndCategoryDto_categoryDtoNotNull() throws AlreadyExistsException, SQLException {
         //Prepare method dependencies
         when(resultSetMock.next()).thenReturn(true);
         when(resultSetMock.getInt(1)).thenReturn(1);
