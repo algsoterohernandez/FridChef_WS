@@ -12,7 +12,6 @@ import com.fpdual.utils.MappingUtils;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 public class RecipeService {

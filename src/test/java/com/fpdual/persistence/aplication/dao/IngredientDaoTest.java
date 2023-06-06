@@ -1,6 +1,6 @@
 package com.fpdual.persistence.aplication.dao;
 
-import com.fpdual.persistence.aplication.dao.IngredientDao;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

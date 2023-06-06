@@ -283,14 +283,16 @@ public class RecipeManager {
     public RecipeDao updateRecipeStatus(Connection con, int id, String status) {
         RecipeDao recipeDao = null;
 
-        try (PreparedStatement updateStm = con.prepareStatement("UPDATE recipe SET status = ? WHERE id = ?")) {
+        try (PreparedStatement stm = con.prepareStatement("UPDATE recipe SET status = ? WHERE id = ?")) {
+
             if (status.equals(RecipeStatus.ACCEPTED.name())) {
-                updateStm.setString(1, RecipeStatus.ACCEPTED.getStatus());
+                stm.setString(1, RecipeStatus.ACCEPTED.getStatus());
             } else if (status.equals(RecipeStatus.DECLINED.name())) {
-                updateStm.setString(1, RecipeStatus.DECLINED.getStatus());
+                stm.setString(1, RecipeStatus.DECLINED.getStatus());
             }
-            updateStm.setInt(2, id);
-            updateStm.executeUpdate();
+
+            stm.setInt(2, id);
+            stm.executeUpdate();
 
             // Consulta adicional para obtener los datos actualizados
             try (PreparedStatement selectStm = con.prepareStatement("SELECT * FROM recipe WHERE id = ?")) {

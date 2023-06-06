@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -26,9 +27,13 @@ public class RecipeManagerTest {
     @Mock
     private PreparedStatement stm;
     @Mock
-    private ResultSet resultSet;
+    private PreparedStatement selectStm;
+    @Mock
+    private ResultSet result;
 
     private RecipeDao exampleRecipeDao;
+    private RecipeDao exampleRecipeDaoAccepted;
+    private RecipeDao exampleRecipeDaoDeclined;
     private List<RecipeDao> recipeDaoList;
 
     @BeforeEach
@@ -40,6 +45,18 @@ public class RecipeManagerTest {
         exampleRecipeDao.setId(1);
         exampleRecipeDao.setStatus(RecipeStatus.PENDING);
 
+        exampleRecipeDaoAccepted = new RecipeDao();
+        exampleRecipeDaoAccepted.setId(2);
+        exampleRecipeDaoAccepted.setName("Tomate");
+        exampleRecipeDaoAccepted.setDescription("En esta receta...");
+        exampleRecipeDaoAccepted.setStatus(RecipeStatus.ACCEPTED);
+
+        exampleRecipeDaoDeclined = new RecipeDao();
+        exampleRecipeDaoDeclined.setId(3);
+        exampleRecipeDaoDeclined.setName("Lechuga");
+        exampleRecipeDaoDeclined.setDescription("En esta receta...");
+        exampleRecipeDaoDeclined.setStatus(RecipeStatus.DECLINED);
+
         recipeDaoList = new ArrayList<>();
         recipeDaoList.add(exampleRecipeDao);
     }
@@ -48,11 +65,11 @@ public class RecipeManagerTest {
     public void testFindByStatusPending_validConnection_recipeDaoListNotNull() throws SQLException {
 
         //Prepare method dependencies
-        when(resultSet.next()).thenReturn(true,false);
+        when(result.next()).thenReturn(true,false);
 
-        when(resultSet.getString(anyString())).thenReturn(RecipeStatus.PENDING.name());
+        when(result.getString(anyString())).thenReturn(RecipeStatus.PENDING.name());
 
-        when(stm.executeQuery()).thenReturn(resultSet);
+        when(stm.executeQuery()).thenReturn(result);
 
         when(con.prepareStatement(anyString())).thenReturn(stm);
 
@@ -72,6 +89,35 @@ public class RecipeManagerTest {
 
         //Asserts
         assertNull(recipeManager.findByStatusPending(con));
+    }
+
+    /*@Test
+    public void testUpdateRecipeStatus_validConnectionIdStatus_recipeDaoNotNullAccepted() throws SQLException {
+        // Prepare method dependencies
+        when(result.getString(anyInt())).thenReturn(RecipeStatus.ACCEPTED.name());
+        when(result.next()).thenReturn(true);
+        when(selectStm.executeQuery()).thenReturn(result);
+
+        when(stm.executeUpdate()).thenReturn(1);
+
+        when(con.prepareStatement(anyString())).thenReturn(stm, selectStm);
+
+        // Execute method
+        RecipeDao recipeDaoRs = recipeManager.updateRecipeStatus(con, exampleRecipeDaoAccepted.getId(), String.valueOf(exampleRecipeDaoAccepted.getStatus()));
+
+        // Asserts
+        assertNotNull(recipeDaoRs);
+    }*/
+
+
+    @Test
+    public void testUpdateRecipeStatus_validConnectionIdStatus_recipeDaoSQLException() throws SQLException {
+
+        //Prepare method dependencies
+        when(con.prepareStatement(anyString())).thenThrow(SQLException.class);
+
+        //Asserts
+        assertNull(recipeManager.updateRecipeStatus(con, exampleRecipeDao.getId(), String.valueOf(exampleRecipeDao.getStatus())));
     }
 
 }

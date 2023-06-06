@@ -93,7 +93,6 @@ public class CategoryService {
         recipeDto.setDescription(recipeDao.getDescription());
         recipeDto.setTime(recipeDao.getTime());
         recipeDto.setUnitTime(recipeDao.getUnitTime());
-        //recipeDto.setImage(recipeDao.getImage());
         recipeDto.setStatus(recipeDao.getStatus());
         // TODO: cuando se verifique el ingredientRecipeDao, se podrá continuar insertando los ingredientes en la receta
         // recipeDto.setIngredients(mapIngredientRecipeDaoListToDtoList(recipeDao.getIngredients(), recipeDao));
