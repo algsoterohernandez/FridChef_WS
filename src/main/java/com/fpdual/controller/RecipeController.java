@@ -278,15 +278,21 @@ public class RecipeController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response findFavorites(@QueryParam("ids") String ids) {
         Response rs;
+
         try {
             List<String> stringId = Arrays.asList(ids.split(","));
-            List<RecipeDto> recipeList = recipeService.findBy(stringId, 0, false, 0, true);
-            return Optional.ofNullable(recipeList)
-                    .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
-                    .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
 
+            List<RecipeDto> recipeList = recipeService.findBy(stringId, 0, false, 0, true);
+
+            if (recipeList == null) {
+                rs = Response.status(HttpStatus.BAD_REQUEST.getStatusCode()).build();
+
+            } else {
+                rs = Optional.ofNullable(recipeList)
+                        .map(list -> Response.status(HttpStatus.OK.getStatusCode()).entity(list).build())
+                        .orElse(Response.status(HttpStatus.INTERNAL_SERVER_ERROR.getStatusCode()).build());
+            }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             rs = Response.status(HttpStatus.NOT_FOUND.getStatusCode()).build();
         }
 
