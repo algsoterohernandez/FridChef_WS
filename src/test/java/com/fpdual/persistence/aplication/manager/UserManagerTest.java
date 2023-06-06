@@ -112,7 +112,7 @@ public class UserManagerTest {
         boolean deleted = userManager.deleteUser(con, exampleUserDao.getEmail());
 
         //Asserts
-        assertTrue(!deleted);
+        assertFalse(deleted);
     }
 
     @Test
