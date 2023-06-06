@@ -21,10 +21,6 @@ public class IngredientDao {
     private String name;
     private List<AllergenDao> allergens;
 
-    public IngredientDao() {
-        aller
-                gens = new ArrayList<>();
-    }
     /**
      * Constructor de la clase IngredientDao.
      *
