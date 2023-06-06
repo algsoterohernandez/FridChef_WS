@@ -1,6 +1,7 @@
 package com.fpdual.service;
 
 import com.fpdual.api.dto.IngredientDto;
+import com.fpdual.exceptions.AlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.IngredientDao;
 import com.fpdual.persistence.aplication.manager.IngredientManager;
@@ -132,29 +133,5 @@ class IngredientServiceTest {
         //Asserts
         assertThrows(NullPointerException.class, () -> ingredientService.createIngredient(exampleIngredientDto.getName()));
     }
-
-   /*@Test
-    public void testCreateIngredient_validName_ingredientDtoException() throws SQLException, ClassNotFoundException {
-
-        //Prepare method dependencies
-        when(mySQLConnector.getMySQLConnection()).thenThrow(Exception.class);
-
-        //Asserts
-        assertThrows(Exception.class, () -> ingredientService.createIngredient(exampleIngredientDto.getName()));
-    }*/
-
-   /*@Test
-    public void testCreateIngredient_validName_ingredientDtoAlreadyExistsException() throws Exception {
-
-        //Prepare method dependencies
-        when(ingredientManager.insertIngredient(any(),anyString())).thenThrow(AlreadyExistsException.class);
-
-        //Execute method
-        IngredientDto ingredientDtoRs = ingredientService.createIngredient(exampleIngredientDto.getName());
-
-        //Asserts
-        assertThrows(AlreadyExistsException.class, () ->ingredientService.createIngredient(exampleIngredientDto.getName()));
-    }*/
-
 
 }

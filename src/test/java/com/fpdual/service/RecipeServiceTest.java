@@ -20,11 +20,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -137,7 +137,7 @@ class RecipeServiceTest {
         List<RecipeDto> expectedRecipeDtos = MappingUtils.mapRecipeListToDto(recipeDaos);
 
         // Mock del comportamiento del objeto RecipeManager
-        when(recipeManager.findBy(any(), anyList(), anyInt(), anyBoolean(), anyInt(), true)).thenReturn(recipeDaos);
+        when(recipeManager.findBy(any(), anyList(), anyInt(), anyBoolean(), anyInt(),anyBoolean())).thenReturn(recipeDaos);
 
         // Llamada al método que queremos probar
         List<RecipeDto> actualRecipeDtos = recipeService.findBy(new ArrayList<>(), 1, false, 10, true);
@@ -198,7 +198,7 @@ class RecipeServiceTest {
         assertEquals(expectedRecipeDtos, actualRecipeDtos);
     }
 
-    /*@Test
+    @Test
     public void testFindByStatusPending_recipeDtoNotNull() throws SQLException, ClassNotFoundException {
 
         //Prepare method dependencies
@@ -211,7 +211,7 @@ class RecipeServiceTest {
         //Asserts
         assertNotNull(recipeDtoListRs);
 
-    }*/
+    }
 
     @Test
     public void testFindByStatusPending_recipeException() throws SQLException, ClassNotFoundException {
@@ -223,7 +223,7 @@ class RecipeServiceTest {
         assertThrows(ClassNotFoundException.class, () -> recipeService.findByStatusPending());
     }
 
-    /*@Test
+    @Test
     public void testUpdateRecipeStatus_validIdStatus_recipeDtoNotNullAccepted() throws SQLException, ClassNotFoundException {
 
         //Prepare method dependencies
@@ -236,9 +236,9 @@ class RecipeServiceTest {
         //Asserts
         assertNotNull(recipeDtoRs);
 
-    }*/
+    }
 
-    /*@Test
+    @Test
     public void testUpdateRecipeStatus_validIdStatus_recipeDtoNotNullDeclined() throws SQLException, ClassNotFoundException {
 
         //Prepare method dependencies
@@ -251,7 +251,7 @@ class RecipeServiceTest {
         //Asserts
         assertNotNull(recipeDtoRs);
 
-    }*/
+    }
 
     @Test
     public void testUpdateRecipeStatus_validIdStatus_recipeException() throws SQLException, ClassNotFoundException {
@@ -263,6 +263,5 @@ class RecipeServiceTest {
         assertThrows(ClassNotFoundException.class,
                 () -> recipeService.updateRecipeStatus(exampleRecipeDto.getId(), String.valueOf(exampleRecipeDto.getStatus())));
     }
-
 
 }

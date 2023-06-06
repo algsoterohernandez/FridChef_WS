@@ -16,18 +16,18 @@ import java.util.List;
  */
 public class IngredientService {
 
-    private final MySQLConnector connector;
+    private final MySQLConnector mySQLConnector;
     private final IngredientManager ingredientManager;
 
     /**
      * Constructor de IngredientService.
      *
-     * @param connector        Conector MySQL utilizado para la conexión a la base de datos.
+     * @param mySQLConnector        Conector MySQL utilizado para la conexión a la base de datos.
      * @param ingredientManager Manager de ingredientes utilizado para realizar las operaciones en la base de datos.
      */
-    public IngredientService(MySQLConnector connector, IngredientManager ingredientManager) {
+    public IngredientService(MySQLConnector mySQLConnector, IngredientManager ingredientManager) {
         this.ingredientManager = ingredientManager;
-        this.connector = connector;
+        this.mySQLConnector = mySQLConnector;
     }
 
     /**
@@ -38,7 +38,7 @@ public class IngredientService {
     public List<IngredientDto> findAll() {
         List<IngredientDto> ingredientDtos = null;
 
-        try (Connection con = connector.getMySQLConnection()) {
+        try (Connection con = mySQLConnector.getMySQLConnection()) {
             List<IngredientDao> ingredientDaos = ingredientManager.findAll(con);
 
             if (ingredientDaos != null) {
@@ -62,7 +62,7 @@ public class IngredientService {
     public boolean deleteIngredient(int id) throws SQLException, ClassNotFoundException {
         boolean deleted;
 
-        try (Connection con = connector.getMySQLConnection()) {
+        try (Connection con = mySQLConnector.getMySQLConnection()) {
             // Borramos el ingrediente
             deleted = this.ingredientManager.deleteIngredient(con, id);
         } catch (Exception e) {
@@ -89,7 +89,7 @@ public class IngredientService {
         try {
             // Si no hay un ingrediente con el mismo nombre, lo creamos
             if (!ingredients.stream().anyMatch(o -> o.getName().equals(name))) {
-                try (Connection con = connector.getMySQLConnection()) {
+                try (Connection con = mySQLConnector.getMySQLConnection()) {
                     IngredientDao ingredientDao = this.ingredientManager.insertIngredient(con, name);
                     if (ingredientDao != null) {
                         ingredientDto = MappingUtils.mapIngredientToDto(ingredientDao);

@@ -278,13 +278,15 @@ public class RecipeManagerTest {
     /*@Test
     public void testUpdateRecipeStatus_validConnectionIdStatus_recipeDaoNotNullAccepted() throws SQLException {
         // Prepare method dependencies
+        when(con.prepareStatement(anyString())).thenReturn(stm, selectStm);
+
         when(result.getString(anyInt())).thenReturn(RecipeStatus.ACCEPTED.name());
-        when(result.next()).thenReturn(true,false);
-        when(selectStm.executeQuery()).thenReturn(result);
 
         when(stm.executeUpdate()).thenReturn(1);
 
-        when(con.prepareStatement(anyString())).thenReturn(stm, selectStm);
+        when(selectStm.executeQuery()).thenReturn(result);
+
+        when(result.next()).thenReturn(true,false);
 
         // Execute method
         RecipeDao recipeDaoRs = recipeManager.updateRecipeStatus(con, exampleRecipeDaoAccepted.getId(), String.valueOf(exampleRecipeDaoAccepted.getStatus()));
@@ -292,7 +294,6 @@ public class RecipeManagerTest {
         // Asserts
         assertNotNull(recipeDaoRs);
     }*/
-
 
     @Test
     public void testUpdateRecipeStatus_validConnectionIdStatus_recipeDaoSQLException() throws SQLException {
