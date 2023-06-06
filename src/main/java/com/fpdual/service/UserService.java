@@ -21,6 +21,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Servicio para manejar las operaciones relacionadas con los usuarios.
+ */
 public class UserService {
 
     private final MySQLConnector connector;
@@ -31,6 +34,14 @@ public class UserService {
     @Setter(AccessLevel.NONE)
     private MessageDigest md5;
 
+    /**
+     * Constructor de la clase UserService.
+     *
+     * @param connector   Conector MySQL para establecer la conexión con la base de datos.
+     * @param userManager Gestor de usuarios para realizar operaciones de inserción, eliminación y búsqueda.
+     * @param favoriteManager  Lista de recetas favoritas
+     * @param rolManager  Gestor de roles para realizar operaciones de inserción y búsqueda de roles.
+     */
     public UserService(MySQLConnector connector, UserManager userManager, RolManager rolManager, FavoriteManager favoriteManager) {
         this.connector = connector;
         this.userManager = userManager;
@@ -38,6 +49,15 @@ public class UserService {
         this.favoriteManager = favoriteManager;
     }
 
+    /**
+     * Crea un nuevo usuario.
+     *
+     * @param userDto Objeto UserDto que contiene los datos del usuario.
+     * @return El objeto UserDto creado.
+     * @throws SQLException            Si ocurre un error de SQL al interactuar con la base de datos.
+     * @throws ClassNotFoundException Si no se encuentra la clase del controlador JDBC.
+     * @throws FridChefException       Si ocurre una excepción específica de FridChef.
+     */
     public UserDto createUser(UserDto userDto) throws SQLException, ClassNotFoundException, FridChefException {
 
         try (Connection con = connector.getMySQLConnection()) {
@@ -66,6 +86,14 @@ public class UserService {
 
     }
 
+    /**
+     * Elimina un usuario.
+     *
+     * @param email Email del usuario a eliminar.
+     * @return `true` si el usuario se eliminó correctamente, `false` de lo contrario.
+     * @throws SQLException        Si ocurre un error de SQL durante la eliminación del usuario.
+     * @throws ClassNotFoundException Si no se encuentra la clase durante la eliminación del usuario.
+     */
     public boolean deleteUser(String email) throws SQLException, ClassNotFoundException {
         boolean deleted;
 
@@ -82,6 +110,15 @@ public class UserService {
 
     }
 
+    /**
+     * Busca un usuario por su email y contraseña.
+     *
+     * @param email    El email del usuario.
+     * @param password La contraseña del usuario.
+     * @return El objeto UserDto que representa al usuario encontrado, o null si no se encuentra.
+     * @throws SQLException             Si ocurre un error de SQL durante la búsqueda.
+     * @throws ClassNotFoundException Si no se encuentra la clase del gestor de usuarios.
+     */
     public UserDto findUser(String email, String password) throws Exception {
         UserDto userDto = null;
         List<RolUserDto> rolUserDto;
@@ -104,8 +141,6 @@ public class UserService {
             }
 
         } catch (Exception e) {
-
-            System.out.println(e.getMessage());
             throw e;
         }
 

@@ -10,17 +10,27 @@ import java.util.List;
 @Data
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
+/**
+ * Clase que representa un objeto IngredientDao.
+ */
 public class IngredientDao {
     private int id;
     private String name;
     private List<AllergenDao> allergens;
 
     public IngredientDao() {
-        allergens = new ArrayList<>();
+        aller
+                gens = new ArrayList<>();
     }
+    /**
+     * Constructor de la clase IngredientDao.
+     *
+     * @param result ResultSet que contiene los datos del ingrediente.
+     */
+
 
     public IngredientDao(ResultSet result) {
         try {

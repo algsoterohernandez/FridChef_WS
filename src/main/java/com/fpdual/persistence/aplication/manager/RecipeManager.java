@@ -12,14 +12,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
+/**
+ * Clase que gestiona las operaciones relacionadas con las recetas.
+ */
 public class RecipeManager {
 
     private final IngredientManager ingredientManager;
 
+    /**
+     * Constructor de la clase RecipeManager.
+     * @param ingredientManager
+     * Inicializa la instancia de IngredientManager.
+     */
     public RecipeManager(IngredientManager ingredientManager)
     {
         this.ingredientManager = ingredientManager;
     }
+
+    /**
+     * Crea una nueva receta en la base de datos.
+     *
+     * @param con    Conexión a la base de datos.
+     * @param recipe Objeto RecipeDao que contiene los datos de la receta a crear.
+     * @return Objeto RecipeDao que representa la receta creada.
+     * @throws SQLException Si ocurre un error al interactuar con la base de datos.
+     */
     public RecipeDao createRecipe(Connection con, RecipeDao recipe) throws SQLException {
 
         try (PreparedStatement stm = con.prepareStatement("INSERT INTO recipe (name, description, difficulty, time, unit_time, id_category, create_time, image) VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
@@ -65,6 +82,7 @@ public class RecipeManager {
         }
 
     }
+
     public List<RecipeDao> findAll(Connection con) {
 
         try (Statement stm = con.createStatement()) {
@@ -87,6 +105,17 @@ public class RecipeManager {
         }
     }
 
+    /**
+     * Obtiene todas las recetas de una categoría específica desde la base de datos.
+     *
+     * @param con        Conexión a la base de datos.
+     * @param idsRecipe  Id de la receta.
+     * @param orderByPopular  booleano que nos indica si esta ordenada.
+     * @param idCategory ID de la categoría de las recetas a buscar.
+     * @param limit
+     * @param onlyAccepted  para que solo muestre las aceptadas
+     * @return Lista de objetos RecipeDao que representan las recetas encontradas para la categoría especificada.
+     */
     public List<RecipeDao> findBy(Connection con, List<String> idsRecipe, int idCategory, boolean orderByPopular, int limit, boolean onlyAccepted) {
 
         try (Statement stm = con.createStatement()) {
@@ -128,6 +157,14 @@ public class RecipeManager {
             return null;
         }
     }
+
+    /**
+     * Obtiene las recetas que contienen los ingredientes especificados desde la base de datos.
+     *
+     * @param con            Conexión a la base de datos.
+     * @param ingredientIds  Lista de IDs de ingredientes para buscar las recetas.
+     * @return Lista de objetos RecipeDao que representan las recetas encontradas que contienen los ingredientes especificados.
+     */
     public List<RecipeDao> findRecipesByIngredients(Connection con, List<Integer> ingredientIds) {
         List<RecipeDao> recipes = new ArrayList<>();
         try {
@@ -187,6 +224,14 @@ public class RecipeManager {
             return recipes;
         }
     }
+    /**
+     * Obtiene sugerencias de recetas basadas en los ingredientes especificados desde la base de datos.
+     *
+     * @param con            Conexión a la base de datos.
+     * @param ingredientIds  Lista de IDs de ingredientes para buscar las sugerencias de recetas.
+     * @return Lista de objetos RecipeDao que representan las sugerencias de recetas encontradas basadas en los ingredientes especificados.
+     */
+
     public List<RecipeDao> findRecipeSuggestions(Connection con, List<Integer> ingredientIds) {
         List<RecipeDao> recipesSuggestions = new ArrayList<>();
         try {
@@ -222,9 +267,23 @@ public class RecipeManager {
             return recipesSuggestions;
         }
     }
+
+    /**
+     * Rellena los ingredientes de una receta.
+     *
+     * @param con       La conexión a la base de datos.
+     * @param recipeDao El objeto RecipeDao de la receta a rellenar.
+     */
     private void fillRecipeIngredients(Connection con, RecipeDao recipeDao) {
         recipeDao.setIngredients(ingredientManager.findIngredientsByRecipeId(con, recipeDao.getId()));
     }
+
+    /**
+     * Busca recetas por estado pendiente.
+     *
+     * @param con La conexión a la base de datos.
+     * @return Una lista de objetos RecipeDao con estado pendiente.
+     */
     public List<RecipeDao> findByStatusPending(Connection con) {
 
         try (PreparedStatement stm = con.prepareStatement("SELECT * FROM recipe WHERE status LIKE ?")) {
@@ -253,6 +312,15 @@ public class RecipeManager {
             return null;
         }
     }
+
+    /**
+     * Actualiza el estado de una receta.
+     *
+     * @param con    La conexión a la base de datos.
+     * @param id     El ID de la receta a actualizar.
+     * @param status El nuevo estado de la receta.
+     * @return El objeto RecipeDao actualizado, o null si ocurre un error.
+     */
     public RecipeDao updateRecipeStatus(Connection con, int id, String status) {
         RecipeDao recipeDao = null;
 
@@ -283,5 +351,4 @@ public class RecipeManager {
 
         }
     }
-
 }

@@ -6,7 +6,19 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase encargada de administrar la creación de valoraciones en la base de datos.
+ */
 public class ValorationManager {
+
+    /**
+     * Crea una nueva valoración en la base de datos.
+     *
+     * @param con        Conexión a la base de datos.
+     * @param valoration Objeto ValorationDao que contiene los datos de la valoración a crear.
+     * @return El objeto ValorationDao con el identificador de la valoración asignado, o null si ocurre un error.
+     * @throws SQLException Si ocurre un error en la ejecución de la consulta SQL.
+     */
     public ValorationDao createValoration(Connection con, ValorationDao valoration) throws SQLException {
 
         try (PreparedStatement stm = con.prepareStatement("INSERT INTO valoration (id_recipe, id_user, comment, valoration, create_time) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
