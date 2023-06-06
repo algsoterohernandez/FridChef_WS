@@ -275,12 +275,12 @@ public class RecipeManagerTest {
         assertEquals(Collections.emptyList(), actualRecipes);
     }
 
-    /*@Test
+    @Test
     public void testUpdateRecipeStatus_validConnectionIdStatus_recipeDaoNotNullAccepted() throws SQLException {
         // Prepare method dependencies
         when(con.prepareStatement(anyString())).thenReturn(stm, selectStm);
 
-        when(result.getString(anyInt())).thenReturn(RecipeStatus.ACCEPTED.name());
+        when(result.getString(anyString())).thenReturn(RecipeStatus.ACCEPTED.name());
 
         when(stm.executeUpdate()).thenReturn(1);
 
@@ -293,7 +293,7 @@ public class RecipeManagerTest {
 
         // Asserts
         assertNotNull(recipeDaoRs);
-    }*/
+    }
 
     @Test
     public void testUpdateRecipeStatus_validConnectionIdStatus_recipeDaoSQLException() throws SQLException {
