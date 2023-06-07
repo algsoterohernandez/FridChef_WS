@@ -1,8 +1,6 @@
 package com.fpdual.service;
 
 import com.fpdual.api.dto.*;
-import com.fpdual.persistence.aplication.dao.IngredientDao;
-import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 import com.fpdual.persistence.aplication.dao.RecipeDao;
 import com.fpdual.persistence.aplication.manager.CategoryManager;
 import com.fpdual.persistence.aplication.manager.IngredientManager;

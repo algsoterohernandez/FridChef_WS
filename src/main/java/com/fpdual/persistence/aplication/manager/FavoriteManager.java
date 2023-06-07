@@ -1,5 +1,4 @@
 package com.fpdual.persistence.aplication.manager;
-import com.fpdual.api.dto.UserDto;
 import com.fpdual.exceptions.FridChefException;
 
 import java.sql.*;

@@ -5,7 +5,6 @@ import com.fpdual.api.dto.UserDto;
 import com.fpdual.exceptions.FridChefException;
 import com.fpdual.exceptions.AlreadyExistsException;
 import com.fpdual.persistence.aplication.connector.MySQLConnector;
-import com.fpdual.persistence.aplication.dao.FavoriteDao;
 import com.fpdual.persistence.aplication.dao.RolUserDao;
 import com.fpdual.persistence.aplication.dao.UserDao;
 import com.fpdual.persistence.aplication.manager.FavoriteManager;
