@@ -51,7 +51,7 @@ class IngredientServiceTest {
     }
 
     @Test
-    void testFindAll() throws SQLException, ClassNotFoundException {
+    void testFindAll(){
         // Mock de datos
         List<IngredientDao> ingredientDaos = Arrays.asList(
                 IngredientDao.builder().id(1).name("Tomate").build(),
@@ -89,7 +89,7 @@ class IngredientServiceTest {
     public void testDeleteIngredient_validId_false() throws Exception {
 
         //Prepare method dependencies
-        when(ingredientManager.deleteIngredient(any(),anyInt())).thenReturn(false);
+        when(ingredientManager.deleteIngredient(any(), anyInt())).thenReturn(false);
         when(mySQLConnector.getMySQLConnection()).thenReturn(null);
 
         //Execute method
@@ -103,7 +103,7 @@ class IngredientServiceTest {
     public void testDeleteIngredient_validId_userException() throws Exception {
 
         //Prepare method dependencies
-        when(ingredientManager.deleteIngredient(any(),anyInt())).thenThrow(SQLException.class);
+        when(ingredientManager.deleteIngredient(any(), anyInt())).thenThrow(SQLException.class);
 
         //Asserts
         assertThrows(SQLException.class, () -> ingredientService.deleteIngredient(exampleIngredientDto.getId()));
@@ -113,7 +113,7 @@ class IngredientServiceTest {
     public void testCreateIngredient_validName_ingredientDtoNotNull() throws Exception {
 
         //Prepare method dependencies
-        when(ingredientManager.insertIngredient(any(),anyString())).thenReturn(exampleIngredientDao);
+        when(ingredientManager.insertIngredient(any(), anyString())).thenReturn(exampleIngredientDao);
         when(mySQLConnector.getMySQLConnection()).thenReturn(null);
 
         //Execute method
@@ -121,6 +121,21 @@ class IngredientServiceTest {
 
         //Asserts
         assertNotNull(ingredientDtoRs);
+
+    }
+
+    @Test
+    public void testCreateIngredient_validName_ingredientDtoAlreadyExistsException(){
+
+        //Prepare method dependencies
+        List<IngredientDao> ingredientDaos = Arrays.asList(
+                IngredientDao.builder().id(1).name("Tomate").build(),
+                IngredientDao.builder().id(2).name("Lechuga").build());
+
+        when(ingredientManager.findAll(any())).thenReturn(ingredientDaos);
+
+        //Asserts
+        assertThrows(AlreadyExistsException.class, () -> ingredientService.createIngredient(exampleIngredientDto.getName()));
 
     }
 

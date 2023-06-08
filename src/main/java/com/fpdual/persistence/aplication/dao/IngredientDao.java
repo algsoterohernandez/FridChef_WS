@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 /**
@@ -38,4 +37,7 @@ public class IngredientDao {
         }
     }
 
+    public IngredientDao() {
+        allergens = new ArrayList<>();
+    }
 }
