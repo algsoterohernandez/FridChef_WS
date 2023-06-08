@@ -37,7 +37,7 @@ class AllergenServiceTest {
     }
 
     @Test
-    void testFindAllAllergens() throws SQLException, ClassNotFoundException {
+    void testFindAllAllergens(){
         // Mock de datos
         List<AllergenDao> allergenDaos = new ArrayList<>();
         //allergenDaos.add(new AllergenDao(1, "Allergen 1"));

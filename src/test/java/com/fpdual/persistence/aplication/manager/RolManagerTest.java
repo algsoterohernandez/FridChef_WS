@@ -111,6 +111,4 @@ public class RolManagerTest {
         //Asserts
         assertNull(rolManager.findRolesById(con, exampleRolUserDao.getIdUser()));
     }
-
-
 }
