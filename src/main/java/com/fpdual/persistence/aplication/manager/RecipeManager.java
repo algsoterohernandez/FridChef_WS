@@ -145,6 +145,8 @@ public class RecipeManager {
 
             while (result.next()) {
                 RecipeDao recipe = new RecipeDao(result);
+                recipe.setValoration(result.getDouble("valoration"));
+
                 fillRecipeIngredients(con, recipe);
 
                 recipes.add(recipe);
