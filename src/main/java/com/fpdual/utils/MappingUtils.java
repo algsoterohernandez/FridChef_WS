@@ -6,7 +6,6 @@ import com.fpdual.api.dto.IngredientRecipeDto;
 import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 
 import javax.sql.rowset.serial.SerialBlob;
-
 import java.sql.Blob;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -259,7 +258,6 @@ public class MappingUtils {
         return userDto;
 
     }
-
 
     /**
      * Mapea un objeto UserDto a un objeto UserDao.

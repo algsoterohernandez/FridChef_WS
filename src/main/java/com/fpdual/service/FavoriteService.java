@@ -37,12 +37,12 @@ public class FavoriteService {
      * @throws SQLException           Si ocurre un error de SQL al buscar las recetas favoritas.
      * @throws ClassNotFoundException Si no se encuentra la clase para el conector de MySQL.
      */
-    public List<RecipeDto> findRecipeFavorite(int idUser) throws SQLException, ClassNotFoundException {
+    public List<RecipeDto> findRecipeFavorite(int idUser) {
         List<RecipeDto> recipeFavoriteListDto = new ArrayList<>();
         return recipeFavoriteListDto;
     }
 
-    public boolean favoriteAdd(int idRecipe, int idUser) throws SQLException, FridChefException {
+    public boolean favoriteAdd(int idRecipe, int idUser){
         boolean favoriteAdd = false;
 
         try (Connection con = connector.getMySQLConnection()) {
@@ -54,7 +54,7 @@ public class FavoriteService {
         return favoriteAdd;
     }
 
-    public boolean favoriteRemove(int idRecipe, int idUser) throws SQLException, FridChefException {
+    public boolean favoriteRemove(int idRecipe, int idUser){
         boolean favoriteRemoved = false;
 
         try (Connection con = connector.getMySQLConnection()) {
@@ -66,6 +66,4 @@ public class FavoriteService {
         }
         return favoriteRemoved;
     }
-
-
 }

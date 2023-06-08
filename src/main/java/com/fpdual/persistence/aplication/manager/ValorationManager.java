@@ -19,7 +19,7 @@ public class ValorationManager {
      * @return El objeto ValorationDao con el identificador de la valoración asignado, o null si ocurre un error.
      * @throws SQLException Si ocurre un error en la ejecución de la consulta SQL.
      */
-    public ValorationDao createValoration(Connection con, ValorationDao valoration) throws SQLException {
+    public ValorationDao createValoration(Connection con, ValorationDao valoration) {
 
         try (PreparedStatement stm = con.prepareStatement("INSERT INTO valoration (id_recipe, id_user, comment, valoration, create_time) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
 

@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Getter
-@Setter
 @AllArgsConstructor
 @Builder
+
 /**
  * Clase que representa un objeto IngredientDao.
  */
