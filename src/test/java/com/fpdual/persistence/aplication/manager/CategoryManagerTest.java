@@ -72,7 +72,7 @@ public class CategoryManagerTest {
     }
 
     @Test
-    public void testCreateCategory_validConnectionAndCategoryDto_categoryDtoNotNull() throws AlreadyExistsException, SQLException {
+    public void testCreateCategory_validConnectionAndCategoryDto_categoryDtoNotNull() throws SQLException {
         //Prepare method dependencies
         when(resultSetMock.next()).thenReturn(true);
         when(resultSetMock.getInt(1)).thenReturn(1);
@@ -90,35 +90,6 @@ public class CategoryManagerTest {
         assertEquals(1, categoryDtoRs.getId());
         assertEquals("Example Category", categoryDtoRs.getName());
     }
-
-    /* @Test
-    public void testCreateCategory_validConnectionAndCategoryDto_categoryAlreadyExistsException() throws SQLException {
-        // Prepare method dependencies
-        PreparedStatement stm = Mockito.mock(PreparedStatement.class);
-        Mockito.when(con.prepareStatement(Mockito.anyString())).thenReturn(stm);
-        Mockito.doThrow(new SQLIntegrityConstraintViolationException()).when(stm).executeUpdate();
-
-        // Asserts
-        assertThrows(CategoryAlreadyExistsException.class, () -> categoryManager.createCategory(con, exampleCategoryDto));
-    }
-
-    @Test
-    public void testCreateCategory_validConnectionAndCategoryDto_categoryDtoNull() throws CategoryAlreadyExistsException, SQLException {
-        // Prepare method dependencies
-        PreparedStatement stm = Mockito.mock(PreparedStatement.class);
-        ResultSet resultSet = Mockito.mock(ResultSet.class);
-        Mockito.when(con.prepareStatement(Mockito.anyString(), Mockito.anyInt())).thenReturn(stm);
-        Mockito.when(stm.executeUpdate()).thenReturn(1);
-        Mockito.when(stm.getGeneratedKeys()).thenReturn(resultSet);
-        Mockito.when(resultSet.next()).thenReturn(false);
-
-        // Execute method
-        CategoryDto categoryDtoRs = categoryManager.createCategory(con, exampleCategoryDto);
-
-        // Asserts
-        assertNull(categoryDtoRs);
-    }*/
-
 
     @Test
     public void testUpdateCategory_validConnectionIdAndCategoryDto_categoryDtoNotNull() throws SQLException {
