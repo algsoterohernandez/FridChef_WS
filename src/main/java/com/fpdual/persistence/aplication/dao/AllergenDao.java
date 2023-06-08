@@ -12,6 +12,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * Clase que representa un alérgeno en la capa de acceso a datos.
+ */
 
 public class AllergenDao {
     private int id;

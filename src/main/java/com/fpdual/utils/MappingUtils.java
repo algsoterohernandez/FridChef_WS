@@ -97,7 +97,6 @@ public class MappingUtils {
 
     }
 
-
     /**
      * Mapea una lista de objetos RecipeDao a una lista de objetos RecipeDto.
      *
@@ -348,14 +347,16 @@ public class MappingUtils {
         valorationDao.setCreateTime(new Date(System.currentTimeMillis()));
         return valorationDao;
     }
+
+    /**
+     * Mapea una lista de objetos ValorationDao a una lista de objetos ValorationDto.
+     *
+     * @param valorationDaoList La lista de objetos RolUserDao a mapear.
+     * @return La lista de objetos ValorationDto mapeada.
+     */
     public static List<ValorationDto> mapValorationListToDto(List<ValorationDao> valorationDaoList) {
         return valorationDaoList.stream()
                 .map(MappingUtils::mapValorationToDto)
-                .collect(Collectors.toList());
-    }
-    public static List<ValorationDao> mapValorationDtoListToDao(List<ValorationDto> valorationDtoList) {
-        return valorationDtoList.stream()
-                .map(MappingUtils::mapValorationToDao)
                 .collect(Collectors.toList());
     }
 }

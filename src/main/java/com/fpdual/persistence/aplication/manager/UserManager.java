@@ -120,41 +120,4 @@ public class UserManager {
             return null;
         }
     }
-
-    /**
-     * Obtiene la lista de recetas favoritas de un usuario.
-     *
-     * @param con    Conexión a la base de datos.
-     * @param idUser Identificador del usuario.
-     * @return La lista de objetos RecipeDao correspondientes a las recetas favoritas del usuario.
-     */
-    public List<RecipeDao> findFavorite(Connection con, int idUser){
-        try (PreparedStatement stm = con.prepareStatement("SELECT recipe.* FROM recipe WHERE recipe.id IN(SELECT id_recipe FROM favorite WHERE id_user=?)")) {
-
-            stm.setInt(1, idUser);
-
-            ResultSet result = stm.executeQuery();
-
-            RecipeDao recipeDao;
-
-            List<RecipeDao> recipeDaoList = new ArrayList<>();
-
-            while (result.next()) {
-
-                recipeDao = new RecipeDao(result);
-                recipeDaoList.add(recipeDao);
-
-            }
-
-            return recipeDaoList;
-
-        } catch (SQLException e) {
-
-            System.out.println(e.getMessage());
-
-            return null;
-        }
-
-    }
-
 }

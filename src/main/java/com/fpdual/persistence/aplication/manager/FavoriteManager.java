@@ -1,5 +1,4 @@
 package com.fpdual.persistence.aplication.manager;
-import com.fpdual.exceptions.FridChefException;
 
 import java.sql.*;
 import java.util.ArrayList;
