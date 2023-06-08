@@ -66,7 +66,6 @@ public class UserController {
         return rs;
     }
 
-
     /**
      * Elimina un usuario.
      *

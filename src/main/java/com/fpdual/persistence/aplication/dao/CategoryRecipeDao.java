@@ -1,16 +1,12 @@
 package com.fpdual.persistence.aplication.dao;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
 
 /**

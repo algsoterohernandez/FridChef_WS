@@ -157,17 +157,6 @@ public class RecipeController {
         return response;
     }
 
-    // Probar que llega la imagen correctamente al backend, generando el fihcero.
-//        File outputFile = new File("C:\\Users\\a.carmona.garrido\\Desktop\\test.png");
-//
-//        try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-//            outputStream.write(imagenContent);
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-
     /**
      * Busca recetas por ingredientes.
      *

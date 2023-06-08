@@ -44,6 +44,14 @@ public class ValorationManager {
         }
     }
 
+    /**
+     * Recupera una lista de valoraciones para una receta específica.
+     *
+     * @param con   La conexión a la base de datos.
+     * @param id    El ID de la receta para la cual se buscarán las valoraciones.
+     * @param limit El límite de valoraciones a recuperar.
+     * @return Una lista de objetos ValorationDao que representan las valoraciones encontradas.
+     */
     public List<ValorationDao> findValorationById(Connection con, int id, int limit) {
         List<ValorationDao> valorationDaoList = new ArrayList<>();
 

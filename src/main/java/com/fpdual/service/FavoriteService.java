@@ -23,7 +23,6 @@ public class FavoriteService {
      * @param connector       Conector a la base de datos MySQL.
      * @param favoriteManager Recetas favoritas.
      */
-
     public FavoriteService(MySQLConnector connector, FavoriteManager favoriteManager) {
         this.connector = connector;
         this.favoriteManager = favoriteManager;
@@ -41,7 +40,13 @@ public class FavoriteService {
         List<RecipeDto> recipeFavoriteListDto = new ArrayList<>();
         return recipeFavoriteListDto;
     }
-
+    /**
+     * Agrega una receta a la lista de favoritos para un usuario específico.
+     *
+     * @param idRecipe El ID de la receta a agregar a favoritos.
+     * @param idUser   El ID del usuario al que se le agregará la receta a favoritos.
+     * @return true si la receta se agregó exitosamente a la lista de favoritos, false en caso contrario.
+     */
     public boolean favoriteAdd(int idRecipe, int idUser){
         boolean favoriteAdd = false;
 
@@ -54,6 +59,13 @@ public class FavoriteService {
         return favoriteAdd;
     }
 
+    /**
+     * Elimina una receta de la lista de favoritos para un usuario específico.
+     *
+     * @param idRecipe El ID de la receta a eliminar de favoritos.
+     * @param idUser   El ID del usuario al que se le eliminará la receta de favoritos.
+     * @return true si la receta se eliminó exitosamente de la lista de favoritos, false en caso contrario.
+     */
     public boolean favoriteRemove(int idRecipe, int idUser){
         boolean favoriteRemoved = false;
 

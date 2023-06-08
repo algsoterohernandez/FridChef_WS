@@ -51,6 +51,15 @@ public class ValorationService {
         return valorationDto;
     }
 
+    /**
+     * Recupera una lista de objetos ValorationDto que representan las valoraciones asociadas a un ID de receta dado.
+     *
+     * @param id    El ID de la receta para la cual se desea obtener las valoraciones.
+     * @param limit El número máximo de valoraciones a recuperar.
+     * @return Una lista de objetos ValorationDto que representan las valoraciones.
+     * @throws SQLException             Si ocurre algún error al interactuar con la base de datos.
+     * @throws ClassNotFoundException Si no se encuentra la clase necesaria durante la conexión a la base de datos.
+     */
     public List<ValorationDto> findValorations(int id, int limit) throws SQLException, ClassNotFoundException {
         List<ValorationDto> valorationDtoList;
         try(Connection con = connector.getMySQLConnection()){

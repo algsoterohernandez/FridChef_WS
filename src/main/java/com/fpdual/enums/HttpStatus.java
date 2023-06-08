@@ -26,6 +26,5 @@ public enum HttpStatus {
      */
     HttpStatus(int statusCode) {
         this.statusCode = statusCode;
-
     }
 }
