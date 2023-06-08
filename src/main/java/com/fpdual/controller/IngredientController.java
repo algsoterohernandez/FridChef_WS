@@ -17,7 +17,6 @@ import java.util.Optional;
  */
 @Path("/ingredients")
 public class IngredientController {
-
     private final IngredientService ingredientService;
 
     /**

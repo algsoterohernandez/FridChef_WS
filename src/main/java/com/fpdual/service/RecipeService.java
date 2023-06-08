@@ -58,6 +58,16 @@ public class RecipeService {
         return recipeDtos;
     }
 
+    /**
+     * Recupera una lista de objetos RecipeDto que coinciden con los criterios de búsqueda especificados.
+     *
+     * @param idsRecipe      Una lista de IDs de recetas específicas a recuperar. Puede ser nula o vacía para no aplicar este filtro.
+     * @param idCategory     El ID de la categoría de receta para filtrar. Un valor de 0 indica que no se aplica este filtro.
+     * @param orderByPopular Indica si los resultados deben ser ordenados por popularidad.
+     * @param limit          El número máximo de recetas a recuperar.
+     * @param onlyAccepted   Indica si solo se deben recuperar recetas aceptadas.
+     * @return Una lista de objetos RecipeDto que coinciden con los criterios de búsqueda especificados. Puede ser nula si no se encontraron coincidencias.
+     */
     public List<RecipeDto> findBy(List<String> idsRecipe, int idCategory, boolean orderByPopular, int limit, boolean onlyAccepted) {
         List<RecipeDto> recipeDtos = null;
         try (Connection con = connector.getMySQLConnection()) {

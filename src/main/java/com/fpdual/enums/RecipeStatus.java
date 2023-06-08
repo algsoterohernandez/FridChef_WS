@@ -25,7 +25,6 @@ public enum RecipeStatus {
         this.status = status;
     }
 
-
     /**
      * Devuelve la instancia del enum RecipeStatus correspondiente al estado proporcionado.
      *

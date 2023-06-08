@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 @Data
 @NoArgsConstructor
+
 /**
  * Clase que representa un objeto de acceso a datos (DAO) para la entidad User.
  */
