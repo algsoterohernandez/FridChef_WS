@@ -131,8 +131,7 @@ public class IngredientManager {
      * @param recipeId ID de la receta.
      * @return Lista de IngredientRecipeDao que representa los ingredientes de la receta.
      */
-    public List<IngredientRecipeDao> findIngredientsByRecipeId(Connection con, int recipeId)
-    {
+    public List<IngredientRecipeDao> findIngredientsByRecipeId(Connection con, int recipeId) {
         try (Statement stm = con.createStatement()) {
 
             ResultSet result = stm.executeQuery("" +
@@ -160,8 +159,7 @@ public class IngredientManager {
      * @param con                 Conexión a la base de datos.
      * @param ingredientRecipeDao Objeto IngredientRecipeDao al que se le asignarán los alérgenos.
      */
-    private void FillIngredientAllergens(Connection con, IngredientRecipeDao ingredientRecipeDao)
-    {
+    private void FillIngredientAllergens(Connection con, IngredientRecipeDao ingredientRecipeDao) {
         ingredientRecipeDao.setAllergens(allergenManager.findIngredientAllergens(con, ingredientRecipeDao.getIdIngredient()));
     }
 }

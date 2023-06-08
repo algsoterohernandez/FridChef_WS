@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteManager {
-    public boolean favoriteAdded(Connection con, int idRecipe, int idUser) throws FridChefException, SQLException {
+    public boolean favoriteAdded(Connection con, int idRecipe, int idUser) throws SQLException {
         boolean favoriteAdded = false;
 
         try (PreparedStatement stm = con.prepareStatement("INSERT INTO favorite (id_recipe, id_user, create_time) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
@@ -26,8 +26,7 @@ public class FavoriteManager {
         return  favoriteAdded;
     }
 
-
-    public boolean favoriteRemoved(Connection con, int idRecipe, int idUser) throws FridChefException, SQLException {
+    public boolean favoriteRemoved(Connection con, int idRecipe, int idUser) throws SQLException {
         boolean favoriteRemoved = false;
 
         try (PreparedStatement stm = con.prepareStatement("DELETE FROM favorite WHERE id_recipe=? AND id_user=?")) {
@@ -47,7 +46,7 @@ public class FavoriteManager {
         return favoriteRemoved;
     }
 
-    public List<Integer> findFavoriteList(Connection con, int idUser) throws FridChefException, SQLException{
+    public List<Integer> findFavoriteList(Connection con, int idUser){
         List<Integer> recipeIds = new ArrayList<>();
 
         try(PreparedStatement stm = con.prepareStatement("SELECT id_recipe FROM favorite WHERE id_user = ?")){

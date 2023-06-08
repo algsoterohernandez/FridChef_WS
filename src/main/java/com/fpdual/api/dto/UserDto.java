@@ -14,7 +14,6 @@ import java.util.List;
 public class UserDto {
     private int id;
     private String name, surname1, surname2, email, password;
-
     private boolean alreadyExists;
     private List<RolUserDto> rolUserDto;
     private List<Integer> favoriteList;

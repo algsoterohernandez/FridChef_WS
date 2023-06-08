@@ -259,7 +259,6 @@ public class MappingUtils {
 
     }
 
-
     /**
      * Mapea un objeto UserDto a un objeto UserDao.
      *

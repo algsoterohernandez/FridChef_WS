@@ -212,7 +212,6 @@ public class RecipeManagerTest {
         assertEquals(Collections.emptyList(), actualRecipes);
     }
 
-
     @Test
     public void testFindRecipeSuggestions() throws SQLException {
         // Mock de datos
@@ -306,7 +305,5 @@ public class RecipeManagerTest {
         //Asserts
         assertNull(recipeManager.updateRecipeStatus(con, exampleRecipeDao.getId(), String.valueOf(exampleRecipeDao.getStatus())));
     }
-
-
 
 }
