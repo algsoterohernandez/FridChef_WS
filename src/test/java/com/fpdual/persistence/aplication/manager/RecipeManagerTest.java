@@ -165,8 +165,6 @@ public class RecipeManagerTest {
         recipe1.setCreateTime(specificSqlDate);
         recipe1.setImage(null);
         recipe1.setStatus(RecipeStatus.valueOf("PENDING"));
-        recipe1.setValoration(5.0);
-
 
         List<RecipeDao> expectedRecipes = new ArrayList<>();
         expectedRecipes.add(recipe1);
@@ -185,7 +183,6 @@ public class RecipeManagerTest {
         when(resultSetMock.getDate("create_time")).thenReturn(specificSqlDate);
         when(resultSetMock.getBlob("image")).thenReturn(null);
         when(resultSetMock.getString("status")).thenReturn("PENDING");
-        when(resultSetMock.getDouble("valoration")).thenReturn(5.0);
 
         // Llamada al método que queremos probar
         List<RecipeDao> actualRecipes = recipeManager.findRecipesByIngredients(con, ingredientIds);
@@ -231,7 +228,6 @@ public class RecipeManagerTest {
         recipe1.setCreateTime(null);
         recipe1.setImage(null);
         recipe1.setStatus(RecipeStatus.ACCEPTED);
-        recipe1.setValoration(0.0);
 
         List<RecipeDao> expectedRecipes = new ArrayList<>();
         expectedRecipes.add(recipe1);
@@ -250,7 +246,6 @@ public class RecipeManagerTest {
         when(resultSetMock.getDate("create_time")).thenReturn(null);
         when(resultSetMock.getBlob("image")).thenReturn(null);
         when(resultSetMock.getString("status")).thenReturn("ACCEPTED");
-        when(resultSetMock.getDouble("valoration")).thenReturn(0.0);
 
         // Llamada al método que queremos probar
         List<RecipeDao> actualRecipes = recipeManager.findRecipeSuggestions(con, ingredientIds);

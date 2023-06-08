@@ -100,7 +100,6 @@ public class RecipeManager {
             return recipes;
 
         } catch (SQLException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -155,7 +154,6 @@ public class RecipeManager {
             return recipes;
 
         } catch (SQLException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -221,8 +219,6 @@ public class RecipeManager {
             return recipes;
 
         } catch (SQLException e) {
-            e.printStackTrace();
-
             return recipes;
         }
     }
@@ -265,7 +261,6 @@ public class RecipeManager {
             return recipesSuggestions;
 
         } catch (SQLException e) {
-            e.printStackTrace();
             return recipesSuggestions;
         }
     }
