@@ -1,17 +1,15 @@
 package com.fpdual.persistence.aplication.dao;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -20,13 +18,6 @@ public class AllergenDaoTest {
 
     @Mock
     private ResultSet resultSetMock;
-
-
-    @BeforeEach
-    public void setUp() throws SQLException {
-        AllergenDao allergenDao = new AllergenDao(resultSetMock);
-    }
-
 
 
     @Test

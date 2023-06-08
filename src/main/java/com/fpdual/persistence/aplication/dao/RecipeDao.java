@@ -57,7 +57,6 @@ public class RecipeDao {
             this.ingredients = new ArrayList<>();
             // Asignar el estado de la receta utilizando el método fromString() del enum RecipeStatus
             this.status = RecipeStatus.fromString(result.getString("status"));
-            this.valoration = result.getDouble("valoration");
         } catch (SQLException e) {
             e.printStackTrace();
         }
