@@ -17,7 +17,6 @@ public class ValorationManager {
      * @param con        Conexión a la base de datos.
      * @param valoration Objeto ValorationDao que contiene los datos de la valoración a crear.
      * @return El objeto ValorationDao con el identificador de la valoración asignado, o null si ocurre un error.
-     * @throws SQLException Si ocurre un error en la ejecución de la consulta SQL.
      */
     public ValorationDao createValoration(Connection con, ValorationDao valoration) {
 
