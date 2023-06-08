@@ -13,4 +13,5 @@ import lombok.*;
 public class AllergenDto {
     private int id;
     private String name;
+
 }
