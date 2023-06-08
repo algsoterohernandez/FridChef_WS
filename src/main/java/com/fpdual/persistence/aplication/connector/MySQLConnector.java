@@ -66,18 +66,4 @@ public class MySQLConnector {
                 .append(prop.getProperty(MySQLConstants.USE_LEGACY_DATE_TIME_CODE)).append(("&serverTimezone="))
                 .append(prop.getProperty(MySQLConstants.SERVER_TIMEZONE)).toString();
     }
-
-    /**
-     * Método principal de la clase para probar la conexión a la base de datos.
-     *
-     * @param args Argumentos de línea de comandos.
-     * @throws SQLException           Si ocurre un error al establecer la conexión.
-     * @throws ClassNotFoundException Si no se encuentra el controlador de la base de datos.
-     */
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        MySQLConnector connector = new MySQLConnector();
-        Connection connection = connector.getMySQLConnection();
-        System.out.println(connection.getCatalog());
-        connection.close();
-    }
 }
