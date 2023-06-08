@@ -8,12 +8,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.*;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class RecipeManagerTest {
     private PreparedStatement stm, selectStm;
 
     @Mock
-    private ResultSet result;
+    private ResultSet resultSetMock;
     @Mock
     private IngredientManager mockIngredientManager;
     private RecipeDao exampleRecipeDao;
@@ -70,11 +72,11 @@ public class RecipeManagerTest {
     public void testFindByStatusPending_validConnection_recipeDaoListNotNull() throws SQLException {
 
         //Prepare method dependencies
-        when(result.next()).thenReturn(true,false);
+        when(resultSetMock.next()).thenReturn(true,false);
 
-        when(result.getString(anyString())).thenReturn(RecipeStatus.PENDING.name());
+        when(resultSetMock.getString(anyString())).thenReturn(RecipeStatus.PENDING.name());
 
-        when(stm.executeQuery()).thenReturn(result);
+        when(stm.executeQuery()).thenReturn(resultSetMock);
 
         when(con.prepareStatement(anyString())).thenReturn(stm);
 
@@ -171,19 +173,19 @@ public class RecipeManagerTest {
 
         // Mock del comportamiento del objeto Connection, PreparedStatement y ResultSet
         when(con.prepareStatement(anyString())).thenReturn(stm);
-        when(stm.executeQuery()).thenReturn(result);
-        when(result.next()).thenReturn(true,  false);
-        when(result.getInt("id")).thenReturn(1 );
-        when(result.getString("name")).thenReturn("ensalada");
-        when(result.getString("description")).thenReturn("ensalada");
-        when(result.getInt("difficulty")).thenReturn(1);
-        when(result.getInt("time")).thenReturn(1);
-        when(result.getString("unit_time")).thenReturn("h");
-        when(result.getInt("id_category")).thenReturn(1);
-        when(result.getDate("create_time")).thenReturn(specificSqlDate);
-        when(result.getBlob("image")).thenReturn(null);
-        when(result.getString("status")).thenReturn("PENDING");
-        when(result.getDouble("valoration")).thenReturn(5.0);
+        when(stm.executeQuery()).thenReturn(resultSetMock);
+        when(resultSetMock.next()).thenReturn(true,  false);
+        when(resultSetMock.getInt("id")).thenReturn(1 );
+        when(resultSetMock.getString("name")).thenReturn("ensalada");
+        when(resultSetMock.getString("description")).thenReturn("ensalada");
+        when(resultSetMock.getInt("difficulty")).thenReturn(1);
+        when(resultSetMock.getInt("time")).thenReturn(1);
+        when(resultSetMock.getString("unit_time")).thenReturn("h");
+        when(resultSetMock.getInt("id_category")).thenReturn(1);
+        when(resultSetMock.getDate("create_time")).thenReturn(specificSqlDate);
+        when(resultSetMock.getBlob("image")).thenReturn(null);
+        when(resultSetMock.getString("status")).thenReturn("PENDING");
+        when(resultSetMock.getDouble("valoration")).thenReturn(5.0);
 
         // Llamada al método que queremos probar
         List<RecipeDao> actualRecipes = recipeManager.findRecipesByIngredients(con, ingredientIds);
@@ -237,19 +239,19 @@ public class RecipeManagerTest {
 
         // Mock del comportamiento del objeto Connection, PreparedStatement y ResultSet
         when(con.prepareStatement(anyString())).thenReturn(stm);
-        when(stm.executeQuery()).thenReturn(result);
-        when(result.next()).thenReturn(true, false);
-        when(result.getInt("id")).thenReturn(1);
-        when(result.getString("name")).thenReturn("ensalada");
-        when(result.getString("description")).thenReturn("ensalada");
-        when(result.getInt("difficulty")).thenReturn(1);
-        when(result.getInt("time")).thenReturn(1);
-        when(result.getString("unit_time")).thenReturn("h");
-        when(result.getInt("id_category")).thenReturn(1);
-        when(result.getDate("create_time")).thenReturn(null);
-        when(result.getBlob("image")).thenReturn(null);
-        when(result.getString("status")).thenReturn("ACCEPTED");
-        when(result.getDouble("valoration")).thenReturn(0.0);
+        when(stm.executeQuery()).thenReturn(resultSetMock);
+        when(resultSetMock.next()).thenReturn(true, false);
+        when(resultSetMock.getInt("id")).thenReturn(1);
+        when(resultSetMock.getString("name")).thenReturn("ensalada");
+        when(resultSetMock.getString("description")).thenReturn("ensalada");
+        when(resultSetMock.getInt("difficulty")).thenReturn(1);
+        when(resultSetMock.getInt("time")).thenReturn(1);
+        when(resultSetMock.getString("unit_time")).thenReturn("h");
+        when(resultSetMock.getInt("id_category")).thenReturn(1);
+        when(resultSetMock.getDate("create_time")).thenReturn(null);
+        when(resultSetMock.getBlob("image")).thenReturn(null);
+        when(resultSetMock.getString("status")).thenReturn("ACCEPTED");
+        when(resultSetMock.getDouble("valoration")).thenReturn(0.0);
 
         // Llamada al método que queremos probar
         List<RecipeDao> actualRecipes = recipeManager.findRecipeSuggestions(con, ingredientIds);
@@ -280,13 +282,13 @@ public class RecipeManagerTest {
         // Prepare method dependencies
         when(con.prepareStatement(anyString())).thenReturn(stm, selectStm);
 
-        when(result.getString(anyString())).thenReturn(RecipeStatus.ACCEPTED.name());
+        when(resultSetMock.getString(anyString())).thenReturn(RecipeStatus.ACCEPTED.name());
 
         when(stm.executeUpdate()).thenReturn(1);
 
-        when(selectStm.executeQuery()).thenReturn(result);
+        when(selectStm.executeQuery()).thenReturn(resultSetMock);
 
-        when(result.next()).thenReturn(true,false);
+        when(resultSetMock.next()).thenReturn(true,false);
 
         // Execute method
         RecipeDao recipeDaoRs = recipeManager.updateRecipeStatus(con, exampleRecipeDaoAccepted.getId(), String.valueOf(exampleRecipeDaoAccepted.getStatus()));
@@ -304,5 +306,7 @@ public class RecipeManagerTest {
         //Asserts
         assertNull(recipeManager.updateRecipeStatus(con, exampleRecipeDao.getId(), String.valueOf(exampleRecipeDao.getStatus())));
     }
+
+
 
 }
