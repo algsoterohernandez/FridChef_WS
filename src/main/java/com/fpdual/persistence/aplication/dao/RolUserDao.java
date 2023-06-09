@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
-@Data
-@NoArgsConstructor
 /**
  * Clase para la relación de roles y usuarios.
  */
+@Data
+@NoArgsConstructor
+
 public class RolUserDao {
     private int idRol, idUser;
 

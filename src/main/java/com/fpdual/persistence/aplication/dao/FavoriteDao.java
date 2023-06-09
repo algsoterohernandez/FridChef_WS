@@ -7,12 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
-@Data
-@NoArgsConstructor
-
 /**
  * Objeto de acceso a datos para la tabla de Favoritos.
  */
+
+
+@Data
+@NoArgsConstructor
+
 public class FavoriteDao {
     private int id;
     private int idRecipe;

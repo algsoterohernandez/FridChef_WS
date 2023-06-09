@@ -1,7 +1,6 @@
 package com.fpdual.persistence.aplication.manager;
 
 import com.fpdual.enums.RecipeStatus;
-import com.fpdual.persistence.aplication.connector.MySQLConnector;
 import com.fpdual.persistence.aplication.dao.IngredientRecipeDao;
 import com.fpdual.persistence.aplication.dao.RecipeDao;
 import lombok.Data;
@@ -9,12 +8,12 @@ import lombok.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Data
 /**
  * Clase que gestiona las operaciones relacionadas con las recetas.
  */
+@Data
+
 public class RecipeManager {
 
     private final IngredientManager ingredientManager;

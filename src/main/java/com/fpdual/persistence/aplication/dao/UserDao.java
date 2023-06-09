@@ -7,13 +7,12 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
-@Data
-@NoArgsConstructor
-
 /**
  * Clase que representa un objeto de acceso a datos (DAO) para la entidad User.
  */
+@Data
+@NoArgsConstructor
+
 public class UserDao {
     private int id;
     private String name, surname1, surname2, email, password;

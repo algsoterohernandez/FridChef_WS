@@ -56,10 +56,11 @@ public class RecipeController {
     }
 
     /**
-     * Obtiene los detalles de una receta específica.
+     * Obtiene los detalles de una receta.
      *
-     * @param id El ID de la receta.
-     * @return Respuesta HTTP con los detalles de la receta si se encuentra, o un error si no se encuentra.
+     * @param id              el ID de la receta
+     * @param onlyAccepted    valor opcional para filtrar solo las recetas aceptadas (por defecto: "1")
+     * @return la respuesta HTTP con los detalles de la receta en formato JSON
      */
     @GET
     @Path("/{id}")

@@ -8,12 +8,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-
 /**
  * Clase que representa una categoría en la capa de acceso a datos.
  */
+@Data
+@NoArgsConstructor
+
 public class CategoryDao {
     private int id;
     private String name;

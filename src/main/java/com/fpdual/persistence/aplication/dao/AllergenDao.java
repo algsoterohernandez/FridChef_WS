@@ -7,14 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase que representa un alérgeno en la capa de acceso a datos.
+ */
 @Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-/**
- * Clase que representa un alérgeno en la capa de acceso a datos.
- */
 
 public class AllergenDao {
     private int id;

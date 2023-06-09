@@ -4,12 +4,13 @@ import lombok.*;
 
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 /**
  * Clase que representa una asociación entre ingrediente y receta.
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class IngredientRecipeDto {
     private int id;
     private int idRecipe;

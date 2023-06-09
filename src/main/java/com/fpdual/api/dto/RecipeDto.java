@@ -6,15 +6,14 @@ import lombok.*;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * Clase que representa una receta.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 
-/**
- * Clase que representa una receta.
- */
 public class RecipeDto {
     private int id;
     private String name;

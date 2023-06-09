@@ -5,11 +5,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Data
-@NoArgsConstructor
 /**
  * Clase que representa una valoración.
  */
+@Data
+@NoArgsConstructor
+
 public class ValorationDto {
     private int id;
     private int idRecipe;
