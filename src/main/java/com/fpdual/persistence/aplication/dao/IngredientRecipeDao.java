@@ -7,12 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-
 /**
  * Clase que representa la relación entre un ingrediente y una receta en la base de datos.
  */
+@Data
+@NoArgsConstructor
+
 public class IngredientRecipeDao {
     private int id;
     private int idRecipe;

@@ -7,13 +7,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase que representa un objeto IngredientDao.
+ */
 @Data
 @AllArgsConstructor
 @Builder
 
-/**
- * Clase que representa un objeto IngredientDao.
- */
 public class IngredientDao {
     private int id;
     private String name;

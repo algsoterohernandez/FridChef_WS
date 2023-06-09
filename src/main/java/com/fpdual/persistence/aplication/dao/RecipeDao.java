@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Clase que representa un objeto RecipeDao que mapea los datos de una receta desde una consulta a la base de datos.
+ */
 @Data
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 
-/**
- * Clase que representa un objeto RecipeDao que mapea los datos de una receta desde una consulta a la base de datos.
- */
 public class RecipeDao {
     private int id;
     private String name;

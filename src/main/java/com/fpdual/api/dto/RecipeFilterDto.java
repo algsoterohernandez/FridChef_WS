@@ -4,11 +4,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
 
-@Data
-@NoArgsConstructor
 /**
  * Clase que representa los criterios de filtrado de recetas.
  */
+@Data
+@NoArgsConstructor
+
 public class RecipeFilterDto {
 
     List<String> Ingredients;

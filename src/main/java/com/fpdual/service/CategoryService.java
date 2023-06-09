@@ -12,11 +12,12 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 /**
  * Servicio para gestionar las categorías de recetas.
  */
+@Getter
+@Setter
+
 public class CategoryService {
 
     private final Connection connector;
@@ -110,10 +111,11 @@ public class CategoryService {
     }
 
     /**
-     * Busca las recetas asociadas a una categoría.
+     * Busca recetas por categoría y devuelve una lista de RecipeDto.
      *
-     * @param categoryDto Objeto CategoryDto que representa la categoría.
-     * @return Lista de objetos RecipeDto que representan las recetas asociadas a la categoría.
+     * @param categoryDto La categoría por la cual se buscarán las recetas.
+     * @param limit El límite máximo de recetas a devolver.
+     * @return Una lista de RecipeDto que coincide con la categoría especificada.
      */
     public List<RecipeDto> findRecipesByCategory(CategoryDto categoryDto, int limit) {
         List<RecipeDto> filteredRecipes = new ArrayList<>();

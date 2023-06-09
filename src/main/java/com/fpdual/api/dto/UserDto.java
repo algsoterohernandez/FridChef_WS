@@ -5,12 +5,13 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-
 /**
  * Clase que representa un usuario.
  */
+@Data
+@NoArgsConstructor
+
+
 public class UserDto {
     private int id;
     private String name, surname1, surname2, email, password;

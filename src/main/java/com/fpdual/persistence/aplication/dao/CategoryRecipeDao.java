@@ -6,12 +6,13 @@ import lombok.NoArgsConstructor;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@Data
-@NoArgsConstructor
-
 /**
  * Clase que representa una asociación entre una categoría y una receta en la base de datos.
  */
+@Data
+@NoArgsConstructor
+
+
 public class CategoryRecipeDao {
     private int idCategory;
     private int idRecipe;

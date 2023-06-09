@@ -68,10 +68,11 @@ public class CategoryController {
     }
 
     /**
-     * Obtiene las recetas de una categoría.
+     * Obtiene las recetas por categoría.
      *
-     * @param idCategory El ID de la categoría.
-     * @return Una respuesta HTTP con la lista de recetas en formato JSON si hay recetas, o un código de estado 204 si no hay recetas.
+     * @param idCategory el ID de la categoría.
+     * @param limit el límite de resultados (opcional, por defecto es 0).
+     * @return la respuesta HTTP con la lista de recetas en formato JSON.
      */
     @GET
     @Path("/{idCategory}/recipes/")

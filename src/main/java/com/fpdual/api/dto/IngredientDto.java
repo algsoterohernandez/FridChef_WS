@@ -4,15 +4,14 @@ import lombok.*;
 
 import java.util.List;
 
-
+/**
+ * Clase que representa un Ingrediente.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 
-/**
- * Clase que representa un Ingrediente.
- */
 public class IngredientDto {
 
     private int id;

@@ -7,11 +7,12 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@Data
-@NoArgsConstructor
 /**
  * Clase que representa un objeto ValorationDao.
  */
+@Data
+@NoArgsConstructor
+
 public class ValorationDao {
     private int id;
     private int idRecipe;
